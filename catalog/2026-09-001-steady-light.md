@@ -372,8 +372,9 @@ LOW (전부 오리지널 창작)
 FINAL LYRICS APPROVED:
 PENDING
 
-⚠ NOTE: 이 가사는 CLAUDE.md 갱신(가사 분량 기준 120–130 → 160–200 words) **이전**
-기준(120–130 words)으로 작성됨. 소급 재작업은 하지 않음 — §15 Producer Decision 참고.
+NOTE (RESOLVED 2026-09-13): CLAUDE.md v6.1 체인지로그에서 CAFÉ/WORK 무드
+전용 가사 분량 예외(120–150 words)가 확정됨. 이 곡(128 words)은 예외 범위
+안에 들어오므로 분량 기준 불일치 리스크는 해소됨 — 소급 재작업 불필요.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 8. TREND EVIDENCE BOARD
@@ -553,8 +554,7 @@ OPTIONAL POLISH:
 PENDING
 
 UNRESOLVED RISK:
-가사 분량 기준이 이 곡 작성 이후 갱신됨(120–130 → 160–200 words).
-소급 재작업 필요 여부는 SAMDADORA 결정 대기.
+없음 (가사 분량 기준 리스크는 CAFÉ/WORK 예외 확정으로 해소 — §7 NOTE 참고)
 
 SAMDADORA FINAL DECISION:
 PENDING

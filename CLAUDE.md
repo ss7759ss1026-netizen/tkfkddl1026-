@@ -80,6 +80,37 @@ MIGRATION NOTE: 가사 단어 수 기준 변경은 이번 통합 이후 신규 �
 기존 완성곡(예: "Steady Light" — 128 words)은 소급 재작업 불필요, 참고 기록으로 유지.
 ```
 
+```
+VERSION: v6.1 (Living Standard MINOR 변경 — 무드별 가사 분량 예외 추가)
+DATE: 2026-09-13
+STATUS: ACTIVE
+APPROVED BY: SAMDADORA
+
+CHANGE TYPE: MINOR SYSTEM CHANGE (프로덕션 디폴트 세분화)
+
+ADDED:
+- CAFÉ/WORK 무드 팔레트(§32-B) 전용 가사 분량 예외: 120–150 words
+  (일반 디폴트 160–200 words와 별도)
+
+CHANGED:
+- §15 BPM/RUNTIME/WORD COUNT, §37 LYRICS STANDARD에 예외 조항 명시
+
+REMOVED: 없음
+
+REASON:
+카페/워크 BGM은 보컬이 배경에 녹아드는 것이 장르 기능이므로 일반 팝
+디폴트(160–200)보다 낮은 가사 밀도가 음악적으로 타당함 (§37 REFERENCE
+LYRICS의 특수 장르 예외 조항 적용). SAMDADORA가 이 방향으로 확정.
+
+AFFECTED MODES: CREATE (카페/워크 무드 곡 한정)
+
+COMPATIBILITY: 하위 호환 — 일반 무드는 160–200 그대로 유지
+
+MIGRATION NOTE: "Steady Light"(128 words, Café/Work)는 이 예외 범위(120–150)
+안에 들어오므로 §7/§15의 "가사 분량 기준 불일치" 리스크는 해소됨. 소급
+재작업 불필요.
+```
+
 ---
 
 # PART A — SAMDADORA MUSIC OS v1.0 (ROUTING & GOVERNANCE LAYER)
@@ -606,8 +637,13 @@ DEFAULT BPM EXPLORATION: 95–120 BPM (하드 제한 아님, 벗어나려면 음
 
 **DEFAULT ENGLISH SUNG WORD TARGET: 160–200 words**
 *(기존 120–130 words에서 MUSIC OS v1.0 §A17 우선순위에 따라 갱신. 2026-09-13
-CHANGE LOG 참고. 카페/워크 등 여백이 중요한 무드는 하단으로, 스토리 밀도가
-높은 무드는 상단으로 조정 가능.)*
+CHANGE LOG 참고.)*
+
+**예외 — CAFÉ/WORK 무드 팔레트 (§32-B): 120–150 words.**
+카페/워크 BGM은 보컬이 전면에 나서지 않고 배경에 녹아드는 것이 장르의
+기능이므로, 가사 밀도를 일반 팝보다 낮게 유지한다 (§37 REFERENCE LYRICS의
+"특수 장르는 음악적으로 타당하면 분량이 달라질 수 있다" 조항 적용). 2026-09-13
+CHANGE LOG 참고.
 
 Runtime First. Word Count Second. 특수 장르/한국어 가사/반복 훅 구조는
 음악적으로 타당하면 달라질 수 있다.
@@ -844,7 +880,7 @@ Signature 20 / Entry-Exit 10 / Break-Final-Outro 10
 ### 37. LYRICS STANDARD ⟵ **v6.0 갱신**
 
 HUMAN TRUTH FIRST. **DEFAULT ENGLISH: 160–200 SUNG WORDS** (§15 갱신 반영).
-Target: 3:00–4:00.
+**CAFÉ/WORK 무드(§32-B)는 120–150 SUNG WORDS 예외 적용.** Target: 3:00–4:00.
 
 우선: natural contemporary language, singability, specific human details,
 clear emotional movement, memorable chorus, Core Memory Line, restrained
