@@ -369,7 +369,7 @@ upload, Shorts/Reels schedule, Playlist placement plan
 PENDING IDENTIFIER / HOLD—RIGHTS / HOLD—AUDIO / HOLD—METADATA /
 HOLD—ARTWORK / HOLD—SAMDADORA APPROVAL
 
-### A12. MASTER CARD (곡당 1장)
+### A12. MASTER CARD (곡당 1장) — RIGHTS & RELEASE LOG v1.0 결합
 
 Song ID · MUSIC OS version · Living Standard version · Creation/Research
 date · 7/30/90-day research status · Platforms/Markets · Human Truth · Core
@@ -379,6 +379,21 @@ signals · Anti-Copy result · Suno model · Generation candidates · Selected
 take · LOCK/KEEP/REPAIR elements · Audio QA · Vocal QA · Reach-for-it-again
 result · Final decision · Release status · Rights & Release Log · Lessons
 for the next song.
+
+**실제 구현:** 전체 25개 섹션 공식 양식(SONG IDENTITY → SONG TRUTH CARD →
+SONG FINGERPRINT → DIFFERENTIATION GATE → VOCAL DNA → ARRANGEMENT MAP →
+LYRICS & RUNTIME → TREND EVIDENCE BOARD → SUNO GENERATION LOG → AUDIO QA →
+VOCAL QA → THREE QA MAPS → ANTI-COPY CHECK → REACH-FOR-IT-AGAIN →
+PRODUCER DECISION → MASTER FILE LOG → CREDITS LOG → RIGHTS & PERMISSION LOG
+→ DISTRIBUTION METADATA → IDENTIFIER LOG → RELEASE SCHEDULE → PLATFORM
+PACKAGING → FINAL RELEASE GATE → POST-RELEASE RECORD → RECORD APPROVAL)은
+`catalog/_TEMPLATE_song-master-card.md`에 보관.
+
+새 곡마다 이 템플릿을 복사해 `catalog/YYYY-MM-###-song-slug.md`로 저장하고
+채운다. 미확정 정보는 절대 추측하지 않고 `PENDING`으로 표기하며, 오디오가
+없으면 관련 QA 항목은 `AUDIO REQUIRED`로 남긴다. 실제 예시:
+`catalog/2026-09-001-steady-light.md` (곡 #1, 프리 제너레이션 단계 완료,
+오디오 대기 중).
 
 ### A13. LEARNING LOOP
 

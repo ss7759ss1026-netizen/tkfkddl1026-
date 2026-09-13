@@ -1,0 +1,1281 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SAMDADORA SONG MASTER CARD
++ RIGHTS & RELEASE LOG v1.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OS VERSION: SAMDADORA MUSIC OS v1.0
+DOCUMENT STATUS: ACTIVE
+OWNER / EXECUTIVE PRODUCER: SAMDADORA
+MUSIC DIRECTOR / PRODUCER: LUON
+
+FINAL DECISION = SAMDADORA
+
+STATUS VALUES:
+DRAFT / SUNO TEST / QA / REPAIR / APPROVED / RELEASE READY / RELEASED / HOLD
+
+UNKNOWN INFORMATION:
+Write PENDING.
+Never guess legal, ownership, distribution, or identifier information.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. SONG IDENTITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SONG ID:
+[YYYY-MM-###]
+
+WORKING TITLE:
+[ ]
+
+FINAL TITLE:
+[ ]
+
+ALTERNATE TITLE:
+[ ]
+
+PROJECT / ARTIST NAME:
+SAMDADORA
+
+VERSION:
+[Original / Radio Edit / Instrumental / Other]
+
+LANGUAGE:
+[English / Korean / Other]
+
+PRIMARY GENRE:
+[ ]
+
+SECONDARY GENRE:
+[ ]
+
+MOOD:
+[ ]
+
+CURRENT STATUS:
+[DRAFT / SUNO TEST / QA / REPAIR / APPROVED / RELEASE READY / RELEASED / HOLD]
+
+CREATION DATE:
+[YYYY-MM-DD]
+
+FINAL APPROVAL DATE:
+[YYYY-MM-DD / PENDING]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. SONG TRUTH CARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SOURCE:
+[Photo / Memory / Experience / Thought / Text / Other]
+
+ORIGINAL HUMAN LINE:
+[Preserve the user's original wording without silently rewriting it.]
+
+SCENE:
+[What can be seen, heard, touched, or felt?]
+
+HUMAN TRUTH:
+[The honest human feeling beneath the scene]
+
+CORE MEMORY LINE:
+[The one sentence that should remain after the song ends]
+
+SONG TRUTH:
+[What the song is truly saying]
+
+TARGET LISTENER:
+[ ]
+
+LISTENING MOMENT:
+[Work / Study / Commute / Drive / Café / Travel / Recovery / Other]
+
+EMOTIONAL START:
+[ ]
+
+EMOTIONAL DESTINATION:
+[ ]
+
+PORTFOLIO CLASS:
+[LIGHT & FORWARD / HUMAN BONDS]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. SONG FINGERPRINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BPM:
+[ ]
+
+KEY:
+[Known value / PENDING]
+
+TIME SIGNATURE:
+[Known value / PENDING]
+
+OPENING HOOK:
+[ ]
+
+INTRO ENTRY:
+[ ]
+
+GROOVE LEADER:
+[ ]
+
+DRUM FEEL:
+[ ]
+
+BASS BEHAVIOR:
+[ ]
+
+HARMONY ANCHOR:
+[ ]
+
+HARMONIC RHYTHM:
+[ ]
+
+GUITAR / KEYS TECHNIQUE:
+[ ]
+
+SIGNATURE INSTRUMENT:
+[ ]
+
+SIGNATURE MOTIF OR TECHNIQUE:
+[ ]
+
+VOCAL CHARACTER:
+[ ]
+
+VOCAL REGISTER:
+[ ]
+
+VOCAL PHRASING:
+[ ]
+
+RHYTHMIC DELIVERY:
+[ ]
+
+CHORUS MECHANISM:
+[ ]
+
+INSTRUMENT ENTRY / EXIT:
+[ ]
+
+INSTRUMENTAL BREAK:
+[8 bars / NO VOCAL / specific behavior]
+
+BRIDGE BEHAVIOR:
+[ ]
+
+FINAL CHORUS BEHAVIOR:
+[ ]
+
+OUTRO / ENDING:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. DIFFERENTIATION GATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COMPARISON SET:
+[Recent 5 songs / Recent 10 songs / Other]
+
+SIMILAR ELEMENTS:
+- [ ]
+- [ ]
+- [ ]
+
+DIFFERENT ELEMENTS:
+- [ ]
+- [ ]
+- [ ]
+
+OVERUSED COMBINATION AVOIDED:
+[ ]
+
+MEANINGFUL NEW BEHAVIOR:
+[ ]
+
+DIFFERENTIATION RISK:
+[LOW / MEDIUM / HIGH]
+
+GATE RESULT:
+[PASS / REDESIGN / INSUFFICIENT DATA]
+
+LUON PRODUCER NOTE:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. VOCAL DNA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VOCAL SLOT:
+[ ]
+
+TIMBRE:
+[ ]
+
+REGISTER:
+[ ]
+
+DICTION:
+[ ]
+
+PHRASING:
+[ ]
+
+BREATH:
+[ ]
+
+MICRO-TIMING:
+[ ]
+
+DYNAMICS:
+[ ]
+
+VIBRATO:
+[ ]
+
+EMOTIONAL DELIVERY:
+[ ]
+
+MIC / SPACE:
+[ ]
+
+DOUBLES:
+[ ]
+
+HARMONY:
+[ ]
+
+PRIORITY NEGATIVES — SELECT 3 TO 5:
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+- [ ]
+
+VOCAL APPROVAL GATE:
+
+CURRENT:
+[PASS / REVIEW / FAIL]
+
+HUMAN:
+[PASS / REVIEW / FAIL]
+
+SONG FIT:
+[PASS / REVIEW / FAIL]
+
+DISTINCTIVE:
+[PASS / REVIEW / FAIL]
+
+VOCAL GATE RESULT:
+[PASS / REPAIR / REJECT / AUDIO REQUIRED]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. ARRANGEMENT MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CORE ROLE 1 — DRUMS:
+[ ]
+
+CORE ROLE 2 — BASS:
+[ ]
+
+CORE ROLE 3 — HARMONY:
+[ ]
+
+CORE ROLE 4 — OPTIONAL HARMONY:
+[ ]
+
+CORE ROLE 5 — SIGNATURE:
+[ ]
+
+STRINGS:
+[OFF / One section and purpose / Approved exception]
+
+SECTION MAP:
+
+INTRO:
+[ ]
+
+VERSE 1:
+[ ]
+
+PRE-CHORUS 1:
+[ ]
+
+CHORUS 1:
+[ ]
+
+TAG:
+[ ]
+
+VERSE 2:
+[ ]
+
+PRE-CHORUS 2:
+[ ]
+
+CHORUS 2:
+[ ]
+
+INSTRUMENTAL BREAK:
+[8 bars / NO VOCAL / musical behavior]
+
+BRIDGE:
+[ ]
+
+FINAL CHORUS + TAG:
+[ ]
+
+OUTRO:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. LYRICS & RUNTIME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LYRICS VERSION:
+[v1 / v2 / Final]
+
+LYRICS OWNER / AUTHORSHIP STATUS:
+[CONFIRMED / PENDING LEGAL DECISION]
+
+SUNG WORDS:
+[ ]
+
+ESTIMATED RUNTIME:
+[ ]
+
+ACTUAL RUNTIME:
+[Audio required / PENDING]
+
+TARGET RUNTIME:
+3:00–4:00
+
+RUNTIME RESULT:
+[PASS / REVIEW / FAIL]
+
+FIRST LYRIC ENTRY:
+[Timestamp / PENDING AUDIO]
+
+FIRST LYRIC ENTRY RESULT:
+[PASS / REVIEW / AUDIO REQUIRED]
+
+INSTRUMENTAL BREAK:
+[8 BARS — NO VOCAL / REVIEW]
+
+SINGABILITY:
+[PASS / REVIEW]
+
+CLICHÉ RISK:
+[LOW / MEDIUM / HIGH]
+
+REPETITION RISK:
+[LOW / MEDIUM / HIGH]
+
+COPYRIGHTED-LYRIC SIMILARITY RISK:
+[LOW / REVIEW REQUIRED]
+
+FINAL LYRICS APPROVED:
+[YES / NO / PENDING]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. TREND EVIDENCE BOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RESEARCH DATE:
+[YYYY-MM-DD / NOT CONDUCTED]
+
+RESEARCH WINDOWS:
+[7 DAYS / 30 DAYS / 90 DAYS]
+
+PLATFORMS:
+[YouTube / Shorts / Instagram / TikTok / Spotify / Apple Music / Threads]
+
+MARKETS:
+[KOR / USA / JPN / EU]
+
+EVIDENCE CONFIDENCE:
+[HIGH / MEDIUM / LOW / INSUFFICIENT]
+
+KEEP:
+1. [Signal + evidence]
+2. [Signal + evidence]
+3. [Signal + evidence]
+
+TEST:
+1. [ ]
+2. [ ]
+3. [ ]
+
+REJECT:
+1. [Signal + reason]
+2. [Signal + reason]
+3. [Signal + reason]
+
+FINAL TREND TOP 3:
+1. [ ]
+2. [ ]
+3. [ ]
+
+STYLE PROMPT MAPPING:
+1. [Trend signal → prompt phrase]
+2. [Trend signal → prompt phrase]
+3. [Trend signal → prompt phrase]
+
+RESEARCH LIMITATION:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. SUNO GENERATION LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SUNO MODEL:
+[v6-mini / v6-wild / v6 / v6 + Max / Other]
+
+SUNO MODEL AVAILABILITY VERIFIED:
+[YES / NO / PENDING]
+
+GENERATION DATE:
+[YYYY-MM-DD]
+
+GENERATION MODE:
+[EXPLORE / PRODUCTION / REPAIR]
+
+VARIETY SETTING:
+[Known value / PENDING]
+
+STYLE PROMPT VERSION:
+[ ]
+
+STYLE PROMPT CHARACTER COUNT:
+[XXX / 1,000]
+
+CHARACTER COUNT RESULT:
+[PASS / FAIL]
+
+LYRICS VERSION USED:
+[ ]
+
+REFERENCE MATERIAL USED:
+[ ]
+
+CANDIDATE A:
+[URL or file / Notes]
+
+CANDIDATE B:
+[URL or file / Notes]
+
+CANDIDATE C:
+[URL or file / Notes]
+
+SELECTED CANDIDATE:
+[A / B / C / NONE]
+
+SELECTION REASON:
+[ ]
+
+LOCK:
+- [Vocal identity]
+- [Melody or hook]
+- [Groove]
+- [Human moment]
+
+KEEP:
+- [ ]
+- [ ]
+- [ ]
+
+REPAIR:
+- [ ]
+- [ ]
+- [ ]
+
+REGENERATION AVOIDANCE NOTE:
+[What must be preserved instead of regenerating the whole song?]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. AUDIO QA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AUDIO RECEIVED:
+[YES / NO]
+
+AUDIO LISTENED IN FULL:
+[YES / NO]
+
+AUDIO FILE / URL:
+[ ]
+
+QA DATE:
+[YYYY-MM-DD / PENDING]
+
+If AUDIO RECEIVED or LISTENED IN FULL is NO:
+FINAL QA STATUS = AUDIO REQUIRED
+
+OPENING IMPACT:
+[PASS / REVIEW / FAIL + evidence]
+
+VOCAL ENTRY:
+[PASS / REVIEW / FAIL + timestamp]
+
+MELODY MEMORABILITY:
+[PASS / REVIEW / FAIL + evidence]
+
+GROOVE STABILITY:
+[PASS / REVIEW / FAIL + evidence]
+
+DRUM–BASS RELATIONSHIP:
+[PASS / REVIEW / FAIL + evidence]
+
+ARRANGEMENT CLARITY:
+[PASS / REVIEW / FAIL + evidence]
+
+SECTION DEVELOPMENT:
+[PASS / REVIEW / FAIL + evidence]
+
+INSTRUMENTAL BREAK:
+[PASS / REVIEW / FAIL + evidence]
+
+FINAL CHORUS:
+[PASS / REVIEW / FAIL + evidence]
+
+OUTRO:
+[PASS / REVIEW / FAIL + evidence]
+
+MIX BALANCE:
+[PASS / REVIEW / FAIL + evidence]
+
+REPEAT-LISTENING FATIGUE:
+[LOW / MEDIUM / HIGH + evidence]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. VOCAL QA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ONE CONSISTENT IDENTITY:
+[PASS / REVIEW / FAIL]
+
+NATURAL TIMING:
+[PASS / REVIEW / FAIL]
+
+BELIEVABLE BREATHS:
+[PASS / REVIEW / FAIL]
+
+PITCH-GRID STIFFNESS:
+[LOW / MEDIUM / HIGH]
+
+TUNING TRANSPARENCY:
+[PASS / REVIEW / FAIL]
+
+DICTION:
+[PASS / REVIEW / FAIL]
+
+EMOTIONAL CREDIBILITY:
+[PASS / REVIEW / FAIL]
+
+VIBRATO:
+[PASS / REVIEW / FAIL]
+
+DOUBLES / HARMONIES:
+[PASS / REVIEW / FAIL]
+
+SYNTHETIC ARTIFACTS:
+[NONE / MINOR / MAJOR]
+
+VOCAL QA RESULT:
+[PASS / REPAIR / REJECT / AUDIO REQUIRED]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. THREE QA MAPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEEP MAP:
+1. [Timestamp + element + reason]
+2. [Timestamp + element + reason]
+3. [Timestamp + element + reason]
+
+REPAIR MAP:
+1. [P1/P2/P3 + timestamp + issue + exact repair]
+2. [P1/P2/P3 + timestamp + issue + exact repair]
+3. [P1/P2/P3 + timestamp + issue + exact repair]
+
+RISK MAP:
+1. [Risk + probability + impact]
+2. [Risk + probability + impact]
+3. [Risk + probability + impact]
+
+PRIORITY DEFINITIONS:
+
+P1:
+Release-blocking
+
+P2:
+Meaningful improvement
+
+P3:
+Optional polish
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. ANTI-COPY CHECK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXISTING MELODY RISK:
+[LOW / REVIEW / HIGH]
+
+LYRIC SIMILARITY RISK:
+[LOW / REVIEW / HIGH]
+
+SIGNATURE RIFF RISK:
+[LOW / REVIEW / HIGH]
+
+ARTIST-IDENTITY IMITATION RISK:
+[LOW / REVIEW / HIGH]
+
+ARRANGEMENT-SIGNATURE RISK:
+[LOW / REVIEW / HIGH]
+
+REAL ARTIST NAMES REMOVED FROM FINAL SUNO PROMPT:
+[YES / NO / NOT APPLICABLE]
+
+ANTI-COPY RESULT:
+[PASS / REVIEW REQUIRED / HOLD]
+
+NOTES:
+[This is a creative screening record, not a legal clearance opinion.]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. REACH-FOR-IT-AGAIN TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FIRST-PLAY ATTRACTION:
+[PASS / REVIEW / FAIL]
+
+TEN-PLAY COMFORT:
+[PASS / REVIEW / FAIL / MORE LISTENING REQUIRED]
+
+MEMORABLE ELEMENT:
+[ ]
+
+HUMAN TRUTH LONGEVITY:
+[PASS / REVIEW / FAIL]
+
+CATALOG CONTRIBUTION:
+[PASS / REVIEW / FAIL]
+
+INTENTIONAL REPLAY VALUE:
+[PASS / REVIEW / FAIL]
+
+FINAL RESULT:
+[PASS / CONDITIONAL PASS / FAIL / AUDIO REQUIRED]
+
+PRODUCER REASON:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. PRODUCER DECISION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LUON RECOMMENDATION:
+[KEEP / REPAIR / REJECT / NEEDS MORE EVIDENCE]
+
+PRIMARY REASON:
+[ ]
+
+REQUIRED REPAIR:
+[ ]
+
+OPTIONAL POLISH:
+[ ]
+
+UNRESOLVED RISK:
+[ ]
+
+SAMDADORA FINAL DECISION:
+[KEEP / REPAIR / REJECT / PENDING]
+
+DECISION DATE:
+[YYYY-MM-DD / PENDING]
+
+SAMDADORA NOTE:
+[ ]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16. MASTER FILE LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MASTER FILENAME:
+[ ]
+
+VERSION NAME:
+[Original / Radio Edit / Instrumental / Other]
+
+MIX VERSION:
+[ ]
+
+MASTERING VERSION:
+[ ]
+
+FILE FORMAT:
+[WAV / FLAC / Other]
+
+SAMPLE RATE:
+[ ]
+
+BIT DEPTH:
+[ ]
+
+CHANNEL FORMAT:
+[Stereo / Other]
+
+ACTUAL DURATION:
+[ ]
+
+LOUDNESS:
+[Measured value / PENDING]
+
+TRUE PEAK:
+[Measured value / PENDING]
+
+EXPLICIT CONTENT:
+[YES / NO / REVIEW]
+
+INSTRUMENTAL VERSION:
+[YES / NO]
+
+LYRIC SHEET SAVED:
+[YES / NO]
+
+OFFICIAL DOWNLOAD SAVED:
+[YES / NO]
+
+BACKUP LOCATION:
+[ ]
+
+FILE INTEGRITY VERIFIED:
+[YES / NO / PENDING]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17. CREDITS LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROJECT / ARTIST NAME:
+SAMDADORA
+
+EXECUTIVE PRODUCER:
+SAMDADORA
+
+MUSIC DIRECTOR / PRODUCER:
+LUON
+
+LYRICS CONTRIBUTION:
+[ ]
+
+COMPOSITION CONTRIBUTION:
+[ ]
+
+ARRANGEMENT CONTRIBUTION:
+[ ]
+
+VOCAL SOURCE:
+[ ]
+
+MIX:
+[ ]
+
+MASTERING:
+[ ]
+
+ARTWORK:
+[ ]
+
+AI TOOLS USED:
+[ ]
+
+OTHER CONTRIBUTORS:
+[ ]
+
+LEGAL CREDIT WORDING CONFIRMED:
+[YES / NO / PENDING]
+
+IMPORTANT:
+Creative contribution records do not automatically determine legal authorship, copyright ownership, or royalty shares.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18. RIGHTS & PERMISSION LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A. INPUTS
+
+ORIGINAL IDEA OWNER:
+[ ]
+
+LYRICS INPUT OWNER:
+[ ]
+
+PHOTO / IMAGE OWNER:
+[ ]
+
+PHOTO / IMAGE LICENSE:
+[Owned / Licensed / Permission received / PENDING]
+
+AUDIO REFERENCE OWNER:
+[ ]
+
+THIRD-PARTY TEXT USED:
+[NO / YES — describe]
+
+THIRD-PARTY AUDIO USED:
+[NO / YES — describe]
+
+SAMPLES USED:
+[NO / YES — describe]
+
+SAMPLE CLEARANCE:
+[NOT APPLICABLE / CONFIRMED / PENDING / HOLD]
+
+B. VOICE
+
+VOICE TYPE:
+[Generated / User-owned recording / Licensed voice / Other]
+
+REAL PERSON IMITATED:
+[NO / REVIEW]
+
+VOICE IDENTITY:
+[ ]
+
+VOICE PERMISSION:
+[CONFIRMED / NOT REQUIRED / PENDING / HOLD]
+
+VOICE PERMISSION EVIDENCE:
+[Document, date, or location]
+
+C. AI GENERATION
+
+SUNO ACCOUNT HOLDER:
+[ ]
+
+SUNO PLAN AT GENERATION:
+[ ]
+
+SUNO MODEL:
+[ ]
+
+GENERATION DATE:
+[ ]
+
+COMMERCIAL-USE ELIGIBILITY REVIEWED:
+[YES / NO / PENDING]
+
+TERMS / LICENSE REVIEW DATE:
+[YYYY-MM-DD / PENDING]
+
+TERMS EVIDENCE:
+[URL, screenshot, document, or PENDING]
+
+PROMPTS PRESERVED:
+[YES / NO]
+
+GENERATION HISTORY PRESERVED:
+[YES / NO]
+
+SOURCE FILES PRESERVED:
+[YES / NO]
+
+D. OWNERSHIP AND REGISTRATION
+
+CLAIMED RIGHTS HOLDER:
+[ ]
+
+LYRICS OWNERSHIP STATUS:
+[CONFIRMED / PENDING REVIEW]
+
+MUSIC OWNERSHIP STATUS:
+[CONFIRMED / PENDING REVIEW]
+
+MASTER RECORDING OWNER:
+[ ]
+
+OWNERSHIP SHARES:
+[CONFIRMED AGREEMENT / PENDING]
+
+COPYRIGHT REGISTRATION:
+[NOT FILED / FILED / REGISTERED / PENDING]
+
+COLLECTING SOCIETY:
+[ ]
+
+PUBLISHER:
+[ ]
+
+LEGAL REVIEW:
+[NOT REQUESTED / PENDING / COMPLETED]
+
+LEGAL REVIEW NOTE:
+[ ]
+
+E. RIGHTS RESULT
+
+RIGHTS RISK:
+[LOW / MEDIUM / HIGH / INSUFFICIENT EVIDENCE]
+
+UNRESOLVED RIGHTS ITEM:
+[ ]
+
+RIGHTS GATE:
+[PASS / REVIEW / HOLD]
+
+This log documents available information.
+It does not replace professional legal advice.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19. DISTRIBUTION METADATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINAL DISPLAY TITLE:
+[ ]
+
+ARTIST NAME:
+SAMDADORA
+
+FEATURED ARTIST:
+[None / ]
+
+RELEASE TYPE:
+[Single / EP / Album]
+
+VERSION:
+[Original / Instrumental / Other]
+
+LANGUAGE:
+[ ]
+
+PRIMARY GENRE:
+[ ]
+
+SECONDARY GENRE:
+[ ]
+
+COMPOSER:
+[CONFIRMED NAME / PENDING]
+
+LYRICIST:
+[CONFIRMED NAME / PENDING]
+
+PRODUCER:
+[CONFIRMED CREDIT / PENDING]
+
+COPYRIGHT LINE:
+[© YEAR RIGHTS HOLDER / PENDING]
+
+PHONOGRAPHIC COPYRIGHT LINE:
+[℗ YEAR MASTER OWNER / PENDING]
+
+RELEASE TERRITORY:
+[Worldwide / Selected territories / PENDING]
+
+ORIGINAL RELEASE DATE:
+[YYYY-MM-DD / PENDING]
+
+PRE-ORDER DATE:
+[YYYY-MM-DD / NOT USED / PENDING]
+
+EXPLICIT CONTENT:
+[YES / NO]
+
+LYRICS PROVIDED:
+[YES / NO]
+
+COVER ART FILE:
+[ ]
+
+COVER ART SIZE:
+[ ]
+
+COVER ART RIGHTS:
+[CONFIRMED / PENDING / HOLD]
+
+METADATA SPELLING VERIFIED:
+[YES / NO]
+
+DISTRIBUTOR VALIDATION:
+[PASS / FAIL / PENDING]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20. IDENTIFIER LOG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ISRC:
+[PENDING]
+
+ISRC ASSIGNED BY:
+[Distributor / Label / National agency / PENDING]
+
+ISRC ASSIGNMENT DATE:
+[YYYY-MM-DD / PENDING]
+
+UPC / EAN:
+[PENDING]
+
+UPC / EAN ASSIGNED BY:
+[ ]
+
+CATALOG NUMBER:
+[PENDING]
+
+DISTRIBUTOR:
+[PENDING]
+
+DISTRIBUTOR RELEASE ID:
+[PENDING]
+
+STORE PRODUCT IDs:
+- Spotify: [PENDING]
+- Apple Music: [PENDING]
+- YouTube Music: [PENDING]
+- Other: [PENDING]
+
+Never invent an ISRC, UPC, EAN, catalog number, or platform ID.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+21. RELEASE SCHEDULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TARGET RELEASE DATE:
+[YYYY-MM-DD / PENDING]
+
+DISTRIBUTOR SUBMISSION DEADLINE:
+[YYYY-MM-DD / PENDING]
+
+FINAL MASTER DEADLINE:
+[YYYY-MM-DD / PENDING]
+
+ARTWORK DEADLINE:
+[YYYY-MM-DD / PENDING]
+
+METADATA LOCK DATE:
+[YYYY-MM-DD / PENDING]
+
+LYRICS DELIVERY DATE:
+[YYYY-MM-DD / PENDING]
+
+PRE-SAVE START:
+[YYYY-MM-DD / NOT USED / PENDING]
+
+YOUTUBE UPLOAD:
+[YYYY-MM-DD / PENDING]
+
+SHORTS / REELS TEASER 1:
+[YYYY-MM-DD / PENDING]
+
+SHORTS / REELS TEASER 2:
+[YYYY-MM-DD / PENDING]
+
+RELEASE-DAY CONTENT:
+[ ]
+
+POST-RELEASE FOLLOW-UP:
+[ ]
+
+PLAYLIST PLACEMENT PLAN:
+[ ]
+
+TIME-ZONE VERIFIED:
+[YES / NO]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+22. PLATFORM PACKAGING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+YOUTUBE TITLE:
+[ ]
+
+YOUTUBE DESCRIPTION:
+[ ]
+
+YOUTUBE THUMBNAIL CONCEPT:
+[ ]
+
+LYRIC VIDEO:
+[YES / NO]
+
+VISUALIZER:
+[YES / NO]
+
+YOUTUBE MUSIC DELIVERY:
+[Distributor / Manual / PENDING]
+
+SHORTS HOOK:
+[ ]
+
+INSTAGRAM REELS HOOK:
+[ ]
+
+CREATOR STORY:
+[ ]
+
+CORE CONTENT MESSAGE:
+[ ]
+
+CALL TO ACTION:
+[ ]
+
+SEARCH KEYWORDS:
+- [ ]
+- [ ]
+- [ ]
+
+PLAYLIST TARGET:
+[ ]
+
+CONTENT ASSETS READY:
+[YES / NO / PARTIAL]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+23. FINAL RELEASE GATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINAL AUDIO APPROVED:
+[YES / NO]
+
+SAMDADORA APPROVAL RECORDED:
+[YES / NO]
+
+METADATA VERIFIED:
+[YES / NO]
+
+CREDITS CONFIRMED:
+[YES / NO]
+
+LYRICS VERIFIED:
+[YES / NO]
+
+ARTWORK APPROVED:
+[YES / NO]
+
+ARTWORK RIGHTS CONFIRMED:
+[YES / NO]
+
+VOICE PERMISSION CONFIRMED:
+[YES / NO / NOT REQUIRED]
+
+COMMERCIAL-USE STATUS REVIEWED:
+[YES / NO]
+
+SAMPLE CLEARANCE CONFIRMED:
+[YES / NO / NOT APPLICABLE]
+
+ANTI-COPY CHECK PASSED:
+[YES / NO]
+
+ISRC STATUS RECORDED:
+[YES / NO]
+
+DISTRIBUTOR REQUIREMENTS PASSED:
+[YES / NO]
+
+RELEASE DATE FEASIBLE:
+[YES / NO]
+
+MASTER AND PROJECT BACKUPS SAVED:
+[YES / NO]
+
+UNRESOLVED P1 ISSUE:
+[NO / YES — describe]
+
+FINAL RELEASE STATUS:
+[ ] READY TO SUBMIT
+[ ] READY WITH PENDING IDENTIFIER
+[ ] HOLD — RIGHTS
+[ ] HOLD — AUDIO
+[ ] HOLD — METADATA
+[ ] HOLD — ARTWORK
+[ ] HOLD — DISTRIBUTOR
+[ ] HOLD — SAMDADORA APPROVAL
+
+BLOCKING REASON:
+[ ]
+
+NEXT REQUIRED ACTION:
+[ ]
+
+RESPONSIBLE PARTY:
+[SAMDADORA / LUON / Distributor / Other]
+
+DUE DATE:
+[YYYY-MM-DD / PENDING]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+24. POST-RELEASE RECORD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ACTUAL RELEASE DATE:
+[YYYY-MM-DD / PENDING]
+
+RELEASED:
+[YES / NO]
+
+LIVE PLATFORM LINKS:
+- YouTube Music: [ ]
+- Spotify: [ ]
+- Apple Music: [ ]
+- Other: [ ]
+
+DELIVERY ERROR:
+[NONE / Describe]
+
+METADATA CORRECTION REQUIRED:
+[NO / YES — describe]
+
+CONTENT PUBLISHED:
+[ ]
+
+PLAYLISTS ADDED:
+[ ]
+
+7-DAY OBSERVATION:
+[ ]
+
+30-DAY OBSERVATION:
+[ ]
+
+90-DAY OBSERVATION:
+[ ]
+
+LISTENER RESPONSE:
+[ ]
+
+REPEAT-LISTENING SIGNAL:
+[ ]
+
+LESSON FOR NEXT RELEASE:
+[OBSERVATION / REPEATED PATTERN / WORKING HYPOTHESIS / CONFIRMED RULE]
+
+DASHBOARD UPDATED:
+[YES / NO]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+25. RECORD APPROVAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LUON REVIEW STATUS:
+[COMPLETE / INCOMPLETE]
+
+LUON REVIEW DATE:
+[YYYY-MM-DD]
+
+SAMDADORA FINAL STATUS:
+[APPROVED / REPAIR / REJECTED / PENDING]
+
+SAMDADORA APPROVAL DATE:
+[YYYY-MM-DD / PENDING]
+
+FINAL NOTE:
+[ ]
+
+FINAL DECISION = SAMDADORA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+END OF SONG MASTER CARD
++ RIGHTS & RELEASE LOG v1.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
