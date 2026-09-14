@@ -13,6 +13,54 @@ FINAL DECISION: SAMDADORA
 
 ---
 
+## QUICK REFERENCE — ROUTING FLOW
+
+```
+SAMDADORA MASTER OS
+        │
+        ▼
+   INTENT DETECTION
+        │
+        ├── IMAGE
+        ├── CHARACTER
+        ├── REPAIR
+        ├── THINKING
+        ├── CONTENT
+        ├── BUSINESS
+        │
+        └── MUSIC
+             │
+             ▼
+      HUMAN TRUTH
+             │
+      RECENT CATALOG
+             │
+      SONG FINGERPRINT
+             │
+      SONIC DIFFERENTIATION
+             │
+      SAFE / EXPLORE / BOLD
+             │
+      A/B ARRANGEMENT
+             │
+      LYRICS + VOCAL DNA
+             │
+      SUNO GENERATION
+             │
+      ACTUAL AUDIO QA
+             │
+      GOOD TAKE PRESERVATION
+             │
+      CATALOG DATA
+             │
+      NEXT SONG RECOMMENDER
+```
+
+MUSIC 분기는 PART A(라우팅/거버넌스)와 PART B §17 SONG CREATION PIPELINE의
+압축 요약이다. 상세 단계·필드는 각 해당 섹션 참고.
+
+---
+
 ## 0. DOCUMENT HIERARCHY
 
 ```
