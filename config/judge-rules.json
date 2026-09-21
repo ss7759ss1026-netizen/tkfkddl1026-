@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "name": "SAMDADORA JUDGE ENGINE RULES",
+    "version": "1.0",
+    "master_standard": "CLAUDE.md — SAMDADORA × LUON UNIFIED CREATIVE & MUSIC OPERATING SYSTEM (PART A: MUSIC OS v1.0 / PART B: PRODUCTION STANDARD v6.0 + v6.1)",
+    "note": "이 파일의 모든 수치/문구 기준은 CLAUDE.md를 그대로 인용한다. CLAUDE.md가 갱신되면(새 CHANGE LOG 버전) 이 파일도 함께 갱신해야 한다. 이 파일 자체는 CLAUDE.md를 축약하거나 대체하지 않는다.",
+    "category_definitions": {
+      "HARD": "위반 시 MASTER PASS가 절대 불가능한 규칙. 자동 PASS/추정 금지.",
+      "ADVISORY": "기본값에서 벗어나면 음악적 근거(justification)가 필요한 권장 기준. HARD FAIL이 아니며 MASTER PASS를 막지 않는다.",
+      "SOFT": "기계적으로 PASS 판정할 수 없는 창작적/주관적 항목. 근거 없이 PASS 금지 — UNASSESSED 또는 REPAIR만 허용.",
+      "CATALOG": "최근 카탈로그 비교 데이터가 있을 때만 판정 가능한 항목. 데이터 없으면 INSUFFICIENT EVIDENCE.",
+      "RELEASE": "RELEASE 모드(실제 발매 진행) 입력이 있을 때만 적용되는 항목."
+    }
+  },
+
+  "structure": {
+    "source": "CLAUDE.md PART B §28 STRUCTURE STANDARD, §61 DEFAULT NEW-SONG DELIVERY",
+    "canonical_sequence": [
+      "Intro", "Verse 1", "Pre-chorus", "Chorus", "Tag",
+      "Verse 2", "Pre-chorus", "Chorus", "Instrumental Break",
+      "Bridge", "Final Chorus", "Final Tag", "Outro"
+    ],
+    "required_min_count": {
+      "Intro": 1,
+      "Verse 1": 1,
+      "Pre-chorus": 2,
+      "Chorus": 2,
+      "Tag": 1,
+      "Verse 2": 1,
+      "Instrumental Break": 1,
+      "Final Chorus": 1,
+      "Final Tag": 1,
+      "Outro": 1
+    },
+    "optional_sections": {
+      "Bridge": "CLAUDE.md §30 BRIDGE — 먼저 SUBTRACTION을 고려하고 음악적으로 타당할 때만 포함. 없어도 HARD FAIL 아님."
+    },
+    "aliases": {
+      "short intro": "Intro",
+      "intro": "Intro",
+      "cold open": "Intro",
+      "verse 1": "Verse 1",
+      "verse1": "Verse 1",
+      "pre": "Pre-chorus",
+      "pre-chorus": "Pre-chorus",
+      "pre chorus": "Pre-chorus",
+      "prechorus": "Pre-chorus",
+      "pre-chorus 1": "Pre-chorus",
+      "pre-chorus 2": "Pre-chorus",
+      "pre 1": "Pre-chorus",
+      "pre 2": "Pre-chorus",
+      "chorus": "Chorus",
+      "chorus 1": "Chorus",
+      "chorus 2": "Chorus",
+      "tag": "Tag",
+      "hook tag": "Tag",
+      "verse 2": "Verse 2",
+      "verse2": "Verse 2",
+      "instrumental break": "Instrumental Break",
+      "8-bar break": "Instrumental Break",
+      "8-bar instrumental break": "Instrumental Break",
+      "break": "Instrumental Break",
+      "dance break": "Instrumental Break",
+      "bridge": "Bridge",
+      "final chorus": "Final Chorus",
+      "final tag": "Final Tag",
+      "outro": "Outro"
+    },
+    "ordering_constraints": [
+      ["Intro", "Verse 1"],
+      ["Verse 1", "Chorus"],
+      ["Chorus", "Tag"],
+      ["Tag", "Verse 2"],
+      ["Verse 2", "Instrumental Break"],
+      ["Instrumental Break", "Final Chorus"],
+      ["Final Chorus", "Final Tag"],
+      ["Final Tag", "Outro"]
+    ]
+  },
+
+  "rules": {
+    "HARD": [
+      {
+        "id": "H1_PROMPT_CHAR_LIMIT",
+        "type": "char_limit",
+        "field": "suno_style_prompt",
+        "max_chars": 1000,
+        "count_mode": "include_whitespace",
+        "source": "CLAUDE.md PART B §45 SUNO STYLE PROMPT — HARD LIMIT: 1,000자(공백 포함)",
+        "description": "Suno Style Prompt는 공백을 포함해 1,000자를 초과할 수 없다. 실제 len() 계산값만 사용하며 추정하지 않는다."
+      },
+      {
+        "id": "H2_STRUCTURE_REQUIRED",
+        "type": "structure_required",
+        "source": "CLAUDE.md PART B §28 STRUCTURE STANDARD, §61 DEFAULT NEW-SONG DELIVERY",
+        "description": "정의된 필수 구조 요소(Bridge 제외)가 모두 존재해야 한다. 하나라도 누락되면 HARD FAIL."
+      },
+      {
+        "id": "H3_ARTIST_REFERENCE_FORBIDDEN",
+        "type": "forbidden_reference",
+        "fields": ["title", "suno_style_prompt", "lyrics"],
+        "source": "CLAUDE.md PART A §A6 ANTI-COPY AND ORIGINALITY GATE",
+        "description": "최종 산출물(제목/Suno 스타일 프롬프트/가사)에 실존 아티스트명, 식별 가능한 아티스트 복제/모방 표현을 포함할 수 없다. 이 목록은 예시이며 SAMDADORA가 계속 확장해야 한다.",
+        "blocklist_names": [
+          "taylor swift", "ed sheeran", "adele", "bruno mars", "ariana grande",
+          "the weeknd", "dua lipa", "billie eilish", "harry styles", "sza",
+          "frank ocean", "john mayer", "coldplay", "imagine dragons",
+          "maroon 5", "jason mraz", "john legend", "bts", "blackpink",
+          "iu", "aespa", "newjeans", "seventeen", "ive", "rose", "jungkook"
+        ],
+        "reference_phrase_patterns": [
+          "in the style of", "sound(s)? exactly like", "sound-alike of",
+          "sounds just like", "copy the voice of", "impersonat", "mimic the voice",
+          "스타일 그대로", "목소리를 그대로 복제", "목소리 복제",
+          "처럼 들리게 따라", "또같이 방송하는 느낌으로 복제"
+        ]
+      }
+    ],
+
+    "ADVISORY": [
+      {
+        "id": "A1_BPM_DEFAULT_RANGE",
+        "type": "range_with_justification",
+        "field": "bpm",
+        "justification_field": "bpm_justification",
+        "min": 95,
+        "max": 120,
+        "source": "CLAUDE.md PART B §15 BPM/RUNTIME/WORD COUNT — 기본 탐색 범위 95–120 BPM (하드 제한 아님, 벗어나려면 음악적 이유 필요)",
+        "description": "BPM이 95–120을 벗어나면 bpm_justification이 필요하다. 하드 제한이 아니므로 FAIL이 아닌 REVIEW로만 표시한다."
+      },
+      {
+        "id": "A2_PROMPT_RECOMMENDED_RANGE",
+        "type": "char_recommended_range",
+        "field": "suno_style_prompt",
+        "min": 850,
+        "max": 950,
+        "source": "CLAUDE.md PART B §45 SUNO STYLE PROMPT — PREFERRED: 850–950",
+        "description": "850–950자는 권장 범위일 뿐이다. 벗어나도 1,000자 이하면 HARD FAIL은 아니고 REVIEW로만 표시한다."
+      },
+      {
+        "id": "A3_SUNG_WORDS",
+        "type": "word_range_by_mood",
+        "field": "lyrics",
+        "mood_field": "mood_palette",
+        "default_range": [160, 200],
+        "mood_overrides": {
+          "cafe_work": [120, 150],
+          "cafe/work": [120, 150],
+          "cafe-work": [120, 150],
+          "카페/워크": [120, 150]
+        },
+        "source": "CLAUDE.md PART B §15 / §37 LYRICS STANDARD — 기본 160–200 words, C제/Work 무드(§32-B) 예외 120–150 words (CHANGE LOG 2026-09-13 v6.0/v6.1)",
+        "description": "sung word는 실제 단어 수를 계산해 모드별 범위와 비교한다. 'Runtime First, Word Count Second' 원칙에 따라 HARD FAIL이 아닌 REVIEW로만 처리한다."
+      },
+      {
+        "id": "A4_STRUCTURE_ORDER",
+        "type": "structure_order",
+        "source": "CLAUDE.md PART B §28 STRUCTURE STANDARD",
+        "description": "구조 요소가 존재하더라도 표준 순서(structure.ordering_constraints)와 다르면 REVIEW. 장르적 타당성이 있으면 사람이 판단해야 하므로 HARD FAIL이 아니다."
+      },
+      {
+        "id": "A5_DEFAULT_AVOID_LIST",
+        "type": "avoid_terms",
+        "fields": ["suno_style_prompt"],
+        "applies_when_genre_unspecified_only": true,
+        "genre_field": "genre",
+        "terms": [
+          "heavy rock", "dark cinematic", "synthwave clich", "big edm drop",
+          "huge drop", "cinematic intro", "wall of sound", "overcrowded arrangement"
+        ],
+        "source": "CLAUDE.md PART A §A5 DEFAULT MUSIC DIRECTION — 장르 미지정 시 기본적으로 피할 것",
+        "description": "장르가 명시되지 않은 경우(기본값 COASTAL INDIE POP)에만 적용되는 권장 회피 목록. 위반해도 REVIEW일 뿐 FAIL 아님."
+      }
+    ],
+
+    "SOFT": [
+      {
+        "id": "S1_HUMAN_TRUTH_PRESENT",
+        "type": "soft_field_presence",
+        "field": "human_truth",
+        "source": "CLAUDE.md PART B §07 HUMAN TRUTH GATE, §16 SONG TRUTH SYSTEM",
+        "description": "HUMAN TRUTH 한 문장이 있는지만 확인한다. 질적 타당성은 LUON/SAMDADORA의 판단 영역이라 UNASSESSED로 남긴다."
+      },
+      {
+        "id": "S2_SIGNATURE_MEMORY_PRESENT",
+        "type": "soft_field_presence",
+        "field": "signature",
+        "source": "CLAUDE.md PART B §25 SIGNATURE MEMORY SYSTEM",
+        "description": "곱마다 하나의 Signature Memory Hook이 지정되었는지만 확인한다. 기억성 자체는 자동 판정 불가."
+      },
+      {
+        "id": "S3_CLICHE_LANGUAGE_CHECK",
+        "type": "cliche_scan",
+        "field": "lyrics",
+        "cliche_phrases": [
+          "shine bright like a diamond", "unbreakable bond", "against all odds",
+          "tapestry of dreams", "depths of my soul", "chase the light forever",
+          "stars align tonight", "fire in my veins", "unstoppable force of love"
+        ],
+        "source": "CLAUDE.md PART B §37 LYRICS STANDARD — 피하기: generic AI poetry, cliche stacking",
+        "description": "대표적인 AI 클리쉘 패턴이 포착되면 REPAIR, 없으면 UNASSESSED(자동 탐지는 일부만 가능)."
+      },
+      {
+        "id": "S4_VOCAL_GATE",
+        "type": "requires_audio",
+        "audio_field": "audio_provided",
+        "source": "CLAUDE.md PART B §39 VOCAL DNA, §51 VOCAL QA — 실제 오디오가 있어야 확정적 QA 가능",
+        "description": "오디오가 없으면 AUDIO REQUIRED(UNASSESSED). 있어도 자동 판정 불가하여 UNASSESSED로 남을 수 있다."
+      },
+      {
+        "id": "S5_REACH_FOR_IT_AGAIN",
+        "type": "requires_audio",
+        "audio_field": "audio_provided",
+        "source": "CLAUDE.md PART A §A8 / PART B §55 REACH-FOR-IT-AGAIN TEST",
+        "description": "오디오 없이 PASS/REPAIR/RETHINK를 단정할 수 없다. 오디오 없으면 AUDIO REQUIRED(UNASSESSED)."
+      }
+    ],
+
+    "CATALOG": [
+      {
+        "id": "C1_RECENT5_DIFFERENTIATION",
+        "type": "recent5_overlap",
+        "catalog_field": "recent5_overlap_count",
+        "thresholds": { "pass_max": 2, "review_max": 3 },
+        "source": "CLAUDE.md PART B §19 RECENT-5 DIFFERENTIATION GATE — 0–2 PASS / 3 REVIEW / 4+ REDESIGN",
+        "description": "catalog_context.recent5_overlap_count가 없으면 INSUFFICIENT EVIDENCE. 있으면 임계값으로 PASS/REVIEW/REDESIGN 판정."
+      },
+      {
+        "id": "C2_VOCAL_PORTFOLIO_BALANCE",
+        "type": "vocal_portfolio",
+        "catalog_field": "vocal_counts",
+        "target_ratio": { "male_solo": 7, "female_solo": 3, "duet": 0 },
+        "source": "CLAUDE.md PART B §14 CATALOG PORTFOLIO — MALE SOLO 7 / FEMALE SOLO 3 / DUET 0 (10곱 기준)",
+        "description": "catalog_context.vocal_counts 없으면 INSUFFICIENT EVIDENCE. 있으면 현재 곱이 포트폴리오 목표를 악화시키는지 알림(REVIEW)."
+      },
+      {
+        "id": "C3_BPM_CATALOG_REPETITION",
+        "type": "bpm_repetition",
+        "catalog_field": "recent_bpms",
+        "cluster_threshold": 3,
+        "source": "CLAUDE.md PART A §A9 ROTATION MODE / PART B §56 RECENT-20 INSTRUMENT AUDIT",
+        "description": "catalog_context.recent_bpms 없으면 INSUFFICIENT EVIDENCE. 있으면 동일/근접 BPM(±2) 재등장 빈도를 검사."
+      }
+    ],
+
+    "RELEASE": [
+      {
+        "id": "R1_NO_FABRICATED_IDENTIFIERS",
+        "type": "no_fabricated_identifiers",
+        "identifier_fields": ["isrc", "upc", "catalog_number", "distributor_release_id"],
+        "release_field": "release",
+        "confirmed_flag_field": "identifiers_confirmed",
+        "source": "CLAUDE.md PART A §A11 D IDENTIFIERS — 미배정 시 PENDING, 가짜 식별자 생성 금지",
+        "description": "release.mode가 RELEASE일 때만 평가. 식별자 값이 'PENDING'이 아니면서 identifiers_confirmed=true가 아니면 FAIL(조작 의심)."
+      },
+      {
+        "id": "R2_RIGHTS_PERMISSION_LOG_PRESENT",
+        "type": "release_field_presence",
+        "release_field": "release",
+        "required_subfields": ["voice_permission_status", "input_ownership_or_license", "samdadora_approval"],
+        "source": "CLAUDE.md PART A §A11 C RIGHTS & PERMISSION LOG",
+        "description": "필수 권리 필드가 비어있거나 PENDING이 아닌 추측값이면 REVIEW."
+      },
+      {
+        "id": "R3_REQUIRED_RELEASE_FIELDS",
+        "type": "release_field_presence",
+        "release_field": "release",
+        "required_subfields": ["song_id", "master_filename", "duration"],
+        "source": "CLAUDE.md PART A §A11 A MASTER DATA",
+        "description": "마스터 데이터 필수 필드가 비어있으면 REVIEW."
+      }
+    ]
+  }
+}
