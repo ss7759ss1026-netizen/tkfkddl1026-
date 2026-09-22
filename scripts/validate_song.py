@@ -45,9 +45,13 @@ def render_report(report: dict) -> str:
     lines.append("SAMDADORA JUDGE REPORT")
     lines.append("=" * 72)
     lines.append(f"MASTER VERDICT : {report['verdict']}")
-    lines.append(f"MASTER PASS    : {report['master_pass']}")
+    lines.append(f"MASTER READY   : {report['master_pass']}")
     if report["hard_failed_ids"]:
         lines.append(f"HARD FAIL IDS  : {', '.join(report['hard_failed_ids'])}")
+    if report.get("needs_repair_ids"):
+        lines.append(f"NEEDS REPAIR   : {', '.join(report['needs_repair_ids'])}")
+    if report.get("needs_review_ids"):
+        lines.append(f"NEEDS REVIEW   : {', '.join(report['needs_review_ids'])}")
     lines.append("")
 
     for category in ("HARD", "ADVISORY", "SOFT", "CATALOG", "RELEASE"):

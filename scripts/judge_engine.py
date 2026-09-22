@@ -7,13 +7,20 @@ RELEASE 다섯 카테고리로 평가한다.
 
 핵심 원칙 (CLAUDE.md PART A §A16 DECISION AND EVIDENCE RULES 반영):
   - 모든 수치는 실제로 계산한다. 추정해서 PASS 처리하지 않는다.
-  - HARD 규칙 위반이 하나라도 있으면 MASTER PASS는 절대 불가능하다.
-  - ADVISORY는 기본값에서 벗어나면 근거(justification)가 필요할 뿐,
-    HARD FAIL이 아니며 MASTER PASS를 막지 않는다.
+  - HARD 규칙 위반이 하나라도 있으면 verdict는 MASTER FAIL — HARD BLOCK이다.
+  - HARD는 전부 통과했더라도 SOFT REPAIR / CATALOG REDESIGN / RELEASE FAIL
+    (수리 필요 등급)이나 ADVISORY·CATALOG·RELEASE의 미해결 REVIEW(검수 필요
+    등급)가 하나라도 남아 있으면 "MASTER READY"라고 표시하지 않는다 —
+    각각 NEEDS REPAIR / NEEDS REVIEW로 명시한다.
+  - MASTER READY는 모든 HARD PASS + 필수 REPAIR 없음(SOFT REPAIR/CATALOG
+    REDESIGN/RELEASE FAIL 없음) + 미해결 REVIEW 없음(ADVISORY/CATALOG/
+    RELEASE REVIEW 없음) 상태에서만 허용한다.
   - SOFT는 창작적/주관적 항목이라 기계적으로 PASS를 줄 수 없다.
     근거가 없으면 UNASSESSED, 결함이 발견되면 REPAIR만 반환한다.
-  - CATALOG/RELEASE는 필요한 데이터가 없으면 INSUFFICIENT EVIDENCE로
-    남기고 임의로 판단하지 않는다.
+  - CATALOG/RELEASE는 필요한 데이터가 없으면 INSUFFICIENT EVIDENCE /
+    NOT APPLICABLE로 남기고 임의로 판단하지 않으며, 이 상태 자체는
+    MASTER READY를 막지 않는다 — 다만 그것을 "검증 완료"로 승격하지도
+    않는다 (검증되지 않은 채로 남아 있을 뿐이다).
 
 이 모듈은 config/judge-rules.json에 정의된 규칙만 읽어서 실행한다.
 규칙의 수치 자체를 이 파일에 하드코딩하지 않는다 (CLAUDE.md 갱신 시
@@ -37,6 +44,11 @@ STATUS_UNASSESSED = "UNASSESSED"
 STATUS_REPAIR = "REPAIR"
 STATUS_INSUFFICIENT_EVIDENCE = "INSUFFICIENT EVIDENCE"
 STATUS_NOT_APPLICABLE = "NOT APPLICABLE"
+
+VERDICT_HARD_BLOCK = "MASTER FAIL — HARD BLOCK"
+VERDICT_NEEDS_REPAIR = "NEEDS REPAIR"
+VERDICT_NEEDS_REVIEW = "NEEDS REVIEW"
+VERDICT_MASTER_READY = "MASTER READY"
 
 
 def load_rules(path: str | Path = DEFAULT_RULES_PATH) -> dict:
@@ -369,8 +381,41 @@ _FORBIDDEN_STATUS_BY_CATEGORY = {
 }
 
 
+# "수리 필요" 등급 — HARD FAIL은 아니지만 MASTER READY를 막는, REVIEW보다
+# 심각한 결함. SOFT는 REPAIR, CATALOG는 REDESIGN(§19 4+ 겹침), RELEASE는
+# FAIL(예: 가짜 식별자)이 여기 해당한다.
+_REPAIR_TIER_STATUSES = {
+    "SOFT": {STATUS_REPAIR},
+    "CATALOG": {STATUS_REDESIGN},
+    "RELEASE": {STATUS_FAIL},
+}
+
+# "검수 필요" 등급 — 아직 해결되지 않은 REVIEW. REPAIR 등급보다는 가볍지만
+# 그 자체로 MASTER READY를 막는다 (근거 없이 승격하지 않는다).
+_REVIEW_TIER_STATUSES = {
+    "ADVISORY": {STATUS_REVIEW},
+    "CATALOG": {STATUS_REVIEW},
+    "RELEASE": {STATUS_REVIEW},
+}
+
+
 def evaluate(song: dict, rules_cfg: dict | None = None) -> dict:
-    """song(dict)을 판정하고 SAMDADORA JUDGE REPORT용 dict를 반환한다."""
+    """song(dict)을 판정하고 SAMDADORA JUDGE REPORT용 dict를 반환한다.
+
+    verdict는 다음 네 가지 중 하나이며, 이 순서로 우선순위를 갖는다:
+      1. MASTER FAIL — HARD BLOCK : HARD 규칙 위반이 하나라도 있음
+      2. NEEDS REPAIR             : SOFT REPAIR / CATALOG REDESIGN /
+                                    RELEASE FAIL 중 하나라도 있음
+      3. NEEDS REVIEW             : ADVISORY / CATALOG / RELEASE REVIEW 중
+                                    하나라도 해결되지 않고 남아 있음
+      4. MASTER READY             : 위 세 가지가 전부 없음 (HARD 전부 PASS,
+                                    필수 REPAIR/REDESIGN 없음, 미해결 REVIEW
+                                    없음)
+
+    master_pass(bool)는 정확히 verdict == MASTER READY와 동치이다 — "HARD만
+    통과하면 PASS"라는 예전 의미로 되돌아가지 않도록, 이 필드 하나만 보고도
+    실제로 출고 가능한 상태인지 착오 없이 판단할 수 있게 한다.
+    """
     if rules_cfg is None:
         rules_cfg = load_rules()
 
@@ -388,24 +433,32 @@ def evaluate(song: dict, rules_cfg: dict | None = None) -> dict:
         report[category] = results
 
     hard_failed = [r for r in report["HARD"] if r["status"] == STATUS_FAIL]
-    master_pass = len(hard_failed) == 0
 
-    advisory_review = [r for r in report["ADVISORY"] if r["status"] != STATUS_PASS]
-    catalog_flags = [r for r in report["CATALOG"] if r["status"] in (STATUS_REVIEW, STATUS_REDESIGN)]
-    release_flags = [r for r in report["RELEASE"] if r["status"] in (STATUS_REVIEW, STATUS_FAIL)]
+    needs_repair = [
+        r for category, statuses in _REPAIR_TIER_STATUSES.items()
+        for r in report[category] if r["status"] in statuses
+    ]
+    needs_review = [
+        r for category, statuses in _REVIEW_TIER_STATUSES.items()
+        for r in report[category] if r["status"] in statuses
+    ]
 
     if hard_failed:
-        verdict = "MASTER FAIL — HARD BLOCK"
-    elif release_flags and any(r["status"] == STATUS_FAIL for r in report["RELEASE"]):
-        verdict = "MASTER PASS — RELEASE BLOCKED (RIGHTS RISK)"
-    elif advisory_review or catalog_flags or release_flags:
-        verdict = "MASTER PASS — REVIEW NEEDED"
+        verdict = VERDICT_HARD_BLOCK
+    elif needs_repair:
+        verdict = VERDICT_NEEDS_REPAIR
+    elif needs_review:
+        verdict = VERDICT_NEEDS_REVIEW
     else:
-        verdict = "MASTER PASS"
+        verdict = VERDICT_MASTER_READY
+
+    master_pass = verdict == VERDICT_MASTER_READY
 
     return {
         "master_pass": master_pass,
         "verdict": verdict,
         "hard_failed_ids": [r["id"] for r in hard_failed],
+        "needs_repair_ids": [r["id"] for r in needs_repair],
+        "needs_review_ids": [r["id"] for r in needs_review],
         "categories": report,
     }
