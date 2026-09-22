@@ -5,7 +5,8 @@ SAMDADORA JUDGE ENGINE 테스트.
   - prompt 999자 PASS / 1000자 PASS / 1001자 HARD FAIL
   - prompt 850~950자 권장 범위(ADVISORY)
   - lyric sung-word 경계값 (일반 160~200, Café/Work 예외 120~150)
-  - BPM 경계값 (95~120, ADVISORY, 근거 제공 시 예외)
+  - BPM 경계값 (102~120, ADVISORY, 근거 제공 시 예외 — 2026-09-21 SAMDADORA 결정으로
+    기본 탐색 범위 하한이 95에서 102로 갱신됨)
   - 필수 구조 요소 누락 시 HARD FAIL
   - 금지 요소 / 아티스트 레퍼런스 탐지
   - HARD FAIL이 하나라도 있으면 MASTER PASS가 절대 나오지 않는 것
@@ -32,7 +33,7 @@ def base_song() -> dict:
         "suno_style_prompt": "x" * 900,
         "lyrics": make_words(180),
         "structure": list(VALID_STRUCTURE),
-        "bpm": 100,
+        "bpm": 108,
         "mood_palette": "general",
         "human_truth": "A quiet promise to keep moving forward, one small day at a time.",
         "signature": "3-note guitar harmonic motif before every chorus",
@@ -215,14 +216,26 @@ def test_sung_words_cafe_work_exception_range():
 
 
 # ---------------------------------------------------------------------------
-# BPM boundary — ADVISORY, default 95–120, justification exception
+# BPM boundary — ADVISORY, default 102–120 (2026-09-21 SAMDADORA 결정으로
+# 기존 95–120에서 하한 갱신), justification exception
 # ---------------------------------------------------------------------------
 
-def test_bpm_95_lower_boundary_pass():
+def test_bpm_101_below_lower_boundary_is_review():
     song = base_song()
-    song["bpm"] = 95
+    song["bpm"] = 101
+    report = evaluate(song)
+    result = get_result(report, "ADVISORY", "A1_BPM_DEFAULT_RANGE")
+    assert result["status"] == je.STATUS_REVIEW
+    assert report["master_pass"] is True  # ADVISORY는 MASTER PASS를 막지 않는다
+
+
+def test_bpm_102_lower_boundary_pass():
+    song = base_song()
+    song["bpm"] = 102
     result = get_result(evaluate(song), "ADVISORY", "A1_BPM_DEFAULT_RANGE")
     assert result["status"] == je.STATUS_PASS
+    assert result["value"] == 102
+    assert result["range"] == [102, 120]
 
 
 def test_bpm_120_upper_boundary_pass():
@@ -232,16 +245,7 @@ def test_bpm_120_upper_boundary_pass():
     assert result["status"] == je.STATUS_PASS
 
 
-def test_bpm_94_without_justification_is_review():
-    song = base_song()
-    song["bpm"] = 94
-    report = evaluate(song)
-    result = get_result(report, "ADVISORY", "A1_BPM_DEFAULT_RANGE")
-    assert result["status"] == je.STATUS_REVIEW
-    assert report["master_pass"] is True  # ADVISORY는 MASTER PASS를 막지 않는다
-
-
-def test_bpm_121_without_justification_is_review():
+def test_bpm_121_above_upper_boundary_is_review():
     song = base_song()
     song["bpm"] = 121
     result = get_result(evaluate(song), "ADVISORY", "A1_BPM_DEFAULT_RANGE")
@@ -255,6 +259,25 @@ def test_bpm_out_of_range_with_justification_passes():
     result = get_result(evaluate(song), "ADVISORY", "A1_BPM_DEFAULT_RANGE")
     assert result["status"] == je.STATUS_PASS
     assert result.get("note") == "JUSTIFIED DEVIATION"
+
+
+def test_bpm_now_excluded_lower_zone_with_justification_passes():
+    # 95~101 BPM은 기존 기준에서는 PASS였으나 새 기준(102~120)에서는 범위 밖이다.
+    # 근거가 있으면 여전히 JUSTIFIED DEVIATION으로 PASS 처리되어야 한다.
+    song = base_song()
+    song["bpm"] = 98
+    song["bpm_justification"] = "Café/Work 팔레트의 느린 그루브를 의도적으로 유지하기 위해 하향."
+    result = get_result(evaluate(song), "ADVISORY", "A1_BPM_DEFAULT_RANGE")
+    assert result["status"] == je.STATUS_PASS
+    assert result.get("note") == "JUSTIFIED DEVIATION"
+
+
+def test_bpm_now_excluded_lower_zone_without_justification_is_review():
+    song = base_song()
+    song["bpm"] = 98
+    result = get_result(evaluate(song), "ADVISORY", "A1_BPM_DEFAULT_RANGE")
+    assert result["status"] == je.STATUS_REVIEW
+    assert result.get("note") != "JUSTIFIED DEVIATION"
 
 
 # ---------------------------------------------------------------------------

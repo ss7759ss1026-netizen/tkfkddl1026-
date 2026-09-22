@@ -123,10 +123,10 @@
         "type": "range_with_justification",
         "field": "bpm",
         "justification_field": "bpm_justification",
-        "min": 95,
+        "min": 102,
         "max": 120,
-        "source": "CLAUDE.md PART B §15 BPM/RUNTIME/WORD COUNT — 기본 탐색 범위 95–120 BPM (하드 제한 아님, 벗어나려면 음악적 이유 필요)",
-        "description": "BPM이 95–120을 벗어나면 bpm_justification이 필요하다. 하드 제한이 아니므로 FAIL이 아닌 REVIEW로만 표시한다."
+        "source": "SAMDADORA 최신 명시적 결정(2026-09-21) — CLAUDE.md PART A §0 DOCUMENT HIERARCHY 1순위(SAMDADORA의 최신 명시적 결정)에 따라 PART B §15 BPM/RUNTIME/WORD COUNT의 문서상 기본 탐색 범위(95–120 BPM)를 102–120 BPM으로 갱신 적용. CLAUDE.md 본문 CHANGE LOG 반영 및 §15 문구 자체의 개정은 PART A §A15 CHANGE CONTROL PROCEDURE에 따라 SAMDADORA 승인 시 별도 진행.",
+        "description": "BPM이 102–120을 벗어나면 bpm_justification이 필요하다. 하드 제한이 아니므로 FAIL이 아닌 REVIEW로만 표시하며, 명확한 근거가 있으면 JUSTIFIED DEVIATION으로 PASS 처리한다."
       },
       {
         "id": "A2_PROMPT_RECOMMENDED_RANGE",
