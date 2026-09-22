@@ -159,6 +159,42 @@ MIGRATION NOTE: "Steady Light"(128 words, Café/Work)는 이 예외 범위(120�
 재작업 불필요.
 ```
 
+```
+VERSION: v6.2 (Living Standard MINOR 변경 — 기본 BPM 탐색 범위 갱신)
+DATE: 2026-09-21
+STATUS: ACTIVE
+APPROVED BY: SAMDADORA
+
+CHANGE TYPE: MINOR SYSTEM CHANGE (프로덕션 디폴트 갱신)
+
+ADDED: 없음
+
+CHANGED:
+- §15 BPM/RUNTIME/WORD COUNT — DEFAULT BPM EXPLORATION: 95–120 BPM →
+  102–120 BPM (하드 제한이 아니라는 원칙과 bpm_justification 예외 메커니즘은
+  동일하게 유지, 하한 수치만 갱신)
+
+REMOVED: 없음
+
+REASON:
+SAMDADORA가 신규 곡 기본 BPM 탐색 범위를 102–120 BPM으로 확정. Judge
+Engine(scripts/judge_engine.py, config/judge-rules.json)에는 이미
+2026-09-21 SAMDADORA 결정으로 우선 반영되어 있었으며, 이번 변경으로 Master
+Standard 문서 본문(§15)과 정식 동기화한다.
+
+AFFECTED MODES: CREATE (신규 곡 BPM 설계 단계)
+
+COMPATIBILITY: 하위 호환 — bpm_justification 근거 제시 시 범위 밖 BPM도
+JUSTIFIED DEVIATION으로 허용하는 예외 메커니즘은 그대로 유지. §41 PRODUCTION
+DNA LIBRARY의 장르별 참고 BPM(P9 ≈92 BPM Neo-Soul, P13 100 BPM Jazz-Hop 등)은
+특정 장르 팔레트의 참고용 예시이며 신규 곡 기본 탐색 범위의 적용 대상이
+아니므로 이번 변경에서 수정하지 않는다.
+
+MIGRATION NOTE: 과거 곡의 실제 BPM 기록(예: "Steady Light" 100 BPM, "Sail
+Slow" 112 BPM)은 소급 재작업하지 않고 참고 기록으로 그대로 유지한다. 새
+범위는 이번 갱신 이후 신규 곡 설계부터 적용된다.
+```
+
 ---
 
 # PART A — SAMDADORA MUSIC OS v1.0 (ROUTING & GOVERNANCE LAYER)
@@ -678,10 +714,14 @@ separation, family, parents, children, gratitude, memory, long
 relationships). 보컬: MALE SOLO 7 / FEMALE SOLO 3 / DUET 0. ONE SONG = ONE
 SOLO VOCAL IDENTITY. 듀엣은 SAMDADORA 명시적 요청시에만.
 
-### 15. BPM / RUNTIME / WORD COUNT ⟵ **v6.0 갱신**
+### 15. BPM / RUNTIME / WORD COUNT ⟵ **v6.0 / v6.2 갱신**
 
-DEFAULT BPM EXPLORATION: 95–120 BPM (하드 제한 아님, 벗어나려면 음악적 이유
-필요). 카탈로그 레벨 BPM 반복 회피. TARGET RUNTIME: 3:00–4:00.
+DEFAULT BPM EXPLORATION: 102–120 BPM (하드 제한 아님, 벗어나려면 음악적
+이유(bpm_justification)가 필요 — 명확한 근거가 있으면 JUSTIFIED DEVIATION으로
+허용).
+*(기존 95–120 BPM에서 2026-09-21 SAMDADORA 결정에 따라 하한 갱신. CHANGE LOG
+v6.2 참고. 과거 곡의 BPM 기록은 소급 수정하지 않는다.)*
+카탈로그 레벨 BPM 반복 회피. TARGET RUNTIME: 3:00–4:00.
 
 **DEFAULT ENGLISH SUNG WORD TARGET: 160–200 words**
 *(기존 120–130 words에서 MUSIC OS v1.0 §A17 우선순위에 따라 갱신. 2026-09-13
