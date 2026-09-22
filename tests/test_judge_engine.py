@@ -11,15 +11,24 @@ SAMDADORA JUDGE ENGINE 테스트.
   - 금지 요소 / 아티스트 레퍼런스 탐지
   - HARD FAIL이 하나라도 있으면 MASTER READY가 절대 나오지 않는 것
 
-verdict 상태 모델 (2026-09-22 수정 — MASTER PASS 의미 충돌 해소):
+verdict 상태 모델 (2026-09-22 PR #2 최종 리뷰 — READY 3단계 분리):
   MASTER FAIL — HARD BLOCK : HARD 규칙 위반 존재
   NEEDS REPAIR             : HARD는 전부 PASS했지만 SOFT REPAIR /
                              CATALOG REDESIGN / RELEASE FAIL 중 하나라도 존재
   NEEDS REVIEW             : 위 REPAIR 등급은 없지만 ADVISORY/CATALOG/
                              RELEASE REVIEW가 미해결로 남아 있음
-  MASTER READY             : 위 세 가지가 전부 없음 (실제로 출고 가능)
-master_pass(bool)는 정확히 verdict == "MASTER READY"와 동치이다. ADVISORY
-REVIEW나 SOFT REPAIR가 남아 있는데 "PASS"라고 표시되는 일은 없어야 한다.
+  DESIGN READY             : 위 세 가지가 전부 없음. 실제 오디오가 없어도
+                             도달 가능
+  MASTER READY             : DESIGN READY + audio_provided=true +
+                             Vocal QA(§39)/Reach-for-it-again(§55) 명시적
+                             PASS 확정 근거 — audio_provided만으로는 승격 금지
+  RELEASE READY            : MASTER READY + release.mode=="RELEASE" +
+                             식별자/권리/마스터 데이터 실제 검증 완료
+                             (PENDING/미검증 값 있으면 승격 금지)
+HARD BLOCK/NEEDS REPAIR/NEEDS REVIEW는 세 READY 단계 전부보다 우선한다.
+readiness_stage는 verdict가 READY 계열일 때만 그 값을 담고, 그 외에는
+None이다. master_pass(bool)는 verdict가 MASTER READY 또는 RELEASE READY일
+때만 True이다 — DESIGN READY만으로는 True가 되지 않는다.
 """
 
 import copy
@@ -65,15 +74,18 @@ def get_result(report: dict, category: str, rule_id: str) -> dict:
 # Sanity: a fully valid song passes everything
 # ---------------------------------------------------------------------------
 
-def test_valid_song_is_master_ready():
-    # 모든 필수 게이트(HARD 전부 PASS, REPAIR/REDESIGN 없음, 미해결 REVIEW
-    # 없음)가 충족되면 MASTER READY여야 한다.
+def test_valid_song_with_no_audio_is_design_ready():
+    # HARD 전부 PASS + REPAIR/REDESIGN 없음 + 미해결 REVIEW 없음이면
+    # DESIGN READY까지는 도달한다 — 실제 오디오가 없어도 가능하다.
+    # 다만 audio_provided가 없으므로 MASTER READY 이상은 아니며,
+    # master_pass는 아직 False여야 한다(MASTER READY 이상에서만 True).
     report = evaluate(base_song())
-    assert report["verdict"] == je.VERDICT_MASTER_READY
-    assert report["master_pass"] is True
     assert report["hard_failed_ids"] == []
     assert report["needs_repair_ids"] == []
     assert report["needs_review_ids"] == []
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["readiness_stage"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
 
 
 # ---------------------------------------------------------------------------
@@ -532,8 +544,191 @@ def test_unassessed_and_insufficient_evidence_do_not_block_master_ready():
     release_statuses = {r["status"] for r in report["categories"]["RELEASE"]}
     assert release_statuses == {je.STATUS_NOT_APPLICABLE}
 
+    # UNASSESSED/INSUFFICIENT EVIDENCE/NOT APPLICABLE 자체는 NEEDS REPAIR나
+    # NEEDS REVIEW로 떨어뜨리지 않는다 — 다만 audio_provided가 없으므로
+    # readiness_stage는 DESIGN READY에 머무른다(더 높은 단계로 "승격"되지
+    # 않는다는 의미).
+    assert report["needs_repair_ids"] == []
+    assert report["needs_review_ids"] == []
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
+
+
+# ---------------------------------------------------------------------------
+# READINESS STAGE — DESIGN READY / MASTER READY / RELEASE READY
+# (2026-09-22 PR #2 final review) HARD/REPAIR/REVIEW가 없다는 전제에서만
+# 의미가 있고, HARD BLOCK/NEEDS REPAIR/NEEDS REVIEW는 이 세 단계 전부보다
+# 우선한다.
+# ---------------------------------------------------------------------------
+
+def _confirmed_vocal_gate() -> dict:
+    return {"current": "PASS", "human": "PASS", "song_fit": "PASS", "distinctive": "PASS"}
+
+
+def _verified_release_block() -> dict:
+    return {
+        "mode": "RELEASE",
+        "identifiers_confirmed": True,
+        "isrc": "KRA123456789",
+        "upc": "123456789012",
+        "catalog_number": "SAMDADORA-001",
+        "distributor_release_id": "DSTR-0001",
+        "voice_permission_status": "CONFIRMED — Suno ToS 상업 이용 허용 범위 내",
+        "input_ownership_or_license": "오리지널 가사/프롬프트, SAMDADORA 소유",
+        "samdadora_approval": "APPROVED",
+        "song_id": "2026-09-003",
+        "master_filename": "2026-09-003-master.wav",
+        "duration": "3:24",
+    }
+
+
+def test_no_audio_yields_design_ready():
+    song = base_song()  # audio_provided 없음
+    report = evaluate(song)
+    assert report["hard_failed_ids"] == []
+    assert report["needs_repair_ids"] == []
+    assert report["needs_review_ids"] == []
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["readiness_stage"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
+
+
+def test_audio_provided_alone_without_qa_confirmation_stays_design_ready():
+    # audio_provided=true만으로는 절대 자동 승격되지 않는다 — Vocal QA와
+    # Reach-for-it-again 확정 근거가 없으면 여전히 DESIGN READY다.
+    song = base_song()
+    song["audio_provided"] = True
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
+
+
+def test_audio_provided_with_partial_vocal_gate_stays_design_ready():
+    # Vocal Gate 4개 축 중 하나라도 PASS가 아니면 확정된 것으로 보지 않는다.
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = {"current": "PASS", "human": "PASS", "song_fit": "PASS", "distinctive": "REPAIR"}
+    song["reach_for_it_again_decision"] = "PASS"
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
+
+
+def test_audio_qa_confirmed_yields_master_ready():
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+
+    report = evaluate(song)
+    assert report["hard_failed_ids"] == []
+    assert report["needs_repair_ids"] == []
+    assert report["needs_review_ids"] == []
+    assert report["verdict"] == je.VERDICT_MASTER_READY
+    assert report["readiness_stage"] == je.VERDICT_MASTER_READY
+    assert report["master_pass"] is True
+
+
+def test_reach_for_it_again_repair_decision_blocks_master_ready():
+    # §55 DECISION이 REPAIR/RETHINK면 "명시적으로 검수 완료된 근거"는
+    # 있지만 PASS가 아니므로 MASTER READY로 승격하지 않는다.
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "REPAIR"
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_DESIGN_READY
+    assert report["master_pass"] is False
+
+
+def test_incomplete_release_data_stays_master_ready():
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    song["release"] = {"mode": "RELEASE", "isrc": "PENDING"}  # 미완료 릴리즈 데이터
+
+    report = evaluate(song)
+    # RELEASE 필수 필드가 비어 있으므로 R2/R3가 REVIEW → NEEDS REVIEW가
+    # 되어 MASTER READY보다도 우선 적용된다. 그래도 RELEASE READY는 아니다.
+    assert report["verdict"] != je.VERDICT_RELEASE_READY
+
+
+def test_verified_release_data_yields_release_ready():
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    song["release"] = _verified_release_block()
+
+    report = evaluate(song)
+    assert report["hard_failed_ids"] == []
+    assert report["needs_repair_ids"] == []
+    assert report["needs_review_ids"] == []
+    assert report["verdict"] == je.VERDICT_RELEASE_READY
+    assert report["readiness_stage"] == je.VERDICT_RELEASE_READY
+    assert report["master_pass"] is True
+
+
+def test_release_ready_rejects_pending_identifier_even_if_confirmed_flag_true():
+    # identifiers_confirmed=true라도 실제 값이 PENDING이면 미검증이다 —
+    # RELEASE READY로 승격하지 않는다(MASTER READY에는 머무른다).
+    song = base_song()
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    release = _verified_release_block()
+    release["isrc"] = "PENDING"
+    song["release"] = release
+
+    report = evaluate(song)
     assert report["verdict"] == je.VERDICT_MASTER_READY
     assert report["master_pass"] is True
+
+
+def test_hard_block_outranks_every_readiness_stage():
+    song = base_song()
+    song["suno_style_prompt"] = "x" * 1001  # HARD FAIL
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    song["release"] = _verified_release_block()
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_HARD_BLOCK
+    assert report["readiness_stage"] is None
+    assert report["master_pass"] is False
+
+
+def test_needs_repair_outranks_every_readiness_stage():
+    song = base_song()
+    del song["signature"]  # SOFT REPAIR
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    song["release"] = _verified_release_block()
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_NEEDS_REPAIR
+    assert report["readiness_stage"] is None
+    assert report["master_pass"] is False
+
+
+def test_needs_review_outranks_every_readiness_stage():
+    song = base_song()
+    song["bpm"] = 200  # ADVISORY REVIEW, no justification
+    song["audio_provided"] = True
+    song["vocal_gate"] = _confirmed_vocal_gate()
+    song["reach_for_it_again_decision"] = "PASS"
+    song["release"] = _verified_release_block()
+
+    report = evaluate(song)
+    assert report["verdict"] == je.VERDICT_NEEDS_REVIEW
+    assert report["readiness_stage"] is None
+    assert report["master_pass"] is False
 
 
 # ---------------------------------------------------------------------------

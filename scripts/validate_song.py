@@ -45,6 +45,7 @@ def render_report(report: dict) -> str:
     lines.append("SAMDADORA JUDGE REPORT")
     lines.append("=" * 72)
     lines.append(f"MASTER VERDICT : {report['verdict']}")
+    lines.append(f"READINESS STAGE: {report.get('readiness_stage') or 'N/A (see verdict)'}")
     lines.append(f"MASTER READY   : {report['master_pass']}")
     if report["hard_failed_ids"]:
         lines.append(f"HARD FAIL IDS  : {', '.join(report['hard_failed_ids'])}")

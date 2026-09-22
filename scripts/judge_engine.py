@@ -10,17 +10,32 @@ RELEASE 다섯 카테고리로 평가한다.
   - HARD 규칙 위반이 하나라도 있으면 verdict는 MASTER FAIL — HARD BLOCK이다.
   - HARD는 전부 통과했더라도 SOFT REPAIR / CATALOG REDESIGN / RELEASE FAIL
     (수리 필요 등급)이나 ADVISORY·CATALOG·RELEASE의 미해결 REVIEW(검수 필요
-    등급)가 하나라도 남아 있으면 "MASTER READY"라고 표시하지 않는다 —
-    각각 NEEDS REPAIR / NEEDS REVIEW로 명시한다.
-  - MASTER READY는 모든 HARD PASS + 필수 REPAIR 없음(SOFT REPAIR/CATALOG
-    REDESIGN/RELEASE FAIL 없음) + 미해결 REVIEW 없음(ADVISORY/CATALOG/
-    RELEASE REVIEW 없음) 상태에서만 허용한다.
+    등급)가 하나라도 남아 있으면 어떤 READY 단계로도 승격하지 않는다 —
+    각각 NEEDS REPAIR / NEEDS REVIEW로 명시하며, 이 둘은 모든 READY
+    단계보다 우선한다.
   - SOFT는 창작적/주관적 항목이라 기계적으로 PASS를 줄 수 없다.
     근거가 없으면 UNASSESSED, 결함이 발견되면 REPAIR만 반환한다.
   - CATALOG/RELEASE는 필요한 데이터가 없으면 INSUFFICIENT EVIDENCE /
     NOT APPLICABLE로 남기고 임의로 판단하지 않으며, 이 상태 자체는
-    MASTER READY를 막지 않는다 — 다만 그것을 "검증 완료"로 승격하지도
+    READY 승격을 막지 않는다 — 다만 그것을 "검증 완료"로 승격하지도
     않는다 (검증되지 않은 채로 남아 있을 뿐이다).
+
+READY는 다음 3단계로 나뉜다 (2026-09-22 PR #2 최종 리뷰 반영):
+  - DESIGN READY : HARD 전부 PASS + REPAIR/REDESIGN 없음 + 미해결 REVIEW
+                   없음. 실제 오디오가 아직 없어도 도달 가능한, 프로덕션
+                   전(pre-generation) 단계의 준비 완료 상태.
+  - MASTER READY : DESIGN READY + audio_provided=true + Vocal QA(§39
+                   VOCAL GATE 4개 축)와 Reach-for-it-again Test(§55)가
+                   명시적으로 PASS 확정된 근거가 있어야 한다.
+                   audio_provided=true라는 사실 하나만으로는 절대
+                   자동 승격되지 않는다.
+  - RELEASE READY: MASTER READY + release.mode=="RELEASE" + 식별자/권리/
+                   마스터 필수 데이터가 실제로 검증 완료(PENDING이나
+                   미검증 값이 아님). PENDING/미검증 값이 하나라도 있으면
+                   RELEASE READY로 승격하지 않는다 (MASTER READY에는
+                   머무른다).
+  master_pass(bool)는 verdict가 MASTER READY 또는 RELEASE READY일 때만
+  True이다 — DESIGN READY만으로는 True가 되지 않는다.
 
 이 모듈은 config/judge-rules.json에 정의된 규칙만 읽어서 실행한다.
 규칙의 수치 자체를 이 파일에 하드코딩하지 않는다 (CLAUDE.md 갱신 시
@@ -48,7 +63,11 @@ STATUS_NOT_APPLICABLE = "NOT APPLICABLE"
 VERDICT_HARD_BLOCK = "MASTER FAIL — HARD BLOCK"
 VERDICT_NEEDS_REPAIR = "NEEDS REPAIR"
 VERDICT_NEEDS_REVIEW = "NEEDS REVIEW"
+VERDICT_DESIGN_READY = "DESIGN READY"
 VERDICT_MASTER_READY = "MASTER READY"
+VERDICT_RELEASE_READY = "RELEASE READY"
+
+_READINESS_STAGES = (VERDICT_DESIGN_READY, VERDICT_MASTER_READY, VERDICT_RELEASE_READY)
 
 
 def load_rules(path: str | Path = DEFAULT_RULES_PATH) -> dict:
@@ -339,6 +358,83 @@ def check_release_field_presence(song: dict, rule: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Readiness stage (DESIGN READY / MASTER READY / RELEASE READY)
+#
+# 이 게이트들은 HARD/ADVISORY/SOFT/CATALOG/RELEASE 다섯 카테고리 판정과는
+# 별개로, "실제로 얼마나 진행됐는지"를 판단한다. audio_provided=true 같은
+# 단일 플래그만으로 자동 승격하지 않도록, CLAUDE.md가 이미 정의한 명시적
+# 검수 근거(§39 VOCAL GATE, §55 REACH-FOR-IT-AGAIN DECISION)와 실제 검증된
+# RELEASE 데이터를 요구한다.
+# ---------------------------------------------------------------------------
+
+def _vocal_qa_confirmed(song: dict, readiness_cfg: dict) -> bool:
+    vocal_gate = song.get(readiness_cfg["vocal_gate_field"]) or {}
+    dims = readiness_cfg["vocal_gate_dimensions"]
+    pass_value = readiness_cfg["vocal_gate_pass_value"]
+    return bool(dims) and all(vocal_gate.get(dim) == pass_value for dim in dims)
+
+
+def _reach_for_it_again_confirmed(song: dict, readiness_cfg: dict) -> bool:
+    decision = song.get(readiness_cfg["reach_for_it_again_field"])
+    return decision == readiness_cfg["reach_for_it_again_pass_value"]
+
+
+def _master_ready_confirmed(song: dict, readiness_cfg: dict) -> bool:
+    """audio_provided=true 단독으로는 절대 True가 되지 않는다 — Vocal QA와
+    Reach-for-it-again 둘 다 명시적으로 PASS 확정된 근거가 있어야 한다."""
+    if song.get(readiness_cfg["audio_provided_field"]) is not True:
+        return False
+    return _vocal_qa_confirmed(song, readiness_cfg) and _reach_for_it_again_confirmed(song, readiness_cfg)
+
+
+def _is_verified_value(value: Any, pending_placeholder: str) -> bool:
+    """비어있거나 PENDING(미확정 플레이스홀더)이면 검증된 값이 아니다."""
+    if not value:
+        return False
+    return value != pending_placeholder
+
+
+def _release_ready_confirmed(song: dict, readiness_cfg: dict, rules_cfg: dict) -> bool:
+    release = song.get(readiness_cfg["release_field"]) or {}
+    if release.get("mode") != readiness_cfg["release_mode_value"]:
+        return False
+
+    pending = readiness_cfg["pending_placeholder"]
+
+    id_rule = _find_rule(rules_cfg, "RELEASE", readiness_cfg["release_identifier_rule_id"])
+    identifiers_ok = bool(release.get(id_rule["confirmed_flag_field"])) and all(
+        _is_verified_value(release.get(f), pending) for f in id_rule["identifier_fields"]
+    )
+
+    rights_rule = _find_rule(rules_cfg, "RELEASE", readiness_cfg["release_rights_rule_id"])
+    rights_ok = all(_is_verified_value(release.get(f), pending) for f in rights_rule["required_subfields"])
+
+    master_rule = _find_rule(rules_cfg, "RELEASE", readiness_cfg["release_master_data_rule_id"])
+    master_data_ok = all(_is_verified_value(release.get(f), pending) for f in master_rule["required_subfields"])
+
+    return identifiers_ok and rights_ok and master_data_ok
+
+
+def _find_rule(rules_cfg: dict, category: str, rule_id: str) -> dict:
+    for rule in rules_cfg["rules"].get(category, []):
+        if rule["id"] == rule_id:
+            return rule
+    raise ValueError(f"readiness config references unknown rule id: {rule_id} in category {category}")
+
+
+def _compute_readiness_stage(song: dict, rules_cfg: dict) -> str:
+    """HARD/REPAIR/REVIEW가 전혀 없다는 전제하에서만 호출된다 — 이 함수는
+    DESIGN READY / MASTER READY / RELEASE READY 중 어디까지 도달했는지만
+    판단한다."""
+    readiness_cfg = rules_cfg["readiness"]
+    if not _master_ready_confirmed(song, readiness_cfg):
+        return VERDICT_DESIGN_READY
+    if _release_ready_confirmed(song, readiness_cfg, rules_cfg):
+        return VERDICT_RELEASE_READY
+    return VERDICT_MASTER_READY
+
+
+# ---------------------------------------------------------------------------
 # Dispatch
 # ---------------------------------------------------------------------------
 
@@ -402,19 +498,23 @@ _REVIEW_TIER_STATUSES = {
 def evaluate(song: dict, rules_cfg: dict | None = None) -> dict:
     """song(dict)을 판정하고 SAMDADORA JUDGE REPORT용 dict를 반환한다.
 
-    verdict는 다음 네 가지 중 하나이며, 이 순서로 우선순위를 갖는다:
+    verdict는 다음 여섯 가지 중 하나이며, 이 순서로 우선순위를 갖는다:
       1. MASTER FAIL — HARD BLOCK : HARD 규칙 위반이 하나라도 있음
       2. NEEDS REPAIR             : SOFT REPAIR / CATALOG REDESIGN /
                                     RELEASE FAIL 중 하나라도 있음
       3. NEEDS REVIEW             : ADVISORY / CATALOG / RELEASE REVIEW 중
                                     하나라도 해결되지 않고 남아 있음
-      4. MASTER READY             : 위 세 가지가 전부 없음 (HARD 전부 PASS,
-                                    필수 REPAIR/REDESIGN 없음, 미해결 REVIEW
-                                    없음)
+      4. DESIGN READY             : 위 세 가지가 전부 없음, 실제 오디오는
+                                    아직 없거나 Vocal QA/Reach-for-it-again
+                                    확정 근거가 아직 없음
+      5. MASTER READY             : DESIGN READY + 실제 오디오 QA 확정
+      6. RELEASE READY            : MASTER READY + RELEASE 데이터 실제 검증
+                                    완료(PENDING/미검증 없음)
 
-    master_pass(bool)는 정확히 verdict == MASTER READY와 동치이다 — "HARD만
-    통과하면 PASS"라는 예전 의미로 되돌아가지 않도록, 이 필드 하나만 보고도
-    실제로 출고 가능한 상태인지 착오 없이 판단할 수 있게 한다.
+    1~3은 4~6(READY 단계) 전부보다 우선한다. readiness_stage는 verdict가
+    4~6 중 하나일 때 그 값을 그대로 담고, 1~3일 때는 None이다.
+    master_pass(bool)는 verdict가 MASTER READY 또는 RELEASE READY일 때만
+    True이다 — DESIGN READY만으로는 True가 되지 않는다.
     """
     if rules_cfg is None:
         rules_cfg = load_rules()
@@ -450,13 +550,15 @@ def evaluate(song: dict, rules_cfg: dict | None = None) -> dict:
     elif needs_review:
         verdict = VERDICT_NEEDS_REVIEW
     else:
-        verdict = VERDICT_MASTER_READY
+        verdict = _compute_readiness_stage(song, rules_cfg)
 
-    master_pass = verdict == VERDICT_MASTER_READY
+    readiness_stage = verdict if verdict in _READINESS_STAGES else None
+    master_pass = verdict in (VERDICT_MASTER_READY, VERDICT_RELEASE_READY)
 
     return {
         "master_pass": master_pass,
         "verdict": verdict,
+        "readiness_stage": readiness_stage,
         "hard_failed_ids": [r["id"] for r in hard_failed],
         "needs_repair_ids": [r["id"] for r in needs_repair],
         "needs_review_ids": [r["id"] for r in needs_review],

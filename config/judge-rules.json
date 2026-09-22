@@ -5,12 +5,29 @@
     "master_standard": "CLAUDE.md — SAMDADORA × LUON UNIFIED CREATIVE & MUSIC OPERATING SYSTEM (PART A: MUSIC OS v1.0 / PART B: PRODUCTION STANDARD v6.0 + v6.1)",
     "note": "이 파일의 모든 수치/문구 기준은 CLAUDE.md를 그대로 인용한다. CLAUDE.md가 갱신되면(새 CHANGE LOG 버전) 이 파일도 함께 갱신해야 한다. 이 파일 자체는 CLAUDE.md를 축약하거나 대체하지 않는다.",
     "category_definitions": {
-      "HARD": "위반 시 MASTER PASS가 절대 불가능한 규칙. 자동 PASS/추정 금지.",
-      "ADVISORY": "기본값에서 벗어나면 음악적 근거(justification)가 필요한 권장 기준. HARD FAIL이 아니며 MASTER PASS를 막지 않는다.",
-      "SOFT": "기계적으로 PASS 판정할 수 없는 창작적/주관적 항목. 근거 없이 PASS 금지 — UNASSESSED 또는 REPAIR만 허용.",
-      "CATALOG": "최근 카탈로그 비교 데이터가 있을 때만 판정 가능한 항목. 데이터 없으면 INSUFFICIENT EVIDENCE.",
-      "RELEASE": "RELEASE 모드(실제 발매 진행) 입력이 있을 때만 적용되는 항목."
+      "HARD": "위반 시 verdict가 절대 MASTER FAIL — HARD BLOCK인 규칙. 자동 PASS/추정 금지.",
+      "ADVISORY": "기본값에서 벗어나면 음악적 근거(justification)가 필요한 권장 기준. HARD FAIL은 아니지만, 미해결 REVIEW로 남으면 NEEDS REVIEW가 되어 READY 승격을 막는다 (2026-09-22 수정).",
+      "SOFT": "기계적으로 PASS 판정할 수 없는 창작적/주관적 항목. 근거 없이 PASS 금지 — UNASSESSED 또는 REPAIR만 허용. REPAIR가 있으면 NEEDS REPAIR가 되어 READY 승격을 막는다.",
+      "CATALOG": "최근 카탈로그 비교 데이터가 있을 때만 판정 가능한 항목. 데이터 없으면 INSUFFICIENT EVIDENCE. REDESIGN은 NEEDS REPAIR, REVIEW는 NEEDS REVIEW로 취급된다.",
+      "RELEASE": "RELEASE 모드(실제 발매 진행) 입력이 있을 때만 적용되는 항목. FAIL은 NEEDS REPAIR, REVIEW는 NEEDS REVIEW로 취급된다."
     }
+  },
+
+  "readiness": {
+    "source": "CLAUDE.md PART B §39 VOCAL DNA(VOCAL GATE: CURRENT/HUMAN/SONG FIT/DISTINCTIVE — 전부 PASS), §55 REACH-FOR-IT-AGAIN TEST(DECISION: PASS/REPAIR/RETHINK), PART A §A11 RELEASE MODE",
+    "note": "DESIGN READY / MASTER READY / RELEASE READY 3단계 게이트. audio_provided=true라는 사실만으로는 절대 MASTER READY로 승격하지 않으며, vocal_gate와 reach_for_it_again_decision에 명시적 PASS 근거가 있어야 한다. RELEASE READY도 PENDING/미검증 값으로는 승격하지 않는다.",
+    "audio_provided_field": "audio_provided",
+    "vocal_gate_field": "vocal_gate",
+    "vocal_gate_dimensions": ["current", "human", "song_fit", "distinctive"],
+    "vocal_gate_pass_value": "PASS",
+    "reach_for_it_again_field": "reach_for_it_again_decision",
+    "reach_for_it_again_pass_value": "PASS",
+    "release_field": "release",
+    "release_mode_value": "RELEASE",
+    "pending_placeholder": "PENDING",
+    "release_identifier_rule_id": "R1_NO_FABRICATED_IDENTIFIERS",
+    "release_rights_rule_id": "R2_RIGHTS_PERMISSION_LOG_PRESENT",
+    "release_master_data_rule_id": "R3_REQUIRED_RELEASE_FIELDS"
   },
 
   "structure": {
