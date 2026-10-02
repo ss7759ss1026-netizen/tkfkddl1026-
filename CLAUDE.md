@@ -11,6 +11,15 @@ FINAL DECISION: SAMDADORA
 이 문서는 이 저장소(AI 음악 플레이리스트 / SAMDADORA 개인 브랜드 콘텐츠)에서
 항상 적용되는 살아있는 운영 기준이다. 두 개의 레이어로 구성된다.
 
+> **곡 제작 파이프라인 안내 (2026-10-02 SAMDADORA 결정):** 실제 작사·
+> 작곡·Suno 프롬프트 작업은 저장소 루트의 `SONG-PRODUCTION-GUIDE-v2.0.md`
+> (HARD/DEFAULT/MENU/T-ID 규칙 체계, PIPELINE, QA, OUTPUT FORMAT 포함)를
+> 따른다. 이 문서(CLAUDE.md)는 대체되지 않고 그대로 유지되며, 두 문서가
+> 상충하면 최신 SAMDADORA 결정 → 해당 곡 지시 → `SONG-PRODUCTION-GUIDE-v2.0.md`
+> 순으로 우선한다. 집계 데이터는 `catalog/SONG-INDEX.md`, 프로젝트 기록은
+> `releases/PROJECT-LOG.md`, 테스트 근거는 `evidence/YOUTH-TEST-SERIES.md`에
+> 쌓는다 (자세한 배경은 `releases/PROJECT-LOG.md` 참고).
+
 ---
 
 ## QUICK REFERENCE — ROUTING FLOW
