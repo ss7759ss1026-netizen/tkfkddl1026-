@@ -19,6 +19,13 @@ FINAL DECISION: SAMDADORA
 > 순으로 우선한다. 집계 데이터는 `catalog/SONG-INDEX.md`, 프로젝트 기록은
 > `releases/PROJECT-LOG.md`, 테스트 근거는 `evidence/YOUTH-TEST-SERIES.md`에
 > 쌓는다 (자세한 배경은 `releases/PROJECT-LOG.md` 참고).
+>
+> **실무 체크리스트 (2026-10-02 SAMDADORA 추가):** 저장소 루트의
+> `SONG-CHECKLIST.md`(1장짜리 작업용 체크리스트)도 함께 참고한다. 이
+> 체크리스트와 `SONG-PRODUCTION-GUIDE-v2.0.md`가 충돌하는 항목(Tag 블록,
+> 독립 악기 섹션, 프롬프트 글자 수 등)은 `SONG-CHECKLIST.md` 하단
+> "v2.0 가이드와의 충돌 메모"에 정리되어 있으며, 최신 지시 우선 원칙에
+> 따라 그 체크리스트 쪽이 우선한다.
 
 ---
 

@@ -20,6 +20,24 @@ SAMDADORA × LUON SONG PRODUCTION GUIDE v2.0이 지정하는 프로젝트 레벨
   이 저장소에 없음 — SAMDADORA가 별도로 보유한 문서로 추정. 필요 시
   첨부 요청.
 
+## 2026-10-02 — SONG-CHECKLIST.md 추가 (v2.0 가이드와 일부 충돌)
+
+- SAMDADORA가 1장짜리 실무 체크리스트(`SONG-CHECKLIST.md`)를 추가 지시.
+  이 문서는 자체적으로 "전체 규칙은 CLAUDE.md"라고 명시 — 즉
+  `SONG-PRODUCTION-GUIDE-v2.0.md`가 아니라 CLAUDE.md의 실무판으로
+  제시됨.
+- 세 문서(CLAUDE.md / SONG-PRODUCTION-GUIDE-v2.0.md / SONG-CHECKLIST.md)
+  사이에 직접 충돌 발견: Tag 블록 허용 여부, 독립 악기 섹션 허용
+  여부, 스타일 프롬프트 글자 수 한도(1,000 vs 950). CLAUDE.md §0
+  CONFLICT PRIORITY(최신 명시적 결정 우선)에 따라 SONG-CHECKLIST.md
+  쪽을 우선 적용하기로 하고, 충돌 내역은 `SONG-CHECKLIST.md` 하단에
+  표로 기록함.
+- 미해결: `yama_check.py`/`lyrics_check.py` 스크립트와 YAMA 판정
+  기준(단어 목록)이 저장소에 없음 — SAMDADORA 확인/공유 필요. Voice
+  ID 표기(M-01~M-10/F-01~F-08)가 기존 CLAUDE.md §38 보컬 슬롯과
+  동일한 목록인지도 미확인. "배치" 단위 기준도 불명확 — 기존 6곡에는
+  이 체크리스트의 배치 쿼터가 소급 적용되지 않음.
+
 ## 다음 액션
 
 - 다음 신규 곡부터 Hook 위치를 Chorus Open(D) 외의 위치로 설계
