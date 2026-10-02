@@ -40,4 +40,21 @@ A/B/C 차별화(7-1)·PLAYLIST LAYER(4-1) 판정에 쓰는 곡 데이터 표.
 
 | 신규 곡 | 비교 대상(최근 5곡) | 겹친 축 | 결과 |
 |---------|----------------------|---------|------|
-| (다음 곡 설계 시 여기에 기록) | | | |
+| Stay Instead / Pocket Town / Unhurried (MODE 2 A/B/C) | Sail Slow, Velvet Spotlight, Same Table, New Ground, Ancient Ground | 없음 | PASS |
+
+## MODE 2 후보 — 바하라흐(독일) A/B/C (2026-10-02, PENDING — 오디오 미생성, SAMDADORA 선택 대기)
+
+SONG-PRODUCTION-GUIDE-v2.0.md + SONG-CHECKLIST.md(우선 적용) 기준으로 설계.
+가사 원문·스타일 프롬프트는 대화 기록 참고. 아래 세 곡 중 SAMDADORA가
+고른 곡만 정식 카탈로그 번호(2026-10-00X)를 부여하고 실제 Suno 생성 후
+QA를 진행한다.
+
+| 후보 | Core Line | 주요 이미지 | Hook 위치 | Groove Leader | Vocal 페르소나 | 주악기/색채 | BPM | 시점 | 장르/무드 |
+|---|---|---|---|---|---|---|---|---|---|
+| A. Stay Instead | "I'm staying instead" | 와인마을 즉흥 축제, 놓친 비행기 | Chorus End ×2 | Accordion-led | Male lightly raspy tenor | Accordion + Handclaps | 118 | 1인칭 | Sunny Funk-Pop |
+| B. Pocket Town | "you fit right in my pocket" | 손바닥만한 중세마을 | Chorus End ×2 | Mandolin-led | Female clear mezzo (hushed) | Mandolin + Glockenspiel | 104 | 2인칭 | Dreamy Indie Pop |
+| C. Unhurried | "this town forgot to rush" | 중세 복장 축제, 멈춘 듯한 시간 | Chorus End ×2 | Vocal-rhythm-led (justified) | Male clear mature tenor | Bell keyboard chime + Tambourine | 88 (justified deviation) | 3인칭 | Slow Coastal Indie Folk |
+
+**참고**: 세 곡 모두 Hook 위치가 Chorus End ×2로 동일함 —
+`SONG-CHECKLIST.md`의 보편 구조 규칙(Tag 금지) 때문에 구조적으로
+불가피했던 부분. `SONG-CHECKLIST.md` 하단 "추가 발견" 메모 참고.
