@@ -14,6 +14,7 @@ RUNTIME: Conway Automaton v0.2.1 · ENV: Windows 표준 계정 + WSL Ubuntu + No
 | `setup-answers.md` | `--setup` / `--configure` 질문별 입력값 |
 | `experiment-log-template.md` | 사람이 쓰는 관찰 일지 (Day 0~8) |
 | `content-plan.md` | 유튜브 / 인스타 / 블로그 콘텐츠 설계 |
+| `runbook.html` | 체크하며 따라 하는 실행판 (복사 버튼, 진행률, 7일 기록장, 비상 정지) |
 
 ## 1. 핵심 설계 원칙 (5줄)
 

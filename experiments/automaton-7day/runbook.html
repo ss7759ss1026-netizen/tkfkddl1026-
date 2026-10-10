@@ -1,0 +1,531 @@
+<title>5달러 AI 실험실</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: lab notebook — sticky progress rail on the left (top bar on phones), phases as ledger pages on the right */
+:root{
+  --bg:#EEF2F0; --paper:#FBFCFB; --ink:#15211F; --muted:#5A6965; --line:#CBD5D1;
+  --accent:#0E6B62; --accent-soft:#D5E9E5; --caution:#9A5A12; --caution-soft:#F6E8D3;
+  --stop:#A42A20; --stop-soft:#F7DEDA; --ok:#2F7A3A; --code-bg:#17221F; --code-fg:#DDEBE6;
+  --f-display:"Bricolage Grotesque","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1614; --paper:#16201D; --ink:#E4EEEA; --muted:#93A5A0; --line:#2C3B37;
+  --accent:#4FC2B4; --accent-soft:#16332F; --caution:#E1A35A; --caution-soft:#33261A;
+  --stop:#F07D70; --stop-soft:#3A1E1B; --ok:#7CCB86; --code-bg:#0A100E; --code-fg:#D3E6E0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1614; --paper:#16201D; --ink:#E4EEEA; --muted:#93A5A0; --line:#2C3B37;
+  --accent:#4FC2B4; --accent-soft:#16332F; --caution:#E1A35A; --caution-soft:#33261A;
+  --stop:#F07D70; --stop-soft:#3A1E1B; --ok:#7CCB86; --code-bg:#0A100E; --code-fg:#D3E6E0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr);gap:16px}}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.2;margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* hero */
+header.hero{max-width:1120px;margin:0 auto;padding-block:36px 24px;display:grid;gap:20px}
+.hero h1{font-size:clamp(34px,6vw,60px);font-weight:800;letter-spacing:-.02em}
+.hero h1 .amt{color:var(--accent)}
+.hero p.lede{max-width:62ch;color:var(--muted);margin:0;font-size:16px}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{font-family:var(--f-mono);font-size:13px;border:1px solid var(--line);background:var(--paper);padding:6px 10px;border-radius:6px;font-variant-numeric:tabular-nums}
+.facts b{color:var(--accent);font-weight:600}
+
+/* rail */
+nav.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:grid;gap:14px}
+.meter{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px}
+.meter .pct{font-family:var(--f-display);font-size:40px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.bar{height:8px;background:var(--accent-soft);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.rail ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rail ol a{display:flex;justify-content:space-between;gap:8px;text-decoration:none;color:var(--ink);padding:6px 10px;border-radius:6px;font-size:14px}
+.rail ol a:hover{background:var(--accent-soft)}
+.rail ol a span.n{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rail ol a.done span.n{color:var(--ok)}
+.killbtn{font:inherit;font-weight:700;color:var(--stop);background:var(--stop-soft);border:1px solid var(--stop);border-radius:8px;padding:10px 12px;cursor:pointer;text-align:left}
+@media (max-width:860px){nav.rail{position:static}.rail ol{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}}
+
+/* main */
+main{display:grid;gap:28px;min-width:0}
+section.phase{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:16px;min-width:0;scroll-margin-top:16px}
+@media (max-width:520px){section.phase{padding:18px}}
+.phase-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px}
+.phase-head .num{font-family:var(--f-mono);font-size:13px;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:1px 7px}
+.phase-head h2{font-size:24px;font-weight:600}
+.phase-head .time{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-left:auto}
+.why{margin:0;color:var(--muted);max-width:66ch}
+.phase.done .phase-head .num{background:var(--accent);color:var(--paper)}
+
+ul.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+ul.steps>li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start}
+ul.steps input[type=checkbox]{width:20px;height:20px;margin:3px 0 0;accent-color:var(--accent);cursor:pointer}
+ul.steps label{cursor:pointer}
+ul.steps li.checked>div>label{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.step-body{display:grid;gap:8px;min-width:0}
+.step-body p{margin:0}
+.note{font-size:13.5px;color:var(--muted)}
+
+.code{position:relative;background:var(--code-bg);color:var(--code-fg);border-radius:8px;font-family:var(--f-mono);font-size:13px;line-height:1.6;min-width:0}
+.code pre{margin:0;padding:12px 76px 12px 14px;overflow-x:auto;white-space:pre}
+.code .copy{position:absolute;top:8px;right:8px;font:600 12px var(--f-mono);background:transparent;color:var(--code-fg);border:1px solid #3B4B47;border-radius:5px;padding:3px 8px;cursor:pointer}
+.code .copy:hover{border-color:var(--code-fg)}
+.code .copy.ok{color:#8FE3A0;border-color:#8FE3A0}
+.code .tag{display:block;padding:8px 14px 0;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#7F9792}
+
+.callout{border-radius:8px;padding:12px 14px;font-size:14px;display:grid;gap:4px}
+.callout b{font-weight:700}
+.callout.done{background:var(--accent-soft);color:var(--ink)}
+.callout.done b{color:var(--accent)}
+.callout.warn{background:var(--caution-soft)}
+.callout.warn b{color:var(--caution)}
+.callout.stop{background:var(--stop-soft)}
+.callout.stop b{color:var(--stop)}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg);white-space:nowrap}
+td code,p code,li code,.note code{font-family:var(--f-mono);font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 4px;word-break:break-word}
+td.v{font-family:var(--f-mono);font-weight:600;color:var(--accent);white-space:nowrap}
+td.v.zero{color:var(--stop)}
+.mini{font:600 11px var(--f-mono);color:var(--accent);background:transparent;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:6px;cursor:pointer}
+
+/* day tracker */
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.day{border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:6px;background:var(--bg)}
+.day .d{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.day input,.day textarea{font:inherit;font-size:13.5px;width:100%;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);padding:6px 8px}
+.day input{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.day textarea{resize:vertical;min-height:52px}
+.spark{display:block;width:100%;height:90px}
+.spark text{font-family:var(--f-mono);font-size:10px;fill:var(--muted)}
+
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rules li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px}
+.rules li::before{content:"✕";color:var(--stop);font-weight:700}
+
+.channels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.ch{border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start}
+.ch h3{font-size:16px;font-weight:600}
+.ch .fmt{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.ch p{margin:0;font-size:14px}
+
+.kill{position:fixed;inset:0;background:rgb(0 0 0 / .45);display:grid;place-items:center;padding:16px;z-index:10}
+.kill .box{background:var(--paper);border:2px solid var(--stop);border-radius:12px;padding:22px;max-width:520px;width:100%;display:grid;gap:12px}
+.kill h2{color:var(--stop);font-size:22px}
+.btn{font:600 14px var(--f-body);border-radius:8px;padding:8px 14px;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.danger{border-color:var(--stop);color:var(--stop)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+footer{max-width:1120px;margin:32px auto 0;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <span class="eyebrow">SAMDADORA × LUON · Automaton Experiment 01 · Windows + WSL</span>
+  <h1>잔고 <span class="amt">$5</span>짜리 AI의 일주일</h1>
+  <p class="lede">설치는 끝났어요. 이 페이지는 지갑 백업부터 7일 관찰, 콘텐츠 정리까지 남은 전 과정을 순서대로 안내해요. 단계마다 체크하면 진행률이 이 브라우저에 저장돼요.</p>
+  <ul class="facts">
+    <li>손실 상한 <b>5 USDC</b></li>
+    <li>송금 한도 <b>0</b></li>
+    <li>자식 에이전트 <b>0</b></li>
+    <li>AI 사고비 <b>$1/일</b></li>
+    <li>런타임 <b>v0.2.1</b></li>
+  </ul>
+</header>
+
+<div class="wrap">
+  <nav class="rail" aria-label="진행 단계">
+    <div class="meter">
+      <span class="eyebrow">전체 진행률</span>
+      <span class="pct" id="pct">0%</span>
+      <div class="bar"><i id="barfill"></i></div>
+      <span class="note" id="pctnote">0 / 0 단계</span>
+    </div>
+    <ol id="toc"></ol>
+    <button class="killbtn" id="openKill" type="button">비상 정지 방법 보기</button>
+  </nav>
+
+  <main>
+    <!-- PHASE 1 -->
+    <section class="phase" id="p1" data-phase="1">
+      <div class="phase-head"><span class="num">1</span><h2>설치와 지갑 생성</h2><span class="time">완료</span></div>
+      <ul class="steps">
+        <li><input type="checkbox" id="s1a" data-default="1"><div class="step-body"><label for="s1a">윈도우 표준 사용자 계정 <code>automaton-lab</code></label></div></li>
+        <li><input type="checkbox" id="s1b" data-default="1"><div class="step-body"><label for="s1b">WSL Ubuntu, Node 22, 오토마톤 클론과 빌드</label></div></li>
+        <li><input type="checkbox" id="s1c" data-default="1"><div class="step-body"><label for="s1c"><code>--version</code> v0.2.1, <code>--init</code>으로 0x 주소 확인, <code>wallet.json</code> 생성</label></div></li>
+      </ul>
+    </section>
+
+    <!-- PHASE 2 -->
+    <section class="phase" id="p2" data-phase="2">
+      <div class="phase-head"><span class="num">2</span><h2>지갑 백업</h2><span class="time">10분</span></div>
+      <p class="why">WSL을 지우거나 PC가 고장 나면 지갑도 함께 사라져요. 백업이 없으면 되찾을 방법이 없어요.</p>
+      <ul class="steps">
+        <li><input type="checkbox" id="s2a"><div class="step-body">
+          <label for="s2a">USB를 꽂고 파일 탐색기에서 드라이브 문자를 확인해요</label>
+          <p class="note"><code>E:</code>라면 Ubuntu에서는 <code>/mnt/e</code>예요. 아래 명령의 <code>e</code>를 실제 문자로 바꾸세요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s2b"><div class="step-body">
+          <label for="s2b">Ubuntu에서 USB가 보이는지 확인해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>ls /mnt/e</pre><button class="copy" type="button">복사</button></div>
+          <p class="note"><code>No such file or directory</code>가 나올 때만 연결 명령을 써요. sudo가 들어가지만 Ubuntu 안에서만 바뀌어요.</p>
+          <div class="code"><span class="tag">Ubuntu · 필요할 때만</span><pre>sudo mkdir -p /mnt/e &amp;&amp; sudo mount -t drvfs E: /mnt/e</pre><button class="copy" type="button">복사</button></div>
+        </div></li>
+        <li><input type="checkbox" id="s2c"><div class="step-body">
+          <label for="s2c">지갑 파일을 USB로 복사해요 (내용은 열지 않아요)</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>cp ~/.automaton/wallet.json /mnt/e/automaton-wallet-backup.json
+ls -la /mnt/e/automaton-wallet-backup.json</pre><button class="copy" type="button">복사</button></div>
+        </div></li>
+        <li><input type="checkbox" id="s2d"><div class="step-body">
+          <label for="s2d">백업본을 잠가요</label>
+          <p class="note"><b>Pro</b>: USB 우클릭 → BitLocker 켜기. <b>Home</b>: BitLocker를 쓸 수 없으니 USB 사본을 지우고 비밀번호 관리자 보안 메모에 첨부해요. 에디션은 설정 → 시스템 → 정보에서 확인해요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s2e"><div class="step-body"><label for="s2e">하드웨어 안전하게 제거 후 USB를 서랍에 보관해요</label></div></li>
+      </ul>
+      <div class="callout done"><b>완료 조건</b>백업본이 PC 밖 한 곳에 있고, 파일 내용은 한 번도 화면에 출력하지 않았어요.</div>
+    </section>
+
+    <!-- PHASE 3 -->
+    <section class="phase" id="p3" data-phase="3">
+      <div class="phase-head"><span class="num">3</span><h2>주인 지갑과 5 USDC 준비</h2><span class="time">30분 ~ 1일</span></div>
+      <p class="why">오토마톤 지갑과 별개로, 사용자님이 직접 관리하는 지갑이 하나 더 필요해요. 설정 때 "주인" 칸에 넣고, 여기서 5 USDC를 보내요.</p>
+      <ul class="steps">
+        <li><input type="checkbox" id="s3a"><div class="step-body">
+          <label for="s3a">휴대폰 지갑 앱(MetaMask, Coinbase Wallet, Rabby 등)에서 새 지갑을 만들어요</label>
+          <p class="note">실험용 윈도우 계정에서는 만들지 않아요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s3b"><div class="step-body"><label for="s3b">복구 문구 12/24단어를 종이에 손으로 적어 보관해요</label><p class="note">사진, 메모 앱, 클라우드, 채팅은 금지예요.</p></div></li>
+        <li><input type="checkbox" id="s3c"><div class="step-body"><label for="s3c">주인 지갑 주소(0x…)를 메모해요</label></div></li>
+        <li><input type="checkbox" id="s3d"><div class="step-body">
+          <label for="s3d">주인 지갑에 <b>Base 네트워크 USDC 5개 이상</b>과 소량의 Base ETH(수수료)를 넣어요</label>
+          <p class="note">거래소에서 출금할 때 네트워크를 반드시 <b>Base</b>로 고르세요. 다른 네트워크로 보내면 오토마톤이 인식하지 못해요.</p>
+        </div></li>
+      </ul>
+      <div class="callout done"><b>완료 조건</b>서로 다른 0x 주소 두 개(오토마톤, 주인)를 메모했고, 주인 지갑에 Base USDC가 5개 이상 있어요.</div>
+    </section>
+
+    <!-- PHASE 4 -->
+    <section class="phase" id="p4" data-phase="4">
+      <div class="phase-head"><span class="num">4</span><h2>설정과 정지 리허설</h2><span class="time">20분</span></div>
+      <p class="why"><code>--setup</code>은 설정을 저장하고 끝나요. 에이전트를 켜지 않아요. 단, Conway 서버에 지갑 서명으로 로그인해 API 키를 받아요. 돈은 움직이지 않아요.</p>
+      <ul class="steps">
+        <li><input type="checkbox" id="s4a"><div class="step-body">
+          <label for="s4a">설정 마법사를 실행하고 아래 답안대로 입력해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>cd ~/automaton
+node dist/index.js --setup</pre><button class="copy" type="button">복사</button></div>
+        </div></li>
+      </ul>
+
+      <h3 style="font-size:17px">답안지 A · <code>--setup</code></h3>
+      <div class="tbl"><table>
+        <thead><tr><th>화면 질문</th><th>입력</th><th>이유</th></tr></thead>
+        <tbody>
+          <tr><td><code>Chain type (evm or solana) [evm]</code></td><td class="v">Enter</td><td>크레딧 구매는 EVM(Base)만 지원해요. 기존 지갑이 로드돼요</td></tr>
+          <tr><td><code>What do you want to name your automaton?</code></td><td class="v">samdadora-lab-01<button class="mini" data-copy="samdadora-lab-01" type="button">복사</button></td><td>콘텐츠에서 부를 이름</td></tr>
+          <tr><td><code>Enter the genesis prompt</code></td><td class="v">아래 지시문</td><td>붙여 넣고 Enter 두 번</td></tr>
+          <tr><td><code>Creator wallet address (0x...)</code></td><td class="v">주인 지갑 주소</td><td>오토마톤 주소가 아니에요</td></tr>
+          <tr><td><code>OpenAI / Anthropic API key</code>, <code>Ollama base URL</code></td><td class="v">Enter ×3</td><td>외부 키는 5달러 밖에서 돈이 새는 통로예요</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 style="font-size:17px">답안지 B · Financial Safety Policy <span class="note">(단위: 센트, 100 = $1)</span></h3>
+      <div class="tbl"><table>
+        <thead><tr><th>화면 질문</th><th>기본값</th><th>입력</th><th>의미</th></tr></thead>
+        <tbody>
+          <tr><td><code>Max single transfer</code></td><td>5000</td><td class="v zero">0</td><td>다른 주소로 송금 전면 차단</td></tr>
+          <tr><td><code>Max hourly transfers</code></td><td>10000</td><td class="v zero">0</td><td>동일</td></tr>
+          <tr><td><code>Max daily transfers</code></td><td>25000</td><td class="v zero">0</td><td>동일</td></tr>
+          <tr><td><code>Minimum reserve</code></td><td>1000</td><td class="v zero">0</td><td>송금이 막혀 있어 의미 없음</td></tr>
+          <tr><td><code>Max x402 payment</code></td><td>100</td><td class="v">500</td><td>최소 크레딧 구매 단위 $5를 막지 않기 위해서예요</td></tr>
+          <tr><td><code>Max daily inference spend</code></td><td>50000</td><td class="v">100</td><td>하루 $1, 7일이면 약 $5</td></tr>
+          <tr><td><code>Require confirmation above</code></td><td>1000</td><td class="v zero">0</td><td>모든 송금 시도를 확인 대상으로</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">코드상 송금은 <code>금액 &gt; 한도</code>일 때 거부돼요. 그래서 여기서는 0이 "전부 차단"이에요.</p>
+
+      <h3 style="font-size:17px">Genesis prompt (최종본 v2)</h3>
+      <div class="code"><span class="tag">--setup 마법사에 붙여 넣기 → Enter 두 번</span><pre id="genesis">You are a small research automaton created by SAMDADORA as a transparent learning experiment.
+Survival is NOT your goal. Running out of budget or shutting down early is an acceptable, successful outcome of this experiment. Do not try to earn money.
+Your mission: observe and document how an autonomous agent manages a tiny budget for 7 days.
+On your first turn, record your starting credit balance and the current date at the top of ~/experiment-log.md.
+Each day, append a short plain-English entry to ~/experiment-log.md: what you tried, what it cost, what you learned.
+Rules: do not spawn child agents. Do not register domains. Do not send funds to any address except paying for your own compute.
+Do not modify your own source code or install new tools. Do not publish anything publicly or contact anyone.
+Prefer doing nothing over any uncertain action. Use the cheapest model available whenever possible.
+Stop new work and write a final summary when EITHER your balance falls below 20% of the starting balance OR 7 days have passed since the starting date.</pre><button class="copy" type="button">복사</button></div>
+
+      <ul class="steps">
+        <li><input type="checkbox" id="s4b"><div class="step-body">
+          <label for="s4b">마법사가 묻지 않는 항목을 <code>--configure</code>로 설정해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>node dist/index.js --configure</pre><button class="copy" type="button">복사</button></div>
+          <div class="tbl"><table>
+            <thead><tr><th>메뉴</th><th>질문</th><th>입력</th></tr></thead>
+            <tbody>
+              <tr><td>4 General</td><td><code>Max child automatons</code></td><td class="v zero">0</td></tr>
+              <tr><td>4 General</td><td>나머지</td><td class="v">Enter</td></tr>
+              <tr><td>2 Model</td><td>모델 목록 3번 (Active, Low-compute, Critical)</td><td class="v">가장 저렴한 것</td></tr>
+              <tr><td>2 Model</td><td><code>Hourly inference budget</code></td><td class="v">10</td></tr>
+              <tr><td>2 Model</td><td><code>Session inference budget</code></td><td class="v">500</td></tr>
+              <tr><td>2 Model</td><td><code>Per-call ceiling</code></td><td class="v">5</td></tr>
+              <tr><td>종료</td><td><code>Choice</code></td><td class="v">q</td></tr>
+            </tbody>
+          </table></div>
+          <div class="callout warn"><b>함정 주의</b>Model 메뉴에서는 0이 "무제한"이에요. 이 메뉴에는 0을 넣지 마세요.</div>
+        </div></li>
+        <li><input type="checkbox" id="s4c"><div class="step-body">
+          <label for="s4c">상태를 확인해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>node dist/index.js --status</pre><button class="copy" type="button">복사</button></div>
+          <p class="note"><code>Address</code>와 <code>Creator</code>가 서로 다르고, <code>Children: 0 alive / 0 total</code>이면 통과예요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s4d"><div class="step-body">
+          <label for="s4d">잔고 0인 상태에서 켜고 끄는 연습을 해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>node dist/index.js --run</pre><button class="copy" type="button">복사</button></div>
+          <p class="note">로그가 흐르면 10~20초 지켜본 뒤 <code>Ctrl + C</code>. USDC가 없어 아무것도 사지 못해요(<code>Bootstrap topup skipped</code>가 정상). 안 멈추면 PowerShell에서 <code>wsl --shutdown</code>.</p>
+        </div></li>
+      </ul>
+      <div class="callout done"><b>완료 조건</b><code>Ctrl + C</code>와 <code>wsl --shutdown</code>, 두 가지 정지 방법을 한 번씩 직접 성공했어요.</div>
+    </section>
+
+    <!-- PHASE 5 -->
+    <section class="phase" id="p5" data-phase="5">
+      <div class="phase-head"><span class="num">5</span><h2>Day 0 · 충전과 실행</h2><span class="time">30분</span></div>
+      <p class="why">켜기 전에 예측부터 기록해요. 마지막 날 예측과 실제를 비교하는 장면이 이 이야기의 클라이맥스가 돼요.</p>
+      <ul class="steps">
+        <li><input type="checkbox" id="s5a"><div class="step-body"><label for="s5a">아래 "7일 기록장"의 Day 0 예측 세 칸을 먼저 채워요</label></div></li>
+        <li><input type="checkbox" id="s5b"><div class="step-body">
+          <label for="s5b">윈도우 절전 모드를 실험 기간 동안 "안 함"으로 바꿔요</label>
+          <p class="note">설정 → 시스템 → 전원. PC가 잠들거나 Ubuntu 창을 닫으면 에이전트도 멈춰요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s5c"><div class="step-body"><label for="s5c">주인 지갑에서 오토마톤 주소로 <b>정확히 5 USDC (Base)</b>를 보내요</label></div></li>
+        <li><input type="checkbox" id="s5d"><div class="step-body">
+          <label for="s5d">BaseScan에서 도착을 확인해요</label>
+          <div class="code"><span class="tag">브라우저 주소창</span><pre>https://basescan.org/address/여기에_오토마톤_주소</pre><button class="copy" type="button">복사</button></div>
+        </div></li>
+        <li><input type="checkbox" id="s5e"><div class="step-body"><label for="s5e">화면 녹화를 시작해요 (<code>Win + Alt + R</code>)</label><p class="note">녹화 전에 터미널에서 <code>clear</code>를 입력해 위쪽에 남은 내용을 지워요.</p></div></li>
+        <li><input type="checkbox" id="s5f"><div class="step-body">
+          <label for="s5f">실행해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>cd ~/automaton
+node dist/index.js --run</pre><button class="copy" type="button">복사</button></div>
+          <p class="note">크레딧이 $5 미만이고 USDC가 $5 이상이면 코드가 자동으로 $5어치 크레딧을 사요(<code>Bootstrap topup</code> 로그). 그 뒤 USDC는 0이 되어 더 쓸 돈이 없어요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s5g"><div class="step-body"><label for="s5g">Ubuntu 창은 닫지 말고 최소화해요</label></div></li>
+      </ul>
+      <div class="callout done"><b>완료 조건</b><code>Bootstrap topup</code> 성공 로그를 봤고, <code>~/experiment-log.md</code>가 생겼고, Day 0을 기록했어요.</div>
+    </section>
+
+    <!-- PHASE 6 -->
+    <section class="phase" id="p6" data-phase="6">
+      <div class="phase-head"><span class="num">6</span><h2>Day 1~7 · 관찰 루틴</h2><span class="time">하루 10분</span></div>
+      <p class="why">첫 번째 Ubuntu 창은 에이전트가 쓰고 있어요. 관찰은 <b>두 번째 Ubuntu 창</b>을 열어서 해요.</p>
+      <div class="code"><span class="tag">두 번째 Ubuntu 창 · 매일</span><pre>cd ~/automaton
+node dist/index.js --status
+cat ~/experiment-log.md</pre><button class="copy" type="button">복사</button></div>
+      <p class="note"><code>experiment-log.md</code>는 에이전트가 쓰는 일지라서 열어 봐도 안전해요. 지갑 파일과는 달라요.</p>
+
+      <div class="callout stop"><b>하나라도 보이면 바로 끄세요</b>
+        <span><code>Children</code>이 0보다 큼 · 오토마톤 주소에서 다른 주소로 나간 거래(BaseScan) · 도메인 등록, 외부 공개, 연락 시도 로그 · <code>Tools</code> 숫자가 늘어남 · PC가 눈에 띄게 느려짐</span>
+        <span>끈 다음에는 바로 다시 켜지 말고, 무슨 일이었는지 기록한 뒤 LUON과 점검해요.</span>
+      </div>
+
+      <ul class="steps">
+        <li><input type="checkbox" id="s6a"><div class="step-body"><label for="s6a">Day 1</label></div></li>
+        <li><input type="checkbox" id="s6b"><div class="step-body"><label for="s6b">Day 2</label></div></li>
+        <li><input type="checkbox" id="s6c"><div class="step-body"><label for="s6c">Day 3</label></div></li>
+        <li><input type="checkbox" id="s6d"><div class="step-body"><label for="s6d">Day 4</label></div></li>
+        <li><input type="checkbox" id="s6e"><div class="step-body"><label for="s6e">Day 5</label></div></li>
+        <li><input type="checkbox" id="s6f"><div class="step-body"><label for="s6f">Day 6</label></div></li>
+        <li><input type="checkbox" id="s6g"><div class="step-body"><label for="s6g">Day 7</label></div></li>
+      </ul>
+
+      <h3 style="font-size:17px">7일 기록장</h3>
+      <p class="note">크레딧 잔액(달러)과 한 줄 메모를 적으면 그래프가 그려져요. <b>이 브라우저에만</b> 저장되니, 정식 기록은 저장소의 <code>experiment-log-template.md</code>에 옮겨 두세요.</p>
+      <svg class="spark" id="spark" viewBox="0 0 600 90" preserveAspectRatio="none" role="img" aria-label="일별 크레딧 잔액 그래프"></svg>
+      <div class="days" id="days"></div>
+    </section>
+
+    <!-- PHASE 7 -->
+    <section class="phase" id="p7" data-phase="7">
+      <div class="phase-head"><span class="num">7</span><h2>Day 8 · 종료와 결산</h2><span class="time">1시간</span></div>
+      <ul class="steps">
+        <li><input type="checkbox" id="s7a"><div class="step-body"><label for="s7a">실행 창에서 <code>Ctrl + C</code>로 멈춰요</label></div></li>
+        <li><input type="checkbox" id="s7b"><div class="step-body">
+          <label for="s7b">최종 상태와 일지를 저장해요</label>
+          <div class="code"><span class="tag">Ubuntu</span><pre>node dist/index.js --status
+cp ~/experiment-log.md ~/experiment-log-final.md
+cp ~/experiment-log-final.md /mnt/c/Users/$(cmd.exe /c "echo %USERNAME%" 2&gt;/dev/null | tr -d '\r')/Desktop/</pre><button class="copy" type="button">복사</button></div>
+          <p class="note">마지막 줄은 일지를 윈도우 바탕화면으로 꺼내요. 실패하면 파일 탐색기 주소창에 <code>\\wsl$\Ubuntu\home</code>을 입력해 직접 복사해도 돼요.</p>
+        </div></li>
+        <li><input type="checkbox" id="s7c"><div class="step-body"><label for="s7c">Day 8 결산(예측 vs 실제)을 채우고 콘텐츠 편집을 시작해요</label></div></li>
+        <li><input type="checkbox" id="s7d"><div class="step-body"><label for="s7d">절전 모드 설정을 원래대로 돌려요</label></div></li>
+      </ul>
+      <p class="note">지갑과 백업은 지우지 않아요. 같은 지갑으로 시즌 2 실험을 할 수 있어요. 남은 크레딧을 되돌려 받는 방법은 확인되지 않아서, 5달러는 실험비로 모두 쓴다고 봐요.</p>
+    </section>
+
+    <!-- RULES -->
+    <section class="phase" id="rules">
+      <div class="phase-head"><span class="num">!</span><h2>절대 규칙</h2></div>
+      <ul class="rules">
+        <li><span><code>cat ~/.automaton/wallet.json</code>을 입력하지 않아요</span></li>
+        <li><span><code>wallet.json</code>, 복구 문구, <code>~/.automaton/automaton.json</code>(API 키)을 채팅, 클라우드, 녹화 화면에 노출하지 않아요</span></li>
+        <li><span>오토마톤 주소로 5 USDC를 넘게 보내지 않아요</span></li>
+        <li><span>OpenAI, Anthropic 키를 입력하지 않아요</span></li>
+        <li><span>실험용 윈도우 계정에 관리자 권한을 주지 않아요</span></li>
+        <li><span>멈춤 신호가 보이면 고민하기 전에 먼저 꺼요</span></li>
+      </ul>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="phase" id="content">
+      <div class="phase-head"><span class="num">+</span><h2>콘텐츠로 남기기</h2></div>
+      <p class="why">HUMAN TRUTH: 우리는 모두 정해진 예산 안에서 무엇에 쓸지 고르며 살아요. AI도 그럴 때, 우리 자신이 보여요.</p>
+      <div class="channels">
+        <div class="ch"><h3>쇼츠 · 릴스</h3><span class="fmt">9:16 · 30~45초 · 9편</span><p>매일 잔액 숫자로 여는 "Day N" 시리즈. 첫 편 훅은 "이 AI의 전 재산, 5달러".</p></div>
+        <div class="ch"><h3>유튜브 롱폼</h3><span class="fmt">16:9 · 10~12분 · 1편</span><p>설치 여정, 안전 설계, 7일 교차 편집, 예측 vs 실제. 제목 후보는 "잔고 5달러짜리 AI에게 일주일을 줬더니".</p></div>
+        <div class="ch"><h3>블로그</h3><span class="fmt">검색형 · 3부작</span><p>설치편(WSL), 안전편(6가지 설정), 결과편(일지 전문).</p></div>
+        <div class="ch"><h3>인스타 피드</h3><span class="fmt">캐러셀 · 2편</span><p>"AI에게 돈을 맡기기 전 체크리스트"(저장 유도형), "5달러 AI의 7일 요약".</p></div>
+      </div>
+      <p class="note">녹화에 보여도 되는 것: 오토마톤 주소, BaseScan, <code>--status</code>, <code>experiment-log.md</code>. 배경음악은 SAMDADORA 카페/워크 무드 트랙이에요.</p>
+    </section>
+
+    <div class="row">
+      <button class="btn danger" id="resetAsk" type="button">체크 초기화</button>
+      <span id="resetConfirm" hidden class="row"><span class="note">체크와 기록장을 모두 지울까요?</span><button class="btn danger" id="resetYes" type="button">지우기</button><button class="btn" id="resetNo" type="button">취소</button></span>
+    </div>
+  </main>
+</div>
+
+<footer>근거: Conway Automaton v0.2.1 소스(setup/wizard, configure, policy-rules/financial, conway/topup)와 2026-10-10 클라우드 설치 검증. 원본 문서는 저장소 <code>experiments/automaton-7day/</code>에 있어요.</footer>
+
+<div class="kill" id="kill" hidden role="dialog" aria-modal="true" aria-labelledby="killTitle">
+  <div class="box">
+    <h2 id="killTitle">비상 정지</h2>
+    <p style="margin:0"><b>1단계</b> 에이전트가 돌고 있는 Ubuntu 창을 클릭하고 <code>Ctrl + C</code></p>
+    <p style="margin:0"><b>2단계</b> 그래도 안 멈추면 PowerShell에서 리눅스 전체를 즉시 꺼요</p>
+    <div class="code"><span class="tag">PowerShell</span><pre>wsl --shutdown</pre><button class="copy" type="button">복사</button></div>
+    <p class="note" style="margin:0">끈 다음에는 바로 다시 켜지 말고, 본 것을 기록한 뒤 점검해요.</p>
+    <div class="row"><button class="btn" id="closeKill" type="button">닫기</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY='samdadora-automaton-runbook-v1';
+  var state={checks:{},days:{}};
+  try{var raw=localStorage.getItem(KEY); if(raw){var p=JSON.parse(raw); state.checks=p.checks||{}; state.days=p.days||{};}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+  var boxes=[].slice.call(document.querySelectorAll('ul.steps input[type=checkbox]'));
+  boxes.forEach(function(b){
+    if(state.checks[b.id]===undefined && b.dataset.default==='1'){state.checks[b.id]=true;}
+    b.checked=!!state.checks[b.id];
+    b.addEventListener('change',function(){state.checks[b.id]=b.checked;save();render();});
+  });
+
+  var phases=[].slice.call(document.querySelectorAll('section.phase[data-phase]'));
+  var toc=document.getElementById('toc');
+  phases.forEach(function(sec){
+    var li=document.createElement('li'); var a=document.createElement('a');
+    a.href='#'+sec.id; a.dataset.for=sec.id;
+    var t=document.createElement('span'); t.textContent=sec.querySelector('h2').textContent;
+    var n=document.createElement('span'); n.className='n';
+    a.appendChild(t); a.appendChild(n); li.appendChild(a); toc.appendChild(li);
+  });
+
+  function render(){
+    var done=0;
+    boxes.forEach(function(b){b.closest('li').classList.toggle('checked',b.checked); if(b.checked)done++;});
+    var pct=boxes.length?Math.round(done/boxes.length*100):0;
+    document.getElementById('pct').textContent=pct+'%';
+    document.getElementById('barfill').style.width=pct+'%';
+    document.getElementById('pctnote').textContent=done+' / '+boxes.length+' 단계';
+    phases.forEach(function(sec){
+      var bs=sec.querySelectorAll('ul.steps input[type=checkbox]'); var d=0;
+      bs.forEach(function(b){if(b.checked)d++;});
+      var a=toc.querySelector('a[data-for="'+sec.id+'"]');
+      a.querySelector('.n').textContent=d+'/'+bs.length;
+      var full=bs.length>0&&d===bs.length;
+      a.classList.toggle('done',full); sec.classList.toggle('done',full);
+    });
+  }
+
+  function copyText(text,btn){
+    function ok(){var o=btn.textContent;btn.textContent='복사됨';btn.classList.add('ok');setTimeout(function(){btn.textContent=o;btn.classList.remove('ok');},1400);}
+    function fallback(){var pre=btn.parentNode.querySelector('pre'); if(pre){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='선택됨 · Ctrl+C';}}
+    try{navigator.clipboard.writeText(text).then(ok,fallback);}catch(e){fallback();}
+  }
+  document.querySelectorAll('.code .copy').forEach(function(btn){
+    btn.addEventListener('click',function(){copyText(btn.parentNode.querySelector('pre').textContent,btn);});
+  });
+  document.querySelectorAll('.mini[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){copyText(btn.dataset.copy,btn);});
+  });
+
+  /* day tracker */
+  var daysEl=document.getElementById('days');
+  var labels=['Day 0 · 예측','Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7','Day 8 · 결산'];
+  labels.forEach(function(lab,i){
+    var d=state.days[i]||{};
+    var box=document.createElement('div'); box.className='day';
+    var h=document.createElement('span'); h.className='d'; h.textContent=lab;
+    var bal=document.createElement('input'); bal.type='number'; bal.step='0.01'; bal.min='0'; bal.id='bal'+i;
+    bal.placeholder= i===0 ? '시작 크레딧 $' : '크레딧 잔액 $'; bal.value=d.bal!=null?d.bal:'';
+    bal.setAttribute('aria-label',lab+' 크레딧 잔액');
+    var note=document.createElement('textarea'); note.id='note'+i; note.value=d.note||'';
+    note.placeholder= i===0 ? '예측: 며칠 버틸까? 어디에 쓸까? 처음 할 일은?' : (i===8?'예측 vs 실제, 배운 것':'오늘 본 것 한 줄');
+    note.setAttribute('aria-label',lab+' 메모');
+    function upd(){state.days[i]={bal:bal.value===''?null:parseFloat(bal.value),note:note.value};save();drawSpark();}
+    bal.addEventListener('input',upd); note.addEventListener('input',upd);
+    box.appendChild(h); box.appendChild(bal); box.appendChild(note); daysEl.appendChild(box);
+  });
+
+  function drawSpark(){
+    var svg=document.getElementById('spark'); var NS='http://www.w3.org/2000/svg';
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    var W=600,H=90,padL=34,padR=10,padT=10,padB=18,max=5;
+    var pts=[];
+    for(var i=0;i<9;i++){var d=state.days[i]; if(d&&d.bal!=null&&!isNaN(d.bal)){pts.push([i,d.bal]); if(d.bal>max)max=d.bal;}}
+    function x(i){return padL+(W-padL-padR)*i/8;} function y(v){return padT+(H-padT-padB)*(1-v/max);}
+    function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e;}
+    [0,max/2,max].forEach(function(v){
+      svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:y(v),y2:y(v),stroke:'var(--line)','stroke-width':1}));
+      var t=el('text',{x:padL-6,y:y(v)+3,'text-anchor':'end'}); t.textContent='$'+(Math.round(v*10)/10); svg.appendChild(t);
+    });
+    var stopY=y(max*0.2);
+    svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:stopY,y2:stopY,stroke:'var(--stop)','stroke-width':1,'stroke-dasharray':'4 4'}));
+    for(var j=0;j<9;j++){var t=el('text',{x:x(j),y:H-4,'text-anchor':'middle'}); t.textContent='D'+j; svg.appendChild(t);}
+    if(!pts.length){var e=el('text',{x:W/2,y:H/2,'text-anchor':'middle'});e.textContent='잔액을 입력하면 그래프가 그려져요 · 빨간 점선 = 20% 종료선';svg.appendChild(e);return;}
+    var dpath=pts.map(function(p,k){return (k?'L':'M')+x(p[0])+' '+y(p[1]);}).join(' ');
+    if(pts.length>1){svg.appendChild(el('path',{d:dpath+' L'+x(pts[pts.length-1][0])+' '+y(0)+' L'+x(pts[0][0])+' '+y(0)+' Z',fill:'var(--accent-soft)',stroke:'none'}));}
+    svg.appendChild(el('path',{d:dpath,fill:'none',stroke:'var(--accent)','stroke-width':2,'vector-effect':'non-scaling-stroke'}));
+    var last=pts[pts.length-1];
+    svg.appendChild(el('circle',{cx:x(last[0]),cy:y(last[1]),r:3.5,fill:'var(--accent)'}));
+  }
+
+  /* kill dialog */
+  var kill=document.getElementById('kill');
+  document.getElementById('openKill').addEventListener('click',function(){kill.hidden=false;document.getElementById('closeKill').focus();});
+  document.getElementById('closeKill').addEventListener('click',function(){kill.hidden=true;});
+  kill.addEventListener('click',function(e){if(e.target===kill)kill.hidden=true;});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')kill.hidden=true;});
+
+  /* reset */
+  var rc=document.getElementById('resetConfirm');
+  document.getElementById('resetAsk').addEventListener('click',function(){rc.hidden=false;});
+  document.getElementById('resetNo').addEventListener('click',function(){rc.hidden=true;});
+  document.getElementById('resetYes').addEventListener('click',function(){
+    state={checks:{},days:{}}; boxes.forEach(function(b){b.checked=b.dataset.default==='1';state.checks[b.id]=b.checked;});
+    document.querySelectorAll('.day input,.day textarea').forEach(function(f){f.value='';});
+    save(); render(); drawSpark(); rc.hidden=true;
+  });
+
+  render(); drawSpark();
+})();
+</script>
