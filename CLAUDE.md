@@ -77,6 +77,10 @@ LEVEL 4  — AI MUSIC TEAM (PART A §2)
 LEVEL 5  — SONIC DASHBOARD (PART B §57)
 ```
 
+SCOPE NOTE: PART C (CODING BEHAVIOR GUIDELINES)는 음악 레이어와 별개로 코드
+작업(`scripts/`, `tests/`, `config/` 등)에만 적용된다. 음악/콘텐츠 작업의
+우선순위에는 영향을 주지 않는다.
+
 CONFLICT PRIORITY (충돌 시 적용 순서):
 
 1. SAMDADORA의 최신 명시적 결정
@@ -193,6 +197,36 @@ DNA LIBRARY의 장르별 참고 BPM(P9 ≈92 BPM Neo-Soul, P13 100 BPM Jazz-Hop 
 MIGRATION NOTE: 과거 곡의 실제 BPM 기록(예: "Steady Light" 100 BPM, "Sail
 Slow" 112 BPM)은 소급 재작업하지 않고 참고 기록으로 그대로 유지한다. 새
 범위는 이번 갱신 이후 신규 곡 설계부터 적용된다.
+```
+
+```
+VERSION: v6.3 (MINOR 변경 — 코드 작업 행동 규칙 PART C 추가)
+DATE: 2026-10-11
+STATUS: ACTIVE
+APPROVED BY: SAMDADORA
+
+CHANGE TYPE: MINOR SYSTEM CHANGE (신규 섹션 추가, 기존 규칙 변경 없음)
+
+ADDED:
+- PART C — CODING BEHAVIOR GUIDELINES (C1 Think Before Coding /
+  C2 Simplicity First / C3 Surgical Changes / C4 Goal-Driven Execution)
+- §0 DOCUMENT HIERARCHY에 PART C 적용 범위 SCOPE NOTE 추가
+
+CHANGED: 없음
+
+REMOVED: 없음
+
+REASON:
+SAMDADORA가 Karpathy 영감의 공개 CLAUDE.md 행동 규칙
+(github.com/multica-ai/andrej-karpathy-skills)을 이 저장소에 도입하기로
+결정. 기존 뮤직 OS를 덮어쓰지 않고, 코드 작업 전용 레이어로 덧붙인다.
+
+AFFECTED MODES: 없음 (음악 MODE 영향 없음) — 코드 작업
+(scripts/, tests/, config/ 등)에만 적용
+
+COMPATIBILITY: 하위 호환 — PART A/B 내용은 그대로 유지
+
+MIGRATION NOTE: 기존 코드 소급 리팩터링 불필요. 이후 코드 변경부터 적용.
 ```
 
 ---
@@ -1237,8 +1271,91 @@ SAMDADORA makes the FINAL DECISION.
 
 ---
 
+# PART C — CODING BEHAVIOR GUIDELINES
+
+*(v6.3 추가. 출처: github.com/multica-ai/andrej-karpathy-skills CLAUDE.md —
+원문은 영어 그대로 유지.)*
+
+**적용 범위:** 이 저장소의 코드 작업(`scripts/`, `tests/`, `config/`, 빌드/
+설정 파일 등)에만 적용한다. 음악·가사·Suno 프롬프트·콘텐츠 작업은 PART A/B를
+따른다. 충돌 시 §0 CONFLICT PRIORITY(SAMDADORA 최신 결정 우선)를 따른다.
+
+> 한국어 요약: ① 모르면 짐작하지 말고 묻기 ② 요청받은 만큼만 단순하게
+> ③ 필요한 곳만 고치기 ④ 완료 기준을 먼저 정하고 검증될 때까지 반복
+
+Behavioral guidelines to reduce common LLM coding mistakes.
+
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial
+tasks, use judgment.
+
+### C1. Think Before Coding
+
+**Don't assume. Don't hide confusion. Surface tradeoffs.**
+
+Before implementing:
+- State your assumptions explicitly. If uncertain, ask.
+- If multiple interpretations exist, present them - don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+- If something is unclear, stop. Name what's confusing. Ask.
+
+### C2. Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes,
+simplify.
+
+### C3. Surgical Changes
+
+**Touch only what you must. Clean up only your own mess.**
+
+When editing existing code:
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it - don't delete it.
+
+When your changes create orphans:
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
+
+The test: Every changed line should trace directly to the user's request.
+
+### C4. Goal-Driven Execution
+
+**Define success criteria. Loop until verified.**
+
+Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan:
+
+```
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+```
+
+Strong success criteria let you loop independently. Weak criteria ("make it
+work") require constant clarification.
+
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer
+rewrites due to overcomplication, and clarifying questions come before
+implementation rather than after mistakes.
+
+---
+
 **FINAL NORTH STAR: MAKE SONGS PEOPLE REACH FOR AGAIN.**
 
 SAMDADORA × LUON — MUSIC OS v1.0 + PRODUCTION STANDARD v6.0
++ PART C CODING BEHAVIOR GUIDELINES (v6.3)
 STATUS: LIVING STANDARD (TWO-LAYER)
 FINAL DECISION: SAMDADORA
