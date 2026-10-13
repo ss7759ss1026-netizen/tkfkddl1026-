@@ -73,3 +73,10 @@ Secrets를 모두 등록한 뒤 **Actions 탭 > Daily YouTube Playlist Summary >
 `.github/workflows/daily-summary.yml`의 `cron: "0 22 * * *"` (UTC 기준)을 원하는
 시간에 맞게 수정하세요. KST는 UTC+9이므로, 예를 들어 오전 8시에 받고 싶다면
 `0 23 * * *`로 바꾸면 됩니다.
+
+## 유튜브 에이전트 스킬 (`/yt-*`)
+
+대본·제목/썸네일·편집점·댓글·쇼츠·챕터 등 유튜브 원고 일을 맡는 Claude 스킬 11개가
+`.claude/skills/`에 들어 있습니다(MIT, Jakeschincariol/youtube-agent-skill). 사용법과
+한글 후킹 주의사항은 [`.claude/skills/README.md`](.claude/skills/README.md), 내 말투 파일은
+[`youtube/voice.md`](youtube/voice.md)를 보세요.
