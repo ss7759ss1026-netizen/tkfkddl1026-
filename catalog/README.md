@@ -15,6 +15,7 @@
 | `2026-09-001-steady-light.md` | 곡 #1 실제 카드 |
 | `2026-09-002-sail-slow.md` | 곡 #2 실제 카드 |
 | `2026-10-003-check-it-off.md` | 곡 #3 실제 카드 |
+| `2026-10-004-between-stops.md` | 곡 #4 실제 카드 |
 
 ## 곡 목록
 
@@ -23,13 +24,15 @@
 | 2026-09-001 | Steady Light | DRAFT (HOLD — AUDIO) | LIGHT & FORWARD | 100 | 07 M soft natural tenor | 82/100 GOOD | [카드](2026-09-001-steady-light.md) |
 | 2026-09-002 | Sail Slow | DRAFT (HOLD — AUDIO) | LIGHT & FORWARD | 112 | 01 F clear mezzo | 84/100 GOOD | [카드](2026-09-002-sail-slow.md) |
 | 2026-10-003 | Check It Off | DRAFT (HOLD — AUDIO) | LIGHT & FORWARD | 116 | 03 M warm mid tenor-baritone | 86/100 DISTINCTIVE (추정) | [카드](2026-10-003-check-it-off.md) |
+| 2026-10-004 | Between Stops | DRAFT (HOLD — AUDIO) | LIGHT & FORWARD | 104 | 05 F warm soft alto-mezzo | 85/100 DISTINCTIVE (추정) | [카드](2026-10-004-between-stops.md) |
 
 ## 카탈로그 스냅샷
 
-- **감정 포트폴리오:** LIGHT & FORWARD 3 / HUMAN BONDS 0 (목표 70:30, 3곡 기준 아직 유의미한 비율 아님)
-- **보컬 포트폴리오:** MALE SOLO 2 / FEMALE SOLO 1 / DUET 0 (목표 7:3:0)
-- **BPM 분포:** 100, 112, 116 (3곡, 112·116이 4 BPM 차로 근접 — 다음 곡은 102–108 구간 권장)
-- **Groove Leader 분포:** GUITAR-LED 1 / BASS-LED 1 / PERCUSSION-LED 1
+- **감정 포트폴리오:** LIGHT & FORWARD 4 / HUMAN BONDS 0 (목표 70:30, 4곡 기준 아직 유의미한 비율 아님)
+- **보컬 포트폴리오:** MALE SOLO 2 / FEMALE SOLO 2 / DUET 0 (목표 7:3:0)
+- **BPM 분포:** 100, 104, 112, 116 (4곡, 100·104와 112·116이 각각 4 BPM 차로 근접 — 다음 곡은 106–110 구간 권장)
+- **Groove Leader 분포:** GUITAR-LED 1 / BASS-LED 1 / PERCUSSION-LED 1 / DRUM-LED 1
+- **브리지 패턴 주의:** 4곡 모두 서브트랙션(화성 악기 + 보컬만) — 다음 곡은 다른 브리지 방식 권장
 - **오디오 QA 완료곡:** 0곡 (Sonic Dashboard 최소 목표 10곡 — 아직 활성화 전, CLAUDE.md PART B §57 참고)
 
 이 스냅샷은 곡이 추가/갱신될 때마다 수동으로 업데이트한다. 10곡 이상 실제
