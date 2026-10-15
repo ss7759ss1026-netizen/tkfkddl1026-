@@ -1,0 +1,5653 @@
+{
+  "id": "e3f2b845-8f2c-4b5a-9caf-eac1029d3e7e",
+  "revision": 3,
+  "last_node_id": 223,
+  "last_link_id": 419,
+  "nodes": [
+    {
+      "id": 92,
+      "type": "SaveVideo",
+      "pos": [
+        855,
+        4470
+      ],
+      "size": [
+        960,
+        120
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 331
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "title": "MiniMax H3 Omni · V7 REVIEWED · NO AUDIO 저장",
+      "properties": {},
+      "widgets_values": [
+        "video/MiniMax_H3_Omni_Background_Only_V7_DarkColor_Reviewed_Fixed",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3_Omni_Background_Only_V7_DarkColor_Reviewed_Fixed",
+        "format": "auto",
+        "codec": "auto"
+      },
+      "color": "#142f21",
+      "bgcolor": "#234d35"
+    },
+    {
+      "id": 137,
+      "type": "LoadImage",
+      "pos": [
+        -1560,
+        5295
+      ],
+      "size": [
+        420,
+        330
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            294,
+            381,
+            382
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "교체할 배경 이미지 · <Picture 1/2/3> REFERENCE PRIORITY",
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "8db1d8fb4b7bfa846e7b5c57d378276b950719196d20ef63a4f547195605dbc6.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "8db1d8fb4b7bfa846e7b5c57d378276b950719196d20ef63a4f547195605dbc6.png",
+        "upload": "image"
+      },
+      "color": "#2d203d",
+      "bgcolor": "#49335f"
+    },
+    {
+      "id": 141,
+      "type": "b86bbef6-4f85-4f7d-a6b5-52a78027a1d4",
+      "pos": [
+        -645,
+        4680
+      ],
+      "size": [
+        690,
+        1110
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "이미지0",
+          "name": "ref_image_0",
+          "type": "IMAGE",
+          "link": 294
+        },
+        {
+          "label": "이미지1",
+          "name": "ref_image_1",
+          "type": "IMAGE",
+          "link": 381
+        },
+        {
+          "label": "이미지2",
+          "name": "ref_image_2",
+          "type": "IMAGE",
+          "link": 382
+        },
+        {
+          "label": "이미지3",
+          "name": "ref_image_3",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "이미지4",
+          "name": "ref_image_4",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "이미지5",
+          "name": "ref_image_5",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "이미지6",
+          "name": "ref_image_6",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "이미지7",
+          "name": "ref_image_7",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "이미지8",
+          "name": "ref_image_8",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "비디오0",
+          "name": "ref_video_0",
+          "type": "IMAGE",
+          "link": 321
+        },
+        {
+          "label": "비디오1",
+          "name": "ref_video_1",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "비디오2",
+          "name": "ref_video_2",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "비디오_오디오0",
+          "name": "ref_video_audio_0",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "비디오_오디오1",
+          "name": "ref_video_audio_1",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "비디오_오디오2",
+          "name": "ref_video_audio_2",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "오디오0",
+          "name": "ref_audio_0",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "오디오1",
+          "name": "ref_audio_1",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "오디오2",
+          "name": "ref_audio_2",
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "프롬프트",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "label": "화면 비율",
+          "name": "aspect_ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "aspect_ratio"
+          },
+          "link": null
+        },
+        {
+          "label": "메가픽셀",
+          "name": "megapixels",
+          "type": "FLOAT",
+          "widget": {
+            "name": "megapixels"
+          },
+          "link": 334
+        },
+        {
+          "label": "해상도 배수",
+          "name": "multiple",
+          "type": "INT",
+          "widget": {
+            "name": "multiple"
+          },
+          "link": null
+        },
+        {
+          "label": "원본 길이 자동 동기화",
+          "name": "duration_seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "duration_seconds"
+          },
+          "link": 310
+        },
+        {
+          "label": "노이즈 시드",
+          "name": "noise_seed",
+          "type": "INT",
+          "widget": {
+            "name": "noise_seed"
+          },
+          "link": 320
+        },
+        {
+          "label": "H3 Omni UNet 모델",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "label": "H3 Omni CLIP 모델",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "label": "비디오 VAE",
+          "name": "video_vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "video_vae_name"
+          },
+          "link": null
+        },
+        {
+          "label": "오디오 VAE",
+          "name": "audio_vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "audio_vae_name"
+          },
+          "link": null
+        },
+        {
+          "label": "참조 이미지 크기 · MAX",
+          "name": "ref_image_size",
+          "type": "COMBO",
+          "widget": {
+            "name": "ref_image_size"
+          },
+          "link": null
+        },
+        {
+          "label": "스왑 지시문 · 대상/외형/시간",
+          "name": "swap_instruction",
+          "type": "STRING",
+          "widget": {
+            "name": "swap_instruction"
+          },
+          "link": null
+        },
+        {
+          "label": "Turbo LoRA · OFF / ON",
+          "name": "turbo_lora_enabled",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "turbo_lora_enabled"
+          },
+          "link": 355
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            345
+          ]
+        }
+      ],
+      "title": "MiniMax H3 · EXPANDED SLOTS · IMAGE9 / VIDEO3 / VIDEO_AUDIO3 / AUDIO3",
+      "properties": {
+        "previewExposures": []
+      },
+      "widgets_values": [
+        "<Video 1> is the original source video and the absolute authority for frame order, duration, playback direction, camera position and movement, lens perspective, crop, foreground-subject motion, pose trajectory, gesture timing, body mechanics, screen position, scale, depth, occlusion, focus, motion blur, and foreground geometry. Start from frame 0 of <Video 1> and reproduce the source action forward without skipping ahead, reversing, looping, adding pre-roll, adding post-roll, or retiming.\n\n<Picture 1>, <Picture 2>, and <Picture 3> are three identical copies of the replacement-background reference. Together they are the absolute authority for the visible background environment. Use only their scenery, architecture, vegetation, sky, terrain, colors, materials, illumination character, and background atmosphere. Ignore and never transfer any person, animal, foreground object, pose, framing, crop, or camera from these pictures.\n\n[SWAP_INSTRUCTION]\n\nTreat the running soldier, his face, hair, skin, body, uniform, tactical gear, rifle, hands, limbs, shadows, contacts, silhouette, motion blur, and the foreground grass as immutable foreground from <Video 1>. Replace the original tree line, original sky, and all distant scenery behind the foreground boundary with the background environment defined by <Picture 1>, <Picture 2>, and <Picture 3>. The original background must not remain visible.\n\nThe replacement background must be clearly established in the first output frame and remain temporally stable through the original final frame. Adapt it to <Video 1>'s camera perspective, parallax, depth, focus, exposure, and motion blur without sliding, swimming, flickering, morphing, or crossing over the soldier or rifle. <Video 1> wins for foreground, timing, camera, geometry, depth, and occlusion boundary. The three pictures win for every replaceable background pixel. Stop at the original source frame count.",
+        "16:9 (Widescreen)",
+        0.8,
+        32,
+        5,
+        157368968253448,
+        "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax_h3_video_vae_fp16.safetensors",
+        "minimax_h3_audio_vae_fp32.safetensors",
+        "max",
+        "Replace only the complete distant background behind the running soldier and foreground grass with the environment from <Picture 1>, duplicated as <Picture 2> and <Picture 3> for stronger background adherence. Remove the original trees, original sky, and original distant scenery from every output frame. Keep the soldier, face, body, uniform, tactical gear, rifle, hands, limbs, pose, running motion, timing, scale, screen position, silhouette, contacts, shadows, motion blur, and foreground grass unchanged. Do not transfer any person or foreground object from the background-reference pictures.",
+        false
+      ],
+      "widgets_values_named": {
+        "prompt": "<Video 1> is the original source video and the absolute authority for frame order, duration, playback direction, camera position and movement, lens perspective, crop, foreground-subject motion, pose trajectory, gesture timing, body mechanics, screen position, scale, depth, occlusion, focus, motion blur, and foreground geometry. Start from frame 0 of <Video 1> and reproduce the source action forward without skipping ahead, reversing, looping, adding pre-roll, adding post-roll, or retiming.\n\n<Picture 1>, <Picture 2>, and <Picture 3> are three identical copies of the replacement-background reference. Together they are the absolute authority for the visible background environment. Use only their scenery, architecture, vegetation, sky, terrain, colors, materials, illumination character, and background atmosphere. Ignore and never transfer any person, animal, foreground object, pose, framing, crop, or camera from these pictures.\n\n[SWAP_INSTRUCTION]\n\nTreat the running soldier, his face, hair, skin, body, uniform, tactical gear, rifle, hands, limbs, shadows, contacts, silhouette, motion blur, and the foreground grass as immutable foreground from <Video 1>. Replace the original tree line, original sky, and all distant scenery behind the foreground boundary with the background environment defined by <Picture 1>, <Picture 2>, and <Picture 3>. The original background must not remain visible.\n\nThe replacement background must be clearly established in the first output frame and remain temporally stable through the original final frame. Adapt it to <Video 1>'s camera perspective, parallax, depth, focus, exposure, and motion blur without sliding, swimming, flickering, morphing, or crossing over the soldier or rifle. <Video 1> wins for foreground, timing, camera, geometry, depth, and occlusion boundary. The three pictures win for every replaceable background pixel. Stop at the original source frame count.",
+        "aspect_ratio": "16:9 (Widescreen)",
+        "megapixels": 0.8,
+        "multiple": 32,
+        "duration_seconds": 5,
+        "noise_seed": 157368968253448,
+        "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "video_vae_name": "minimax_h3_video_vae_fp16.safetensors",
+        "audio_vae_name": "minimax_h3_audio_vae_fp32.safetensors",
+        "ref_image_size": "max",
+        "swap_instruction": "Replace only the complete distant background behind the running soldier and foreground grass with the environment from <Picture 1>, duplicated as <Picture 2> and <Picture 3> for stronger background adherence. Remove the original trees, original sky, and original distant scenery from every output frame. Keep the soldier, face, body, uniform, tactical gear, rifle, hands, limbs, pose, running motion, timing, scale, screen position, silhouette, contacts, shadows, motion blur, and foreground grass unchanged. Do not transfer any person or foreground object from the background-reference pictures.",
+        "turbo_lora_enabled": false
+      },
+      "color": "#291b37",
+      "bgcolor": "#432b57"
+    },
+    {
+      "id": 147,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -1065,
+        5175
+      ],
+      "size": [
+        330,
+        150
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 323
+        },
+        {
+          "label": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        },
+        {
+          "label": "c",
+          "name": "values.c",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            310
+          ]
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": null
+        }
+      ],
+      "title": "출력 길이 자동 동기화 · frames / 24",
+      "properties": {
+        "Node name for S&R": "ComfyMathExpression"
+      },
+      "widgets_values": [
+        "a / 24"
+      ],
+      "widgets_values_named": {
+        "expression": "a / 24"
+      },
+      "color": "#351a23",
+      "bgcolor": "#512936"
+    },
+    {
+      "id": 160,
+      "type": "VHS_LoadVideo",
+      "pos": [
+        -1635,
+        4605
+      ],
+      "size": [
+        465,
+        310
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            321,
+            338
+          ]
+        },
+        {
+          "name": "frame_count",
+          "type": "INT",
+          "links": [
+            323,
+            346
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": null
+        }
+      ],
+      "title": "원본 비디오 · VIDEO ONLY · FORCE 24FPS / MAX 345 FRAMES",
+      "properties": {
+        "Node name for S&R": "VHS_LoadVideo",
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "1.7.9"
+      },
+      "widgets_values": {
+        "video": "85f2fe7583d54b735ff2fcac683f925ac46d3a97dc9d1a66879bb07618261738.mp4",
+        "force_rate": 24,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 345,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "None",
+        "videopreview": {
+          "hidden": false,
+          "params": {
+            "filename": "85f2fe7583d54b735ff2fcac683f925ac46d3a97dc9d1a66879bb07618261738.mp4",
+            "format": "video/mp4",
+            "type": "input"
+          },
+          "paused": false
+        }
+      },
+      "widgets_values_named": {
+        "video": "85f2fe7583d54b735ff2fcac683f925ac46d3a97dc9d1a66879bb07618261738.mp4",
+        "force_rate": 24,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 345,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "None",
+        "choose video to upload": null,
+        "videopreview": {
+          "hidden": false,
+          "params": {
+            "filename": "85f2fe7583d54b735ff2fcac683f925ac46d3a97dc9d1a66879bb07618261738.mp4",
+            "format": "video/mp4",
+            "type": "input"
+          },
+          "paused": false
+        }
+      },
+      "color": "#10283a",
+      "bgcolor": "#1b4058"
+    },
+    {
+      "id": 161,
+      "type": "PrimitiveInt",
+      "pos": [
+        -1065,
+        4875
+      ],
+      "size": [
+        330,
+        135
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            320
+          ]
+        }
+      ],
+      "title": "SEED · FIXED / RANDOMIZE",
+      "properties": {
+        "Node name for S&R": "PrimitiveInt",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        157368968253448,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 157368968253448,
+        "fixed": "fixed"
+      },
+      "color": "#351a23",
+      "bgcolor": "#512936"
+    },
+    {
+      "id": 164,
+      "type": "CreateVideo",
+      "pos": [
+        435,
+        4710
+      ],
+      "size": [
+        390,
+        135
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 347
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            331
+          ]
+        }
+      ],
+      "title": "최종 완전 무음 MP4 · 원본 프레임 수 / 24FPS",
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        24,
+        8
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": 8
+      },
+      "color": "#142f21",
+      "bgcolor": "#234d35"
+    },
+    {
+      "id": 166,
+      "type": "PrimitiveFloat",
+      "pos": [
+        -1065,
+        5025
+      ],
+      "size": [
+        330,
+        90
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            334
+          ]
+        }
+      ],
+      "title": "OUTPUT MEGAPIXELS · USER CONTROL",
+      "properties": {
+        "Node name for S&R": "PrimitiveFloat",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        0.8
+      ],
+      "widgets_values_named": {
+        "value": 0.8
+      },
+      "color": "#351a23",
+      "bgcolor": "#512936"
+    },
+    {
+      "id": 167,
+      "type": "GetImageSize",
+      "pos": [
+        180,
+        4980
+      ],
+      "size": [
+        240,
+        150
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 348
+        }
+      ],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            336
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            337
+          ]
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "title": "AFTER 해상도 읽기",
+      "properties": {
+        "Node name for S&R": "GetImageSize"
+      },
+      "color": "#202e34",
+      "bgcolor": "#33474f"
+    },
+    {
+      "id": 168,
+      "type": "ImageScale",
+      "pos": [
+        450,
+        4980
+      ],
+      "size": [
+        315,
+        180
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 338
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 336
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 337
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            339
+          ]
+        }
+      ],
+      "title": "BEFORE · AFTER 크기에 맞춤",
+      "properties": {
+        "Node name for S&R": "ImageScale",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        "lanczos",
+        768,
+        432,
+        "disabled"
+      ],
+      "widgets_values_named": {
+        "upscale_method": "lanczos",
+        "width": 768,
+        "height": 432,
+        "crop": "disabled"
+      },
+      "color": "#202e34",
+      "bgcolor": "#33474f"
+    },
+    {
+      "id": 169,
+      "type": "ImageBatch",
+      "pos": [
+        795,
+        4980
+      ],
+      "size": [
+        270,
+        120
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image1",
+          "type": "IMAGE",
+          "link": 339
+        },
+        {
+          "name": "image2",
+          "type": "IMAGE",
+          "link": 349
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            341
+          ]
+        }
+      ],
+      "title": "BEFORE → AFTER 순차 결합",
+      "properties": {
+        "Node name for S&R": "ImageBatch"
+      },
+      "color": "#202e34",
+      "bgcolor": "#33474f"
+    },
+    {
+      "id": 170,
+      "type": "CreateVideo",
+      "pos": [
+        1095,
+        4980
+      ],
+      "size": [
+        330,
+        135
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 341
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            342
+          ]
+        }
+      ],
+      "title": "BEFORE → AFTER · 무음 비교 영상",
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        24,
+        8
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": 8
+      },
+      "color": "#202e34",
+      "bgcolor": "#33474f"
+    },
+    {
+      "id": 171,
+      "type": "SaveVideo",
+      "pos": [
+        1455,
+        4980
+      ],
+      "size": [
+        825,
+        120
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 342
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "title": "BEFORE → AFTER 비교 결과 저장",
+      "properties": {},
+      "widgets_values": [
+        "video/MiniMax_H3_Before_After_SourceLengthSync",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3_Before_After_SourceLengthSync",
+        "format": "auto",
+        "codec": "auto"
+      },
+      "color": "#202e34",
+      "bgcolor": "#33474f"
+    },
+    {
+      "id": 173,
+      "type": "ImageFromBatch",
+      "pos": [
+        90,
+        4695
+      ],
+      "size": [
+        300,
+        120
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 345
+        },
+        {
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 346
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            347,
+            348,
+            349
+          ]
+        }
+      ],
+      "title": "H3 출력 · 원본 FRAME COUNT로 자동 절단",
+      "properties": {
+        "Node name for S&R": "ImageFromBatch",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        0,
+        46
+      ],
+      "widgets_values_named": {
+        "batch_index": 0,
+        "length": 46
+      },
+      "color": "#142f21",
+      "bgcolor": "#234d35"
+    },
+    {
+      "id": 175,
+      "type": "MarkdownNote",
+      "pos": [
+        -2115,
+        5400
+      ],
+      "size": [
+        300,
+        540
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Size Settings Reference",
+      "properties": {},
+      "widgets_values": [
+        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      ],
+      "widgets_values_named": {
+        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      },
+      "color": "#151515",
+      "bgcolor": "#242424"
+    },
+    {
+      "id": 176,
+      "type": "MarkdownNote",
+      "pos": [
+        -2730,
+        4425
+      ],
+      "size": [
+        450,
+        750
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Model Links",
+      "properties": {},
+      "widgets_values": [
+        "## Model Links\n[🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n**vae**\n\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\n**diffusion_models**\n\n- [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 vae/\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   └── minimax_h3_audio_vae_fp32.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── minimax_h3_ref2va_pruned_int8_convrot.safetensors\n│   └── 📂 text_encoders/\n│       └── qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      ],
+      "widgets_values_named": {
+        "text": "## Model Links\n[🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n**vae**\n\n- [minimax_h3_video_vae_fp16.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors)\n- [minimax_h3_audio_vae_fp32.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors)\n\n**diffusion_models**\n\n- [minimax_h3_ref2va_pruned_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors)\n\n**text_encoders**\n\n- [qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors](https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 vae/\n│   │   ├── minimax_h3_video_vae_fp16.safetensors\n│   │   └── minimax_h3_audio_vae_fp32.safetensors\n│   ├── 📂 diffusion_models/\n│   │   └── minimax_h3_ref2va_pruned_int8_convrot.safetensors\n│   └── 📂 text_encoders/\n│       └── qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      },
+      "color": "#151515",
+      "bgcolor": "#242424"
+    },
+    {
+      "id": 177,
+      "type": "MarkdownNote",
+      "pos": [
+        -2265,
+        4425
+      ],
+      "size": [
+        450,
+        900
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: MiniMax H3",
+      "properties": {},
+      "widgets_values": [
+        "## MiniMax H3\n\n[MiniMax H3](https://www.minimax.io/blog/minimax-h3) is MiniMax's general-purpose, omni-modal generation model. It jointly understands text, image, video, and audio, and generates video with **native stereo audio**: voice, sound effects, and music are modeled jointly in a single forward pass, not layered on afterward. Output is up to 2K resolution, 24fps, and up to about 15 seconds.\n\n## ComfyUI links\n- [ComfyUI#15224](https://github.com/Comfy-Org/ComfyUI/pull/15224)\n- [🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n## About this workflow\n\nThis template runs the **reference-to-video (ref2va)** task using the `MiniMaxH3ReferenceToVideo` node. It takes any mix of reference images, videos, and standalone audio, and weaves them into the generation to lock in a character's identity, a style, a motion, a camera move, or a voice.\n\n**Key inputs**\n\n- **ref_images / ref_videos / ref_video_audios / ref_audios**: up to 9 reference images, 3 reference videos (each may carry its own paired soundtrack), and 3 standalone reference audio clips\n- **prompt**: reference the inputs by tag, in the exact order they were connected, for example `<Picture 1>`, `<Video 1>`, `<Audio 1>`, then describe the target scene, motion, and audio\n- **ref_image_size**: `match` scales references down to the generation's resolution (faster); `max` keeps up to a 2048px short edge for stronger identity fidelity, at the cost of speed since reference tokens ride along every sampling step\n- **width / height**: set via Resolution Selector.\n- **duration (seconds)**: converted to a valid frame `length` by the Math Expression node\n\n**Sampling and decode**\n\n- Sampler: `res_multistep`. `beta` or `normal` scheduler tends to outperform `simple` for reference-heavy prompts like this one\n- The sampler's joint audio+video `LATENT` output feeds directly into both `VAEDecode` (video, `minimax_h3_video_vae_fp16`) and `VAEDecodeAudio` (audio, `minimax_h3_audio_vae_fp32`); each decode node automatically pulls its own half out of the packed latent. `CreateVideo` then muxes the two into a single MP4 with synced sound\n- The diffusion model here is `minimax_h3_ref2va_pruned_int8_convrot.safetensors`, a different set of weights from the `fl2va` model used by the t2v/i2v templates\n\nRef2va's output is very sensitive to prompt wording; matching the reference tags precisely and being explicit about which reference drives which part of the shot tends to work best."
+      ],
+      "widgets_values_named": {
+        "text": "## MiniMax H3\n\n[MiniMax H3](https://www.minimax.io/blog/minimax-h3) is MiniMax's general-purpose, omni-modal generation model. It jointly understands text, image, video, and audio, and generates video with **native stereo audio**: voice, sound effects, and music are modeled jointly in a single forward pass, not layered on afterward. Output is up to 2K resolution, 24fps, and up to about 15 seconds.\n\n## ComfyUI links\n- [ComfyUI#15224](https://github.com/Comfy-Org/ComfyUI/pull/15224)\n- [🤗 Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3)\n\n## About this workflow\n\nThis template runs the **reference-to-video (ref2va)** task using the `MiniMaxH3ReferenceToVideo` node. It takes any mix of reference images, videos, and standalone audio, and weaves them into the generation to lock in a character's identity, a style, a motion, a camera move, or a voice.\n\n**Key inputs**\n\n- **ref_images / ref_videos / ref_video_audios / ref_audios**: up to 9 reference images, 3 reference videos (each may carry its own paired soundtrack), and 3 standalone reference audio clips\n- **prompt**: reference the inputs by tag, in the exact order they were connected, for example `<Picture 1>`, `<Video 1>`, `<Audio 1>`, then describe the target scene, motion, and audio\n- **ref_image_size**: `match` scales references down to the generation's resolution (faster); `max` keeps up to a 2048px short edge for stronger identity fidelity, at the cost of speed since reference tokens ride along every sampling step\n- **width / height**: set via Resolution Selector.\n- **duration (seconds)**: converted to a valid frame `length` by the Math Expression node\n\n**Sampling and decode**\n\n- Sampler: `res_multistep`. `beta` or `normal` scheduler tends to outperform `simple` for reference-heavy prompts like this one\n- The sampler's joint audio+video `LATENT` output feeds directly into both `VAEDecode` (video, `minimax_h3_video_vae_fp16`) and `VAEDecodeAudio` (audio, `minimax_h3_audio_vae_fp32`); each decode node automatically pulls its own half out of the packed latent. `CreateVideo` then muxes the two into a single MP4 with synced sound\n- The diffusion model here is `minimax_h3_ref2va_pruned_int8_convrot.safetensors`, a different set of weights from the `fl2va` model used by the t2v/i2v templates\n\nRef2va's output is very sensitive to prompt wording; matching the reference tags precisely and being explicit about which reference drives which part of the shot tends to work best."
+      },
+      "color": "#151515",
+      "bgcolor": "#242424"
+    },
+    {
+      "id": 180,
+      "type": "PrimitiveBoolean",
+      "pos": [
+        -1065,
+        4680
+      ],
+      "size": [
+        390,
+        135
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "BOOLEAN",
+          "type": "BOOLEAN",
+          "links": [
+            355
+          ]
+        }
+      ],
+      "title": "⚡ TURBO LORA · OFF=NORMAL 20 / ON=TURBO 4",
+      "properties": {
+        "Node name for S&R": "PrimitiveBoolean",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        false
+      ],
+      "widgets_values_named": {
+        "value": false
+      },
+      "color": "#392500",
+      "bgcolor": "#62420b"
+    }
+  ],
+  "links": [
+    [
+      294,
+      137,
+      0,
+      141,
+      0,
+      "IMAGE"
+    ],
+    [
+      310,
+      147,
+      0,
+      141,
+      22,
+      "FLOAT"
+    ],
+    [
+      320,
+      161,
+      0,
+      141,
+      23,
+      "INT"
+    ],
+    [
+      321,
+      160,
+      0,
+      141,
+      9,
+      "IMAGE"
+    ],
+    [
+      323,
+      160,
+      1,
+      147,
+      0,
+      "INT"
+    ],
+    [
+      334,
+      166,
+      0,
+      141,
+      20,
+      "FLOAT"
+    ],
+    [
+      331,
+      164,
+      0,
+      92,
+      0,
+      "VIDEO"
+    ],
+    [
+      336,
+      167,
+      0,
+      168,
+      1,
+      "INT"
+    ],
+    [
+      337,
+      167,
+      1,
+      168,
+      2,
+      "INT"
+    ],
+    [
+      338,
+      160,
+      0,
+      168,
+      0,
+      "IMAGE"
+    ],
+    [
+      339,
+      168,
+      0,
+      169,
+      0,
+      "IMAGE"
+    ],
+    [
+      341,
+      169,
+      0,
+      170,
+      0,
+      "IMAGE"
+    ],
+    [
+      342,
+      170,
+      0,
+      171,
+      0,
+      "VIDEO"
+    ],
+    [
+      345,
+      141,
+      0,
+      173,
+      0,
+      "IMAGE"
+    ],
+    [
+      346,
+      160,
+      1,
+      173,
+      1,
+      "INT"
+    ],
+    [
+      347,
+      173,
+      0,
+      164,
+      0,
+      "IMAGE"
+    ],
+    [
+      348,
+      173,
+      0,
+      167,
+      0,
+      "IMAGE"
+    ],
+    [
+      349,
+      173,
+      0,
+      169,
+      1,
+      "IMAGE"
+    ],
+    [
+      355,
+      180,
+      0,
+      141,
+      30,
+      "BOOLEAN"
+    ],
+    [
+      381,
+      137,
+      0,
+      141,
+      1,
+      "IMAGE"
+    ],
+    [
+      382,
+      137,
+      0,
+      141,
+      2,
+      "IMAGE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "01 · SOURCE + REFERENCE + TURBO CONTROL",
+      "bounding": [
+        -1680,
+        4440,
+        1000,
+        1310
+      ],
+      "color": "#4d2f36",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "02 · H3 EXPANDED REFERENCE SLOTS · NO AUDIO OUTPUT",
+      "bounding": [
+        -690,
+        4440,
+        760,
+        1580
+      ],
+      "color": "#44305a",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "03 · FRAME SYNC + FINAL OUTPUT + COMPARISON",
+      "bounding": [
+        75,
+        4395,
+        2300,
+        760
+      ],
+      "color": "#315640",
+      "flags": {}
+    }
+  ],
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "b86bbef6-4f85-4f7d-a6b5-52a78027a1d4",
+        "version": 1,
+        "state": {
+          "lastGroupId": 5,
+          "lastNodeId": 223,
+          "lastLinkId": 419,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "MiniMax H3 Omni · V7 Reviewed · Turbo Toggle · No Audio",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -1640,
+            4880,
+            184.4103546142578,
+            668
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            1100,
+            4880,
+            188.46200561523438,
+            68
+          ]
+        },
+        "inputs": [
+          {
+            "id": "38ec6f15-80f5-46b7-9252-a2a1f3e1d6bd",
+            "name": "ref_image_0",
+            "type": "IMAGE",
+            "linkIds": [
+              278
+            ],
+            "localized_name": "이미지0",
+            "label": "이미지0",
+            "pos": [
+              -1479.5896453857422,
+              4904
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000002",
+            "name": "ref_image_1",
+            "type": "IMAGE",
+            "linkIds": [
+              352
+            ],
+            "localized_name": "이미지1",
+            "label": "이미지1",
+            "pos": [
+              -1479.5896453857422,
+              4924
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000003",
+            "name": "ref_image_2",
+            "type": "IMAGE",
+            "linkIds": [
+              353
+            ],
+            "localized_name": "이미지2",
+            "label": "이미지2",
+            "pos": [
+              -1479.5896453857422,
+              4944
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000004",
+            "name": "ref_image_3",
+            "type": "IMAGE",
+            "linkIds": [
+              367
+            ],
+            "localized_name": "이미지3",
+            "label": "이미지3",
+            "pos": [
+              -1479.5896453857422,
+              4964
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000005",
+            "name": "ref_image_4",
+            "type": "IMAGE",
+            "linkIds": [
+              368
+            ],
+            "localized_name": "이미지4",
+            "label": "이미지4",
+            "pos": [
+              -1479.5896453857422,
+              4984
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000006",
+            "name": "ref_image_5",
+            "type": "IMAGE",
+            "linkIds": [
+              369
+            ],
+            "localized_name": "이미지5",
+            "label": "이미지5",
+            "pos": [
+              -1479.5896453857422,
+              5004
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000007",
+            "name": "ref_image_6",
+            "type": "IMAGE",
+            "linkIds": [
+              370
+            ],
+            "localized_name": "이미지6",
+            "label": "이미지6",
+            "pos": [
+              -1479.5896453857422,
+              5024
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000008",
+            "name": "ref_image_7",
+            "type": "IMAGE",
+            "linkIds": [
+              371
+            ],
+            "localized_name": "이미지7",
+            "label": "이미지7",
+            "pos": [
+              -1479.5896453857422,
+              5044
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000009",
+            "name": "ref_image_8",
+            "type": "IMAGE",
+            "linkIds": [
+              372
+            ],
+            "localized_name": "이미지8",
+            "label": "이미지8",
+            "pos": [
+              -1479.5896453857422,
+              5064
+            ]
+          },
+          {
+            "id": "0f9ec6c1-142e-4695-9072-000000000001",
+            "name": "ref_video_0",
+            "type": "IMAGE",
+            "linkIds": [
+              301
+            ],
+            "localized_name": "비디오0",
+            "label": "비디오0",
+            "pos": [
+              -1479.5896453857422,
+              5084
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000011",
+            "name": "ref_video_1",
+            "type": "IMAGE",
+            "linkIds": [
+              373
+            ],
+            "localized_name": "비디오1",
+            "label": "비디오1",
+            "pos": [
+              -1479.5896453857422,
+              5104
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000012",
+            "name": "ref_video_2",
+            "type": "IMAGE",
+            "linkIds": [
+              374
+            ],
+            "localized_name": "비디오2",
+            "label": "비디오2",
+            "pos": [
+              -1479.5896453857422,
+              5124
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000013",
+            "name": "ref_video_audio_0",
+            "type": "AUDIO",
+            "linkIds": [
+              375
+            ],
+            "localized_name": "비디오_오디오0",
+            "label": "비디오_오디오0",
+            "pos": [
+              -1479.5896453857422,
+              5144
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000014",
+            "name": "ref_video_audio_1",
+            "type": "AUDIO",
+            "linkIds": [
+              376
+            ],
+            "localized_name": "비디오_오디오1",
+            "label": "비디오_오디오1",
+            "pos": [
+              -1479.5896453857422,
+              5164
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000015",
+            "name": "ref_video_audio_2",
+            "type": "AUDIO",
+            "linkIds": [
+              377
+            ],
+            "localized_name": "비디오_오디오2",
+            "label": "비디오_오디오2",
+            "pos": [
+              -1479.5896453857422,
+              5184
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000016",
+            "name": "ref_audio_0",
+            "type": "AUDIO",
+            "linkIds": [
+              378
+            ],
+            "localized_name": "오디오0",
+            "label": "오디오0",
+            "pos": [
+              -1479.5896453857422,
+              5204
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000017",
+            "name": "ref_audio_1",
+            "type": "AUDIO",
+            "linkIds": [
+              379
+            ],
+            "localized_name": "오디오1",
+            "label": "오디오1",
+            "pos": [
+              -1479.5896453857422,
+              5224
+            ]
+          },
+          {
+            "id": "e7b1c0de-8a21-4f0f-9a17-000000000018",
+            "name": "ref_audio_2",
+            "type": "AUDIO",
+            "linkIds": [
+              380
+            ],
+            "localized_name": "오디오2",
+            "label": "오디오2",
+            "pos": [
+              -1479.5896453857422,
+              5244
+            ]
+          },
+          {
+            "id": "fd70819a-0a76-4c70-a38e-7a3db0d0f429",
+            "name": "prompt",
+            "type": "STRING",
+            "linkIds": [
+              283
+            ],
+            "localized_name": "프롬프트",
+            "label": "프롬프트",
+            "pos": [
+              -1479.5896453857422,
+              5264
+            ]
+          },
+          {
+            "id": "55cd62c1-449b-4285-8380-5ebf5a5a224a",
+            "name": "aspect_ratio",
+            "type": "COMBO",
+            "linkIds": [
+              284
+            ],
+            "localized_name": "화면 비율",
+            "label": "화면 비율",
+            "pos": [
+              -1479.5896453857422,
+              5284
+            ]
+          },
+          {
+            "id": "d4f58a02-77f6-4a3e-a3ea-27a57200d0d1",
+            "name": "megapixels",
+            "type": "FLOAT",
+            "linkIds": [
+              285
+            ],
+            "localized_name": "메가픽셀",
+            "label": "메가픽셀",
+            "pos": [
+              -1479.5896453857422,
+              5304
+            ]
+          },
+          {
+            "id": "daea2f10-548c-4eae-a54c-68b6f948e8a2",
+            "name": "multiple",
+            "type": "INT",
+            "linkIds": [
+              286
+            ],
+            "localized_name": "해상도 배수",
+            "label": "해상도 배수",
+            "pos": [
+              -1479.5896453857422,
+              5324
+            ]
+          },
+          {
+            "id": "e05c5cbf-65ab-4f45-92ed-35d14550576c",
+            "name": "duration_seconds",
+            "type": "FLOAT",
+            "linkIds": [
+              287
+            ],
+            "localized_name": "지속 시간(초)",
+            "label": "지속 시간(초)",
+            "pos": [
+              -1479.5896453857422,
+              5344
+            ]
+          },
+          {
+            "id": "b24afc73-3173-4658-a2f0-65994c84ae35",
+            "name": "noise_seed",
+            "type": "INT",
+            "linkIds": [
+              288
+            ],
+            "localized_name": "노이즈 시드",
+            "label": "노이즈 시드",
+            "pos": [
+              -1479.5896453857422,
+              5364
+            ]
+          },
+          {
+            "id": "3b111e29-116f-455c-ae1e-0d96c8d518bb",
+            "name": "unet_name",
+            "type": "COMBO",
+            "linkIds": [
+              289
+            ],
+            "localized_name": "H3 Omni UNet 모델",
+            "label": "H3 Omni UNet 모델",
+            "pos": [
+              -1479.5896453857422,
+              5384
+            ]
+          },
+          {
+            "id": "c22e66dd-bc50-44b0-8ee7-7f00ca9b3fc6",
+            "name": "clip_name",
+            "type": "COMBO",
+            "linkIds": [
+              290
+            ],
+            "localized_name": "H3 Omni CLIP 모델",
+            "label": "H3 Omni CLIP 모델",
+            "pos": [
+              -1479.5896453857422,
+              5404
+            ]
+          },
+          {
+            "id": "43607734-c6f2-4e65-8117-89e27155e42b",
+            "name": "video_vae_name",
+            "type": "COMBO",
+            "linkIds": [
+              291
+            ],
+            "localized_name": "비디오 VAE",
+            "label": "비디오 VAE",
+            "pos": [
+              -1479.5896453857422,
+              5424
+            ]
+          },
+          {
+            "id": "a9426975-11a5-457e-87d0-0f8b3cd998d7",
+            "name": "audio_vae_name",
+            "type": "COMBO",
+            "linkIds": [
+              292
+            ],
+            "localized_name": "오디오 VAE",
+            "label": "오디오 VAE",
+            "pos": [
+              -1479.5896453857422,
+              5444
+            ]
+          },
+          {
+            "id": "c443b24a-3a54-4620-8bd5-0708cab9dd8e",
+            "name": "ref_image_size",
+            "type": "COMBO",
+            "linkIds": [
+              293
+            ],
+            "localized_name": "참조 이미지 크기 · MAX",
+            "label": "참조 이미지 크기 · MAX",
+            "pos": [
+              -1479.5896453857422,
+              5464
+            ]
+          },
+          {
+            "id": "67dc0c0c-b0dc-4fc5-9716-000000000001",
+            "name": "swap_instruction",
+            "type": "STRING",
+            "linkIds": [
+              333
+            ],
+            "localized_name": "스왑 지시문 · 대상/외형/시간",
+            "label": "스왑 지시문 · 대상/외형/시간",
+            "pos": [
+              -1479.5896453857422,
+              5484
+            ]
+          },
+          {
+            "id": "0f9ec6c1-142e-4695-9072-000000000016",
+            "name": "turbo_lora_enabled",
+            "type": "BOOLEAN",
+            "linkIds": [
+              356,
+              357,
+              358
+            ],
+            "localized_name": "Turbo LoRA · OFF / ON",
+            "label": "Turbo LoRA · OFF / ON",
+            "pos": [
+              -1479.5896453857422,
+              5504
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "fa38b4bc-31c2-42f3-bd18-000000000001",
+            "name": "images",
+            "type": "IMAGE",
+            "linkIds": [
+              324
+            ],
+            "localized_name": "H3 비디오 프레임 · 무음 출력",
+            "pos": [
+              1124,
+              4904
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 115,
+            "type": "ResolutionSelector",
+            "pos": [
+              -1485,
+              5610
+            ],
+            "size": [
+              315,
+              180
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "showAdvanced": false,
+            "inputs": [
+              {
+                "localized_name": "종횡비",
+                "name": "aspect_ratio",
+                "type": "COMBO",
+                "widget": {
+                  "name": "aspect_ratio"
+                },
+                "link": 284
+              },
+              {
+                "localized_name": "메가픽셀",
+                "name": "megapixels",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "megapixels"
+                },
+                "link": 285
+              },
+              {
+                "localized_name": "배수",
+                "name": "multiple",
+                "type": "INT",
+                "widget": {
+                  "name": "multiple"
+                },
+                "link": 286
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "너비",
+                "name": "width",
+                "type": "INT",
+                "links": [
+                  276
+                ]
+              },
+              {
+                "localized_name": "높이",
+                "name": "height",
+                "type": "INT",
+                "links": [
+                  277
+                ]
+              }
+            ],
+            "title": "OUTPUT SIZE · MAIN GRAPH CONTROL",
+            "properties": {
+              "Node name for S&R": "ResolutionSelector"
+            },
+            "widgets_values": [
+              "16:9 (Widescreen)",
+              0.3,
+              32
+            ],
+            "widgets_values_named": {
+              "aspect_ratio": "16:9 (Widescreen)",
+              "megapixels": 0.3,
+              "multiple": 32
+            },
+            "color": "#351a23",
+            "bgcolor": "#512936"
+          },
+          {
+            "id": 123,
+            "type": "KSamplerSelect",
+            "pos": [
+              -255,
+              5190
+            ],
+            "size": [
+              375,
+              75
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "localized_name": "샘플러",
+                "name": "SAMPLER",
+                "type": "SAMPLER",
+                "links": [
+                  362
+                ]
+              }
+            ],
+            "title": "NORMAL SAMPLER · res_multistep",
+            "properties": {
+              "Node name for S&R": "KSamplerSelect"
+            },
+            "widgets_values": [
+              "res_multistep"
+            ],
+            "widgets_values_named": {
+              "sampler_name": "res_multistep"
+            },
+            "color": "#102f33",
+            "bgcolor": "#1b4b50"
+          },
+          {
+            "id": 129,
+            "type": "RandomNoise",
+            "pos": [
+              -255,
+              4935
+            ],
+            "size": [
+              360,
+              90
+            ],
+            "flags": {},
+            "order": 11,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "노이즈 시드",
+                "name": "noise_seed",
+                "type": "INT",
+                "widget": {
+                  "name": "noise_seed"
+                },
+                "link": 288
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "노이즈",
+                "name": "NOISE",
+                "type": "NOISE",
+                "links": [
+                  253
+                ]
+              }
+            ],
+            "title": "NORMAL NOISE / SEED",
+            "properties": {
+              "Node name for S&R": "RandomNoise"
+            },
+            "widgets_values": [
+              157368968253448,
+              "fixed"
+            ],
+            "widgets_values_named": {
+              "noise_seed": 157368968253448,
+              "control_after_generate": "fixed"
+            },
+            "color": "#102f33",
+            "bgcolor": "#1b4b50"
+          },
+          {
+            "id": 132,
+            "type": "PrimitiveFloat",
+            "pos": [
+              -1485,
+              5835
+            ],
+            "size": [
+              270,
+              75
+            ],
+            "flags": {},
+            "order": 13,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "값",
+                "name": "value",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 287
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "실수",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": [
+                  261
+                ]
+              }
+            ],
+            "title": "Float (Duration)",
+            "properties": {
+              "Node name for S&R": "PrimitiveFloat"
+            },
+            "widgets_values": [
+              5
+            ],
+            "widgets_values_named": {
+              "value": 5
+            },
+            "color": "#351a23",
+            "bgcolor": "#512936"
+          },
+          {
+            "id": 138,
+            "type": "PrimitiveStringMultiline",
+            "pos": [
+              -1485,
+              6000
+            ],
+            "size": [
+              435,
+              390
+            ],
+            "flags": {},
+            "order": 15,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "값",
+                "name": "value",
+                "type": "STRING",
+                "widget": {
+                  "name": "value"
+                },
+                "link": 283
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "문자열",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  332
+                ]
+              }
+            ],
+            "title": "H3 OMNI PROMPT · Video Authority / Picture Appearance",
+            "properties": {
+              "Node name for S&R": "PrimitiveStringMultiline"
+            },
+            "widgets_values": [
+              "<Video 1> is the original source video and the absolute authority for frame order, duration, playback direction, camera position and movement, lens perspective, crop, foreground-subject motion, pose trajectory, gesture timing, body mechanics, screen position, scale, depth, occlusion, focus, motion blur, and foreground geometry. Start from frame 0 of <Video 1> and reproduce the source action forward without skipping ahead, reversing, looping, adding pre-roll, adding post-roll, or retiming.\n\n<Picture 1>, <Picture 2>, and <Picture 3> are three identical copies of the replacement-background reference. Together they are the absolute authority for the visible background environment. Use only their scenery, architecture, vegetation, sky, terrain, colors, materials, illumination character, and background atmosphere. Ignore and never transfer any person, animal, foreground object, pose, framing, crop, or camera from these pictures.\n\n[SWAP_INSTRUCTION]\n\nTreat the running soldier, his face, hair, skin, body, uniform, tactical gear, rifle, hands, limbs, shadows, contacts, silhouette, motion blur, and the foreground grass as immutable foreground from <Video 1>. Replace the original tree line, original sky, and all distant scenery behind the foreground boundary with the background environment defined by <Picture 1>, <Picture 2>, and <Picture 3>. The original background must not remain visible.\n\nThe replacement background must be clearly established in the first output frame and remain temporally stable through the original final frame. Adapt it to <Video 1>'s camera perspective, parallax, depth, focus, exposure, and motion blur without sliding, swimming, flickering, morphing, or crossing over the soldier or rifle. <Video 1> wins for foreground, timing, camera, geometry, depth, and occlusion boundary. The three pictures win for every replaceable background pixel. Stop at the original source frame count."
+            ],
+            "widgets_values_named": {
+              "value": "<Video 1> is the original source video and the absolute authority for frame order, duration, playback direction, camera position and movement, lens perspective, crop, foreground-subject motion, pose trajectory, gesture timing, body mechanics, screen position, scale, depth, occlusion, focus, motion blur, and foreground geometry. Start from frame 0 of <Video 1> and reproduce the source action forward without skipping ahead, reversing, looping, adding pre-roll, adding post-roll, or retiming.\n\n<Picture 1>, <Picture 2>, and <Picture 3> are three identical copies of the replacement-background reference. Together they are the absolute authority for the visible background environment. Use only their scenery, architecture, vegetation, sky, terrain, colors, materials, illumination character, and background atmosphere. Ignore and never transfer any person, animal, foreground object, pose, framing, crop, or camera from these pictures.\n\n[SWAP_INSTRUCTION]\n\nTreat the running soldier, his face, hair, skin, body, uniform, tactical gear, rifle, hands, limbs, shadows, contacts, silhouette, motion blur, and the foreground grass as immutable foreground from <Video 1>. Replace the original tree line, original sky, and all distant scenery behind the foreground boundary with the background environment defined by <Picture 1>, <Picture 2>, and <Picture 3>. The original background must not remain visible.\n\nThe replacement background must be clearly established in the first output frame and remain temporally stable through the original final frame. Adapt it to <Video 1>'s camera perspective, parallax, depth, focus, exposure, and motion blur without sliding, swimming, flickering, morphing, or crossing over the soldier or rifle. <Video 1> wins for foreground, timing, camera, geometry, depth, and occlusion boundary. The three pictures win for every replaceable background pixel. Stop at the original source frame count."
+            },
+            "color": "#291b37",
+            "bgcolor": "#432b57"
+          },
+          {
+            "id": 124,
+            "type": "BasicScheduler",
+            "pos": [
+              -255,
+              5310
+            ],
+            "size": [
+              390,
+              135
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "모델",
+                "name": "model",
+                "type": "MODEL",
+                "link": 354
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "시그마",
+                "name": "SIGMAS",
+                "type": "SIGMAS",
+                "links": [
+                  364
+                ]
+              }
+            ],
+            "title": "NORMAL SCHEDULER · BETA / 20 STEPS",
+            "properties": {
+              "Node name for S&R": "BasicScheduler"
+            },
+            "widgets_values": [
+              "beta",
+              20,
+              1
+            ],
+            "widgets_values_named": {
+              "scheduler": "beta",
+              "steps": 20,
+              "denoise": 1
+            },
+            "color": "#102f33",
+            "bgcolor": "#1b4b50"
+          },
+          {
+            "id": 131,
+            "type": "ComfyMathExpression",
+            "pos": [
+              -1455,
+              5940
+            ],
+            "size": [
+              225,
+              75
+            ],
+            "flags": {
+              "collapsed": true
+            },
+            "order": 12,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "localized_name": "values.a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 261
+              },
+              {
+                "label": "b",
+                "localized_name": "values.b",
+                "name": "values.b",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "실수",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "localized_name": "정수",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  275
+                ]
+              },
+              {
+                "localized_name": "BOOL",
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "ComfyMathExpression"
+            },
+            "widgets_values": [
+              "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+            ],
+            "widgets_values_named": {
+              "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+            },
+            "color": "#351a23",
+            "bgcolor": "#512936"
+          },
+          {
+            "id": 126,
+            "type": "BasicGuider",
+            "pos": [
+              -255,
+              5085
+            ],
+            "size": [
+              360,
+              60
+            ],
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "모델",
+                "name": "model",
+                "type": "MODEL",
+                "link": 350
+              },
+              {
+                "localized_name": "조건",
+                "name": "conditioning",
+                "type": "CONDITIONING",
+                "link": 270
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "가이드",
+                "name": "GUIDER",
+                "type": "GUIDER",
+                "links": [
+                  254
+                ]
+              }
+            ],
+            "title": "SELECTED MODEL GUIDER",
+            "properties": {
+              "Node name for S&R": "BasicGuider"
+            },
+            "color": "#102f33",
+            "bgcolor": "#1b4b50"
+          },
+          {
+            "id": 125,
+            "type": "SamplerCustomAdvanced",
+            "pos": [
+              150,
+              5115
+            ],
+            "size": [
+              240,
+              375
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "노이즈",
+                "name": "noise",
+                "type": "NOISE",
+                "link": 253
+              },
+              {
+                "localized_name": "가이더",
+                "name": "guider",
+                "type": "GUIDER",
+                "link": 254
+              },
+              {
+                "localized_name": "샘플러",
+                "name": "sampler",
+                "type": "SAMPLER",
+                "link": 255
+              },
+              {
+                "localized_name": "시그마 배열",
+                "name": "sigmas",
+                "type": "SIGMAS",
+                "link": 256
+              },
+              {
+                "localized_name": "잠재 데이터",
+                "name": "latent_image",
+                "type": "LATENT",
+                "link": 271
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "출력",
+                "name": "output",
+                "type": "LATENT",
+                "links": [
+                  280
+                ]
+              },
+              {
+                "localized_name": "디노이즈 출력",
+                "name": "denoised_output",
+                "type": "LATENT",
+                "links": []
+              }
+            ],
+            "title": "SELECTED PATH SAMPLING",
+            "properties": {
+              "Node name for S&R": "SamplerCustomAdvanced"
+            },
+            "color": "#102f33",
+            "bgcolor": "#1b4b50"
+          },
+          {
+            "id": 122,
+            "type": "VAEDecode",
+            "pos": [
+              480,
+              5055
+            ],
+            "size": [
+              300,
+              60
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "잠재 데이터",
+                "name": "samples",
+                "type": "LATENT",
+                "link": 280
+              },
+              {
+                "localized_name": "vae",
+                "name": "vae",
+                "type": "VAE",
+                "link": 251
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "이미지",
+                "name": "IMAGE",
+                "type": "IMAGE",
+                "links": [
+                  324
+                ]
+              }
+            ],
+            "title": "VIDEO FRAME DECODE · AUDIO CUT",
+            "properties": {
+              "Node name for S&R": "VAEDecode"
+            },
+            "color": "#142f21",
+            "bgcolor": "#234d35"
+          },
+          {
+            "id": 165,
+            "type": "StringReplace",
+            "pos": [
+              -1035,
+              6015
+            ],
+            "size": [
+              345,
+              240
+            ],
+            "flags": {},
+            "order": 16,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "문자열",
+                "name": "string",
+                "type": "STRING",
+                "widget": {
+                  "name": "string"
+                },
+                "link": 332
+              },
+              {
+                "localized_name": "바꾸기",
+                "name": "replace",
+                "type": "STRING",
+                "widget": {
+                  "name": "replace"
+                },
+                "link": 333
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "문자열",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  279
+                ]
+              }
+            ],
+            "title": "스왑 지시문 → 보존형 H3 프롬프트",
+            "properties": {
+              "Node name for S&R": "StringReplace",
+              "cnr_id": "comfy-core",
+              "ver": "0.24.0"
+            },
+            "widgets_values": [
+              "",
+              "[SWAP_INSTRUCTION]",
+              ""
+            ],
+            "widgets_values_named": {
+              "string": "",
+              "find": "[SWAP_INSTRUCTION]",
+              "replace": ""
+            },
+            "color": "#291b37",
+            "bgcolor": "#432b57"
+          },
+          {
+            "id": 179,
+            "type": "MiniMaxH3SigmaShift",
+            "pos": [
+              -1065,
+              4815
+            ],
+            "size": [
+              345,
+              90
+            ],
+            "flags": {},
+            "order": 17,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "model",
+                "name": "model",
+                "type": "MODEL",
+                "link": 349
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "모델",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  354,
+                  360
+                ]
+              }
+            ],
+            "title": "NORMAL SIGMA SHIFT · VIDEO 12 / AUDIO 6",
+            "properties": {
+              "Node name for S&R": "MiniMaxH3SigmaShift"
+            },
+            "widgets_values": [
+              12,
+              6
+            ],
+            "widgets_values_named": {
+              "shift_video": 12,
+              "shift_audio": 6
+            },
+            "color": "#102536",
+            "bgcolor": "#1c3b52"
+          },
+          {
+            "id": 182,
+            "type": "KSamplerSelect",
+            "pos": [
+              -255,
+              4620
+            ],
+            "size": [
+              345,
+              75
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+              {
+                "localized_name": "샘플러",
+                "name": "SAMPLER",
+                "type": "SAMPLER",
+                "links": [
+                  363
+                ]
+              }
+            ],
+            "title": "⚡ CLOUD TURBO SAMPLER · EULER · CORE",
+            "properties": {
+              "Node name for S&R": "KSamplerSelect",
+              "cnr_id": "comfy-core",
+              "ver": "0.33.0"
+            },
+            "widgets_values": [
+              "euler"
+            ],
+            "widgets_values_named": {
+              "sampler_name": "euler"
+            },
+            "color": "#3b1900",
+            "bgcolor": "#703406"
+          },
+          {
+            "id": 184,
+            "type": "ComfySwitchNode",
+            "pos": [
+              -705,
+              4620
+            ],
+            "size": [
+              390,
+              150
+            ],
+            "flags": {},
+            "order": 20,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "거짓일 때",
+                "name": "on_false",
+                "type": "MODEL",
+                "link": 360
+              },
+              {
+                "localized_name": "참일 때",
+                "name": "on_true",
+                "type": "MODEL",
+                "link": 361
+              },
+              {
+                "localized_name": "스위치",
+                "name": "switch",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "switch"
+                },
+                "link": 356
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "출력",
+                "name": "output",
+                "type": "MODEL",
+                "links": [
+                  350
+                ]
+              }
+            ],
+            "title": "MODEL SWITCH · FALSE=NORMAL / TRUE=TURBO",
+            "properties": {
+              "Node name for S&R": "ComfySwitchNode",
+              "cnr_id": "comfy-core"
+            },
+            "widgets_values": [
+              false
+            ],
+            "widgets_values_named": {
+              "switch": false
+            },
+            "color": "#392500",
+            "bgcolor": "#62420b"
+          },
+          {
+            "id": 206,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              4995
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 42,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 384
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지0",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  402
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 189,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4432.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 25,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 352
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지1",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  385
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 207,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5025
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 43,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 385
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지1",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  403
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 190,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4462.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 26,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 353
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지2",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  386
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 208,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5055
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 44,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 386
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지2",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  404
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 191,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4492.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 27,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 367
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지3",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  387
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 209,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5085
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 45,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 387
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지3",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  405
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 192,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4522.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 28,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 368
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지4",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  388
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 210,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5115
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 46,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 388
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지4",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  406
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 193,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4552.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 29,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 369
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지5",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  389
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 211,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5145
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 47,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 389
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지5",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  407
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 194,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4582.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 30,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 370
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지6",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  390
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 212,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5175
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 48,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 390
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지6",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  408
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 195,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4612.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 31,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 371
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지7",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  391
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 213,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5205
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 49,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 391
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지7",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  409
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 196,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4642.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 32,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 372
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지8",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  392
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 214,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5235
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 50,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 392
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지8",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  410
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 197,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4672.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 33,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 301
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오0",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  393
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 215,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5265
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 51,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 393
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오0",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  411
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 198,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4702.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 34,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 373
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오1",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  394
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 216,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5295
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 52,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 394
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오1",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  412
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 199,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4732.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 35,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 374
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오2",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  395
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 217,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5325
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 53,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 395
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오2",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  413
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#14342a",
+            "bgcolor": "#246047"
+          },
+          {
+            "id": 200,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4762.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 36,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 375
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오0",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  396
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 218,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5355
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 54,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 396
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오0",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  414
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 201,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4792.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 37,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 376
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오1",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  397
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 219,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5385
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 55,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 397
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오1",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  415
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 220,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5415
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 56,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 398
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오2",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  416
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 221,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5445
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 57,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 399
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오0",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  417
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 222,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5475
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 58,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 400
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오1",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  418
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 223,
+            "type": "Reroute",
+            "pos": [
+              -945,
+              5505
+            ],
+            "size": [
+              90,
+              30
+            ],
+            "flags": {},
+            "order": 59,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 401
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오2",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  419
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 205,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4912.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 41,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 380
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오2",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  401
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 204,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4882.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 40,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 379
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오1",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  400
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 203,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4852.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 39,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 378
+              }
+            ],
+            "outputs": [
+              {
+                "label": "오디오0",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  399
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#431d27",
+            "bgcolor": "#753244"
+          },
+          {
+            "id": 202,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4822.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 38,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 377
+              }
+            ],
+            "outputs": [
+              {
+                "label": "비디오_오디오2",
+                "name": "",
+                "type": "AUDIO",
+                "links": [
+                  398
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#342044",
+            "bgcolor": "#5a3972"
+          },
+          {
+            "id": 188,
+            "type": "Reroute",
+            "pos": [
+              -1667.271659257189,
+              4402.461590274639
+            ],
+            "size": [
+              105,
+              30
+            ],
+            "flags": {},
+            "order": 24,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "",
+                "type": "*",
+                "link": 278
+              }
+            ],
+            "outputs": [
+              {
+                "label": "이미지0",
+                "name": "",
+                "type": "IMAGE",
+                "links": [
+                  384
+                ]
+              }
+            ],
+            "properties": {
+              "showOutputText": false,
+              "horizontal": false
+            },
+            "color": "#123148",
+            "bgcolor": "#1d5375"
+          },
+          {
+            "id": 127,
+            "type": "UNETLoader",
+            "pos": [
+              -373.8243871305254,
+              5779.798785306156
+            ],
+            "size": [
+              645,
+              105
+            ],
+            "flags": {},
+            "order": 9,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "UNet 모델 파일명",
+                "name": "unet_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "unet_name"
+                },
+                "link": 289
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "모델",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  349,
+                  359
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "UNETLoader",
+              "models": [
+                {
+                  "directory": "diffusion_models",
+                  "name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+                }
+              ]
+            },
+            "widgets_values": [
+              "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+              "default"
+            ],
+            "widgets_values_named": {
+              "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+              "weight_dtype": "default"
+            },
+            "color": "#102536",
+            "bgcolor": "#1c3b52"
+          },
+          {
+            "id": 128,
+            "type": "CLIPLoader",
+            "pos": [
+              -373.8243871305254,
+              5929.798785306156
+            ],
+            "size": [
+              645,
+              135
+            ],
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "CLIP 파일명",
+                "name": "clip_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "clip_name"
+                },
+                "link": 290
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "CLIP",
+                "name": "CLIP",
+                "type": "CLIP",
+                "links": [
+                  272
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "CLIPLoader",
+              "models": [
+                {
+                  "directory": "text_encoders",
+                  "name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+                }
+              ]
+            },
+            "widgets_values": [
+              "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+              "minimax",
+              "default"
+            ],
+            "widgets_values_named": {
+              "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+              "type": "minimax",
+              "device": "default"
+            },
+            "color": "#102536",
+            "bgcolor": "#1c3b52"
+          },
+          {
+            "id": 119,
+            "type": "VAELoader",
+            "pos": [
+              -373.8243871305254,
+              6109.798785306156
+            ],
+            "size": [
+              645,
+              75
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "vae 파일명",
+                "name": "vae_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "vae_name"
+                },
+                "link": 291
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "VAE",
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  251,
+                  273
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAELoader",
+              "models": [
+                {
+                  "directory": "vae",
+                  "name": "minimax_h3_video_vae_fp16.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors"
+                }
+              ]
+            },
+            "widgets_values": [
+              "minimax_h3_video_vae_fp16.safetensors"
+            ],
+            "widgets_values_named": {
+              "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+            },
+            "color": "#102536",
+            "bgcolor": "#1c3b52"
+          },
+          {
+            "id": 120,
+            "type": "VAELoader",
+            "pos": [
+              -373.8243871305254,
+              6244.798785306156
+            ],
+            "size": [
+              660,
+              75
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "vae 파일명",
+                "name": "vae_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "vae_name"
+                },
+                "link": 292
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "VAE",
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  274
+                ]
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "VAELoader",
+              "models": [
+                {
+                  "directory": "vae",
+                  "name": "minimax_h3_audio_vae_fp32.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors"
+                }
+              ]
+            },
+            "widgets_values": [
+              "minimax_h3_audio_vae_fp32.safetensors"
+            ],
+            "widgets_values_named": {
+              "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+            },
+            "color": "#102536",
+            "bgcolor": "#1c3b52"
+          },
+          {
+            "id": 136,
+            "type": "MiniMaxH3ReferenceToVideo",
+            "pos": [
+              -825,
+              4935
+            ],
+            "size": [
+              525,
+              720
+            ],
+            "flags": {},
+            "order": 14,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "clip",
+                "name": "clip",
+                "type": "CLIP",
+                "link": 272
+              },
+              {
+                "localized_name": "vae",
+                "name": "vae",
+                "type": "VAE",
+                "link": 273
+              },
+              {
+                "localized_name": "audio_vae",
+                "name": "audio_vae",
+                "type": "VAE",
+                "link": 274
+              },
+              {
+                "label": "ref_image_0",
+                "localized_name": "ref_images.ref_image_0",
+                "name": "ref_images.ref_image_0",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 402
+              },
+              {
+                "label": "ref_image_1",
+                "localized_name": "ref_images.ref_image_1",
+                "name": "ref_images.ref_image_1",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 403
+              },
+              {
+                "label": "ref_image_2",
+                "localized_name": "ref_images.ref_image_2",
+                "name": "ref_images.ref_image_2",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 404
+              },
+              {
+                "label": "ref_image_3",
+                "localized_name": "ref_images.ref_image_3",
+                "name": "ref_images.ref_image_3",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 405
+              },
+              {
+                "label": "ref_image_4",
+                "localized_name": "ref_images.ref_image_4",
+                "name": "ref_images.ref_image_4",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 406
+              },
+              {
+                "label": "ref_image_5",
+                "localized_name": "ref_images.ref_image_5",
+                "name": "ref_images.ref_image_5",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 407
+              },
+              {
+                "label": "ref_image_6",
+                "localized_name": "ref_images.ref_image_6",
+                "name": "ref_images.ref_image_6",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 408
+              },
+              {
+                "label": "ref_image_7",
+                "localized_name": "ref_images.ref_image_7",
+                "name": "ref_images.ref_image_7",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 409
+              },
+              {
+                "label": "ref_image_8",
+                "localized_name": "ref_images.ref_image_8",
+                "name": "ref_images.ref_image_8",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 410
+              },
+              {
+                "label": "ref_video_0",
+                "localized_name": "ref_videos.ref_video_0",
+                "name": "ref_videos.ref_video_0",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 411
+              },
+              {
+                "label": "ref_video_1",
+                "localized_name": "ref_videos.ref_video_1",
+                "name": "ref_videos.ref_video_1",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 412
+              },
+              {
+                "label": "ref_video_2",
+                "localized_name": "ref_videos.ref_video_2",
+                "name": "ref_videos.ref_video_2",
+                "shape": 7,
+                "type": "IMAGE",
+                "link": 413
+              },
+              {
+                "label": "ref_video_audio_0",
+                "localized_name": "ref_video_audios.ref_video_audio_0",
+                "name": "ref_video_audios.ref_video_audio_0",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 414
+              },
+              {
+                "label": "ref_video_audio_1",
+                "localized_name": "ref_video_audios.ref_video_audio_1",
+                "name": "ref_video_audios.ref_video_audio_1",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 415
+              },
+              {
+                "label": "ref_video_audio_2",
+                "localized_name": "ref_video_audios.ref_video_audio_2",
+                "name": "ref_video_audios.ref_video_audio_2",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 416
+              },
+              {
+                "label": "ref_audio_0",
+                "localized_name": "ref_audios.ref_audio_0",
+                "name": "ref_audios.ref_audio_0",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 417
+              },
+              {
+                "label": "ref_audio_1",
+                "localized_name": "ref_audios.ref_audio_1",
+                "name": "ref_audios.ref_audio_1",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 418
+              },
+              {
+                "label": "ref_audio_2",
+                "localized_name": "ref_audios.ref_audio_2",
+                "name": "ref_audios.ref_audio_2",
+                "shape": 7,
+                "type": "AUDIO",
+                "link": 419
+              },
+              {
+                "localized_name": "prompt",
+                "name": "prompt",
+                "type": "STRING",
+                "widget": {
+                  "name": "prompt"
+                },
+                "link": 279
+              },
+              {
+                "localized_name": "width",
+                "name": "width",
+                "type": "INT",
+                "widget": {
+                  "name": "width"
+                },
+                "link": 276
+              },
+              {
+                "localized_name": "height",
+                "name": "height",
+                "type": "INT",
+                "widget": {
+                  "name": "height"
+                },
+                "link": 277
+              },
+              {
+                "localized_name": "length",
+                "name": "length",
+                "type": "INT",
+                "widget": {
+                  "name": "length"
+                },
+                "link": 275
+              },
+              {
+                "localized_name": "ref_image_size",
+                "name": "ref_image_size",
+                "type": "COMBO",
+                "widget": {
+                  "name": "ref_image_size"
+                },
+                "link": 293
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "positive",
+                "name": "positive",
+                "type": "CONDITIONING",
+                "links": [
+                  270
+                ]
+              },
+              {
+                "localized_name": "잠재 데이터",
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [
+                  271
+                ]
+              }
+            ],
+            "title": "H3 REFERENCE SLOTS · IMAGE 9 / VIDEO 3 / VIDEO_AUDIO 3 / AUDIO 3",
+            "properties": {
+              "Node name for S&R": "MiniMaxH3ReferenceToVideo"
+            },
+            "widgets_values": [
+              "",
+              1344,
+              768,
+              124,
+              "max"
+            ],
+            "widgets_values_named": {
+              "prompt": "",
+              "width": 1344,
+              "height": 768,
+              "length": 124,
+              "ref_image_size": "max"
+            },
+            "color": "#291b37",
+            "bgcolor": "#432b57"
+          },
+          {
+            "id": 181,
+            "type": "LoraLoaderModelOnly",
+            "pos": [
+              -1245,
+              4455
+            ],
+            "size": [
+              450,
+              90
+            ],
+            "flags": {},
+            "order": 18,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "모델",
+                "name": "model",
+                "type": "MODEL",
+                "link": 359
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "모델",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  366
+                ]
+              }
+            ],
+            "title": "⚡ CLOUD TURBO LORA · REF2VA 4-STEP · CORE",
+            "properties": {
+              "Node name for S&R": "LoraLoaderModelOnly",
+              "cnr_id": "comfy-core",
+              "ver": "0.33.0",
+              "models": [
+                {
+                  "name": "minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/loras/minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+                  "directory": "loras"
+                }
+              ]
+            },
+            "widgets_values": [
+              "minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+              1
+            ],
+            "widgets_values_named": {
+              "lora_name": "minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+              "strength_model": 1
+            },
+            "color": "#3b1900",
+            "bgcolor": "#703406"
+          },
+          {
+            "id": 187,
+            "type": "MiniMaxH3SigmaShift",
+            "pos": [
+              -750,
+              4440
+            ],
+            "size": [
+              405,
+              90
+            ],
+            "flags": {},
+            "order": 23,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "model",
+                "name": "model",
+                "type": "MODEL",
+                "link": 366
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "모델",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  361,
+                  383
+                ]
+              }
+            ],
+            "title": "⚡ TURBO SIGMA SHIFT · VIDEO 12 / AUDIO 3 · CORE",
+            "properties": {
+              "Node name for S&R": "MiniMaxH3SigmaShift",
+              "cnr_id": "comfy-core",
+              "ver": "0.33.0"
+            },
+            "widgets_values": [
+              12,
+              3
+            ],
+            "widgets_values_named": {
+              "shift_video": 12,
+              "shift_audio": 3
+            },
+            "color": "#3b1900",
+            "bgcolor": "#703406"
+          },
+          {
+            "id": 183,
+            "type": "BasicScheduler",
+            "pos": [
+              -270,
+              4410
+            ],
+            "size": [
+              390,
+              135
+            ],
+            "flags": {},
+            "order": 19,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "모델",
+                "name": "model",
+                "type": "MODEL",
+                "link": 383
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "시그마",
+                "name": "SIGMAS",
+                "type": "SIGMAS",
+                "links": [
+                  365
+                ]
+              }
+            ],
+            "title": "⚡ CLOUD TURBO SCHEDULER · SIMPLE / 4 STEPS",
+            "properties": {
+              "Node name for S&R": "BasicScheduler",
+              "cnr_id": "comfy-core",
+              "ver": "0.33.0"
+            },
+            "widgets_values": [
+              "simple",
+              4,
+              1
+            ],
+            "widgets_values_named": {
+              "scheduler": "simple",
+              "steps": 4,
+              "denoise": 1
+            },
+            "color": "#3b1900",
+            "bgcolor": "#703406"
+          },
+          {
+            "id": 185,
+            "type": "ComfySwitchNode",
+            "pos": [
+              195,
+              4410
+            ],
+            "size": [
+              405,
+              150
+            ],
+            "flags": {},
+            "order": 21,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "거짓일 때",
+                "name": "on_false",
+                "type": "SAMPLER",
+                "link": 362
+              },
+              {
+                "localized_name": "참일 때",
+                "name": "on_true",
+                "type": "SAMPLER",
+                "link": 363
+              },
+              {
+                "localized_name": "스위치",
+                "name": "switch",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "switch"
+                },
+                "link": 357
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "출력",
+                "name": "output",
+                "type": "SAMPLER",
+                "links": [
+                  255
+                ]
+              }
+            ],
+            "title": "SAMPLER SWITCH · FALSE=NORMAL / TRUE=TURBO",
+            "properties": {
+              "Node name for S&R": "ComfySwitchNode",
+              "cnr_id": "comfy-core"
+            },
+            "widgets_values": [
+              false
+            ],
+            "widgets_values_named": {
+              "switch": false
+            },
+            "color": "#392500",
+            "bgcolor": "#62420b"
+          },
+          {
+            "id": 186,
+            "type": "ComfySwitchNode",
+            "pos": [
+              210,
+              4620
+            ],
+            "size": [
+              390,
+              150
+            ],
+            "flags": {},
+            "order": 22,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "거짓일 때",
+                "name": "on_false",
+                "type": "SIGMAS",
+                "link": 364
+              },
+              {
+                "localized_name": "참일 때",
+                "name": "on_true",
+                "type": "SIGMAS",
+                "link": 365
+              },
+              {
+                "localized_name": "스위치",
+                "name": "switch",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "switch"
+                },
+                "link": 358
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "출력",
+                "name": "output",
+                "type": "SIGMAS",
+                "links": [
+                  256
+                ]
+              }
+            ],
+            "title": "SIGMA SWITCH · FALSE=BETA20 / TRUE=SIMPLE4",
+            "properties": {
+              "Node name for S&R": "ComfySwitchNode",
+              "cnr_id": "comfy-core"
+            },
+            "widgets_values": [
+              false
+            ],
+            "widgets_values_named": {
+              "switch": false
+            },
+            "color": "#392500",
+            "bgcolor": "#62420b"
+          }
+        ],
+        "groups": [
+          {
+            "id": 1,
+            "title": "01 · MODEL · NAVY=NORMAL / ORANGE=TURBO",
+            "bounding": [
+              -1515,
+              4395,
+              1380,
+              1150
+            ],
+            "color": "#294d66",
+            "flags": {}
+          },
+          {
+            "id": 2,
+            "title": "03 · SAMPLING · NORMAL/TURBO SWITCHED",
+            "bounding": [
+              -285,
+              4395,
+              690,
+              1110
+            ],
+            "color": "#285258",
+            "flags": {}
+          },
+          {
+            "id": 3,
+            "title": "02 · H3 CONDITIONING · 18 SLOT REROUTE LANES",
+            "bounding": [
+              -1320,
+              4395,
+              1180,
+              1320
+            ],
+            "color": "#4a3560",
+            "flags": {}
+          },
+          {
+            "id": 4,
+            "title": "04 · VIDEO FRAME DECODE · AUDIO CUT",
+            "bounding": [
+              435,
+              4845,
+              670,
+              670
+            ],
+            "color": "#315640",
+            "flags": {}
+          },
+          {
+            "id": 5,
+            "title": "⚡ TURBO ON · CLOUD CORE · REF2VA LORA + EULER + SIMPLE4",
+            "bounding": [
+              -1515,
+              5535,
+              1930,
+              900
+            ],
+            "color": "#593040",
+            "flags": {}
+          }
+        ],
+        "links": [
+          {
+            "id": 251,
+            "origin_id": 119,
+            "origin_slot": 0,
+            "target_id": 122,
+            "target_slot": 1,
+            "type": "VAE"
+          },
+          {
+            "id": 253,
+            "origin_id": 129,
+            "origin_slot": 0,
+            "target_id": 125,
+            "target_slot": 0,
+            "type": "NOISE"
+          },
+          {
+            "id": 254,
+            "origin_id": 126,
+            "origin_slot": 0,
+            "target_id": 125,
+            "target_slot": 1,
+            "type": "GUIDER"
+          },
+          {
+            "id": 255,
+            "origin_id": 185,
+            "origin_slot": 0,
+            "target_id": 125,
+            "target_slot": 2,
+            "type": "SAMPLER"
+          },
+          {
+            "id": 256,
+            "origin_id": 186,
+            "origin_slot": 0,
+            "target_id": 125,
+            "target_slot": 3,
+            "type": "SIGMAS"
+          },
+          {
+            "id": 261,
+            "origin_id": 132,
+            "origin_slot": 0,
+            "target_id": 131,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 270,
+            "origin_id": 136,
+            "origin_slot": 0,
+            "target_id": 126,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 271,
+            "origin_id": 136,
+            "origin_slot": 1,
+            "target_id": 125,
+            "target_slot": 4,
+            "type": "LATENT"
+          },
+          {
+            "id": 272,
+            "origin_id": 128,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 0,
+            "type": "CLIP"
+          },
+          {
+            "id": 273,
+            "origin_id": 119,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 1,
+            "type": "VAE"
+          },
+          {
+            "id": 274,
+            "origin_id": 120,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 2,
+            "type": "VAE"
+          },
+          {
+            "id": 275,
+            "origin_id": 131,
+            "origin_slot": 1,
+            "target_id": 136,
+            "target_slot": 24,
+            "type": "INT"
+          },
+          {
+            "id": 276,
+            "origin_id": 115,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 22,
+            "type": "INT"
+          },
+          {
+            "id": 277,
+            "origin_id": 115,
+            "origin_slot": 1,
+            "target_id": 136,
+            "target_slot": 23,
+            "type": "INT"
+          },
+          {
+            "id": 278,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 188,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 279,
+            "origin_id": 165,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 21,
+            "type": "STRING"
+          },
+          {
+            "id": 280,
+            "origin_id": 125,
+            "origin_slot": 0,
+            "target_id": 122,
+            "target_slot": 0,
+            "type": "LATENT"
+          },
+          {
+            "id": 283,
+            "origin_id": -10,
+            "origin_slot": 18,
+            "target_id": 138,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 284,
+            "origin_id": -10,
+            "origin_slot": 19,
+            "target_id": 115,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 285,
+            "origin_id": -10,
+            "origin_slot": 20,
+            "target_id": 115,
+            "target_slot": 1,
+            "type": "FLOAT"
+          },
+          {
+            "id": 286,
+            "origin_id": -10,
+            "origin_slot": 21,
+            "target_id": 115,
+            "target_slot": 2,
+            "type": "INT"
+          },
+          {
+            "id": 287,
+            "origin_id": -10,
+            "origin_slot": 22,
+            "target_id": 132,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 288,
+            "origin_id": -10,
+            "origin_slot": 23,
+            "target_id": 129,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 289,
+            "origin_id": -10,
+            "origin_slot": 24,
+            "target_id": 127,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 290,
+            "origin_id": -10,
+            "origin_slot": 25,
+            "target_id": 128,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 291,
+            "origin_id": -10,
+            "origin_slot": 26,
+            "target_id": 119,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 292,
+            "origin_id": -10,
+            "origin_slot": 27,
+            "target_id": 120,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 293,
+            "origin_id": -10,
+            "origin_slot": 28,
+            "target_id": 136,
+            "target_slot": 25,
+            "type": "COMBO"
+          },
+          {
+            "id": 301,
+            "origin_id": -10,
+            "origin_slot": 9,
+            "target_id": 197,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 324,
+            "origin_id": 122,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 332,
+            "origin_id": 138,
+            "origin_slot": 0,
+            "target_id": 165,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 333,
+            "origin_id": -10,
+            "origin_slot": 29,
+            "target_id": 165,
+            "target_slot": 1,
+            "type": "STRING"
+          },
+          {
+            "id": 349,
+            "origin_id": 127,
+            "origin_slot": 0,
+            "target_id": 179,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 350,
+            "origin_id": 184,
+            "origin_slot": 0,
+            "target_id": 126,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 352,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 189,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 353,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 190,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 354,
+            "origin_id": 179,
+            "origin_slot": 0,
+            "target_id": 124,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 356,
+            "origin_id": -10,
+            "origin_slot": 30,
+            "target_id": 184,
+            "target_slot": 2,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 357,
+            "origin_id": -10,
+            "origin_slot": 30,
+            "target_id": 185,
+            "target_slot": 2,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 358,
+            "origin_id": -10,
+            "origin_slot": 30,
+            "target_id": 186,
+            "target_slot": 2,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 359,
+            "origin_id": 127,
+            "origin_slot": 0,
+            "target_id": 181,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 360,
+            "origin_id": 179,
+            "origin_slot": 0,
+            "target_id": 184,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 361,
+            "origin_id": 187,
+            "origin_slot": 0,
+            "target_id": 184,
+            "target_slot": 1,
+            "type": "MODEL"
+          },
+          {
+            "id": 362,
+            "origin_id": 123,
+            "origin_slot": 0,
+            "target_id": 185,
+            "target_slot": 0,
+            "type": "SAMPLER"
+          },
+          {
+            "id": 363,
+            "origin_id": 182,
+            "origin_slot": 0,
+            "target_id": 185,
+            "target_slot": 1,
+            "type": "SAMPLER"
+          },
+          {
+            "id": 364,
+            "origin_id": 124,
+            "origin_slot": 0,
+            "target_id": 186,
+            "target_slot": 0,
+            "type": "SIGMAS"
+          },
+          {
+            "id": 365,
+            "origin_id": 183,
+            "origin_slot": 0,
+            "target_id": 186,
+            "target_slot": 1,
+            "type": "SIGMAS"
+          },
+          {
+            "id": 366,
+            "origin_id": 181,
+            "origin_slot": 0,
+            "target_id": 187,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 367,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 191,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 368,
+            "origin_id": -10,
+            "origin_slot": 4,
+            "target_id": 192,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 369,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 193,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 370,
+            "origin_id": -10,
+            "origin_slot": 6,
+            "target_id": 194,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 371,
+            "origin_id": -10,
+            "origin_slot": 7,
+            "target_id": 195,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 372,
+            "origin_id": -10,
+            "origin_slot": 8,
+            "target_id": 196,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 373,
+            "origin_id": -10,
+            "origin_slot": 10,
+            "target_id": 198,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 374,
+            "origin_id": -10,
+            "origin_slot": 11,
+            "target_id": 199,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 375,
+            "origin_id": -10,
+            "origin_slot": 12,
+            "target_id": 200,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 376,
+            "origin_id": -10,
+            "origin_slot": 13,
+            "target_id": 201,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 377,
+            "origin_id": -10,
+            "origin_slot": 14,
+            "target_id": 202,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 378,
+            "origin_id": -10,
+            "origin_slot": 15,
+            "target_id": 203,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 379,
+            "origin_id": -10,
+            "origin_slot": 16,
+            "target_id": 204,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 380,
+            "origin_id": -10,
+            "origin_slot": 17,
+            "target_id": 205,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 383,
+            "origin_id": 187,
+            "origin_slot": 0,
+            "target_id": 183,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 384,
+            "origin_id": 188,
+            "origin_slot": 0,
+            "target_id": 206,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 402,
+            "origin_id": 206,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 3,
+            "type": "IMAGE"
+          },
+          {
+            "id": 385,
+            "origin_id": 189,
+            "origin_slot": 0,
+            "target_id": 207,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 403,
+            "origin_id": 207,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 4,
+            "type": "IMAGE"
+          },
+          {
+            "id": 386,
+            "origin_id": 190,
+            "origin_slot": 0,
+            "target_id": 208,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 404,
+            "origin_id": 208,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 5,
+            "type": "IMAGE"
+          },
+          {
+            "id": 387,
+            "origin_id": 191,
+            "origin_slot": 0,
+            "target_id": 209,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 405,
+            "origin_id": 209,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 6,
+            "type": "IMAGE"
+          },
+          {
+            "id": 388,
+            "origin_id": 192,
+            "origin_slot": 0,
+            "target_id": 210,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 406,
+            "origin_id": 210,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 7,
+            "type": "IMAGE"
+          },
+          {
+            "id": 389,
+            "origin_id": 193,
+            "origin_slot": 0,
+            "target_id": 211,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 407,
+            "origin_id": 211,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 8,
+            "type": "IMAGE"
+          },
+          {
+            "id": 390,
+            "origin_id": 194,
+            "origin_slot": 0,
+            "target_id": 212,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 408,
+            "origin_id": 212,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 9,
+            "type": "IMAGE"
+          },
+          {
+            "id": 391,
+            "origin_id": 195,
+            "origin_slot": 0,
+            "target_id": 213,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 409,
+            "origin_id": 213,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 10,
+            "type": "IMAGE"
+          },
+          {
+            "id": 392,
+            "origin_id": 196,
+            "origin_slot": 0,
+            "target_id": 214,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 410,
+            "origin_id": 214,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 11,
+            "type": "IMAGE"
+          },
+          {
+            "id": 393,
+            "origin_id": 197,
+            "origin_slot": 0,
+            "target_id": 215,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 411,
+            "origin_id": 215,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 12,
+            "type": "IMAGE"
+          },
+          {
+            "id": 394,
+            "origin_id": 198,
+            "origin_slot": 0,
+            "target_id": 216,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 412,
+            "origin_id": 216,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 13,
+            "type": "IMAGE"
+          },
+          {
+            "id": 395,
+            "origin_id": 199,
+            "origin_slot": 0,
+            "target_id": 217,
+            "target_slot": 0,
+            "type": "IMAGE"
+          },
+          {
+            "id": 413,
+            "origin_id": 217,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 14,
+            "type": "IMAGE"
+          },
+          {
+            "id": 396,
+            "origin_id": 200,
+            "origin_slot": 0,
+            "target_id": 218,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 414,
+            "origin_id": 218,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 15,
+            "type": "AUDIO"
+          },
+          {
+            "id": 397,
+            "origin_id": 201,
+            "origin_slot": 0,
+            "target_id": 219,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 415,
+            "origin_id": 219,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 16,
+            "type": "AUDIO"
+          },
+          {
+            "id": 398,
+            "origin_id": 202,
+            "origin_slot": 0,
+            "target_id": 220,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 416,
+            "origin_id": 220,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 17,
+            "type": "AUDIO"
+          },
+          {
+            "id": 399,
+            "origin_id": 203,
+            "origin_slot": 0,
+            "target_id": 221,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 417,
+            "origin_id": 221,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 18,
+            "type": "AUDIO"
+          },
+          {
+            "id": 400,
+            "origin_id": 204,
+            "origin_slot": 0,
+            "target_id": 222,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 418,
+            "origin_id": 222,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 19,
+            "type": "AUDIO"
+          },
+          {
+            "id": 401,
+            "origin_id": 205,
+            "origin_slot": 0,
+            "target_id": 223,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 419,
+            "origin_id": 223,
+            "origin_slot": 0,
+            "target_id": 136,
+            "target_slot": 20,
+            "type": "AUDIO"
+          }
+        ],
+        "extra": {
+          "workflowRendererVersion": "LG"
+        }
+      }
+    ]
+  },
+  "config": {},
+  "extra": {
+    "VHS_KeepIntermediate": true,
+    "VHS_MetadataImage": true,
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "frontendVersion": "1.50.7",
+    "minimaxH3DevelopV6": {
+      "base": "MiniMax_H3_Omni_Background_Only_V5_ReferencePriority_00001_",
+      "turboLoRA": "OFF (not present in source workflow)",
+      "sageAttention": "OFF (cloud-safe; KJ patch not used)",
+      "sigmaShift": {
+        "video": 12,
+        "audio": 6
+      },
+      "scheduler": {
+        "name": "beta",
+        "steps": 20,
+        "denoise": 1
+      },
+      "output": {
+        "fps": 24,
+        "audio": "muted",
+        "trimToSourceFrameCount": true
+      }
+    },
+    "minimaxH3DevelopV7": {
+      "turboDefault": "OFF",
+      "turboOffPath": "SigmaShift 12/6 + res_multistep + beta/20",
+      "turboOnPath": "ComfyUI core LoraLoaderModelOnly + MiniMaxH3SigmaShift 12/3 + KSamplerSelect euler + simple/4",
+      "turboLoRAFile": "minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+      "audio": "fully disconnected: no audio decode, no audio/video subgraph output, final CreateVideo audio empty"
+    },
+    "reviewedV7": {
+      "fixes": [
+        "removed non-functional SAGE status control and interface input",
+        "removed stale proxyWidgetErrorQuarantine metadata",
+        "dark role-based colors across main graph and subgraph",
+        "replaced unsupported MiniMaxH3TurboLoRA with core LoraLoaderModelOnly",
+        "replaced unsupported MiniMaxH3TurboSampler with core KSamplerSelect euler",
+        "added core MiniMaxH3SigmaShift 12/3 for the Ref2VA Turbo branch"
+      ],
+      "verified": {
+        "turboDefault": "OFF",
+        "normalPath": "SigmaShift 12/6 + res_multistep + beta/20",
+        "turboPath": "core-only Ref2VA Turbo LoRA + SigmaShift 12/3 + euler + simple/4",
+        "output": "24fps, source-frame trim, audio disconnected"
+      },
+      "dependencies": [
+        "ComfyUI core nodes for MiniMax H3 and Turbo",
+        "ComfyUI-VideoHelperSuite (VHS_LoadVideo)"
+      ]
+    },
+    "expandedReferenceSlots": {
+      "images": 9,
+      "videos": 3,
+      "videoAudios": 3,
+      "audios": 3,
+      "defaults": {
+        "image0": "connected to background reference",
+        "image1": "connected to same background reference",
+        "image2": "connected to same background reference",
+        "video0": "connected to source video frames",
+        "remaining": "empty optional slots"
+      }
+    },
+    "cloudTurboFix": {
+      "removedUnsupportedNodeTypes": [
+        "MiniMaxH3TurboLoRA",
+        "MiniMaxH3TurboSampler"
+      ],
+      "replacementNodeTypes": [
+        "LoraLoaderModelOnly",
+        "KSamplerSelect",
+        "MiniMaxH3SigmaShift",
+        "BasicScheduler"
+      ],
+      "turboDefault": false,
+      "turboLora": "minimax_h3_ref2v_turbo_4step_v0.1_comfyui_bf16.safetensors",
+      "turboSampler": "euler",
+      "turboScheduler": "simple",
+      "turboSteps": 4,
+      "turboShiftVideo": 12,
+      "turboShiftAudio": 3
+    },
+    "organizedReferenceReroutes": {
+      "mediaSlots": 18,
+      "rerouteBanks": 2,
+      "rerouteNodes": 36,
+      "order": "image 0-8, video 0-2, video_audio 0-2, audio 0-2"
+    },
+    "ds": {
+      "scale": 0.2519581494127889,
+      "offset": [
+        2793.8215666035326,
+        -3910.6204834480122
+      ]
+    }
+  },
+  "version": 0.4
+}
