@@ -117,6 +117,21 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .note p span{color:var(--muted);font-size:.76rem;margin-right:4px}
 .copybox{width:100%;min-height:140px;font:inherit;font-size:.8rem;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:8px;margin-top:8px}
 .ovx{overflow-x:auto}
+/* routine */
+.routine{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+@media (max-width:560px){.routine{grid-template-columns:minmax(0,1fr)}}
+.rt{border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rt.done{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.rt h3{margin:0;font-size:.86rem;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.rt h3 .num{color:var(--muted)}
+.rt.done h3 .num{color:var(--ok);font-weight:700}
+.rtbtns{display:flex;gap:4px;flex-wrap:wrap}
+.rtbtns button,.cups button,.vit{font:inherit;font-family:var(--f-mono);font-size:.78rem;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:4px 8px;cursor:pointer}
+.cups{display:flex;gap:6px}
+.cups button{flex:1;height:40px;padding:0;position:relative;overflow:hidden;font-size:.66rem;color:var(--muted)}
+.cups button[aria-pressed="true"]{background:var(--c1);border-color:var(--c1);color:var(--ink)}
+.vit{display:flex;align-items:center;gap:8px;font-family:var(--f-body);font-size:.84rem;padding:8px 10px;justify-content:center}
+.vit[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--sheet)}
 @media (prefers-reduced-motion:no-preference){.cell{transition:background-color .12s}}
 </style>
 
@@ -141,6 +156,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   <div id="dayView" class="spread">
     <section class="page" aria-labelledby="pdLabel">
       <div class="pagehead"><span class="label" id="pdLabel">PLAN / DO</span><button class="ghost" id="catEdit">색 이름 바꾸기</button></div>
+      <div class="routine" aria-label="데일리 루틴">
+        <div class="rt" id="rtPt"><h3>피티 <span class="num" id="ptNum">0 / 50</span></h3><div class="bar"><i id="ptBar" style="background:var(--c4);width:0"></i></div><div class="rtbtns"><button type="button" data-pt="-5">−5</button><button type="button" data-pt="5">+5</button><button type="button" data-pt="10">+10</button><button type="button" data-pt="50">50 완료</button></div></div>
+        <div class="rt" id="rtWater"><h3>물 2L <span class="num" id="waterNum">0 / 2L</span></h3><div class="cups" id="cups"></div></div>
+        <div class="rt" id="rtVit"><h3>비타민 <span class="num" id="vitNum">아직</span></h3><button type="button" class="vit" id="vit" aria-pressed="false">비타민 먹었어요</button></div>
+      </div>
       <div class="palette" id="palette" role="toolbar" aria-label="형광펜 색 선택"></div>
       <div class="grid" id="grid"></div>
       <p class="hint">PLAN에 시간대별 계획을 적고, 끝내면 체크하세요. DO 칸은 형광펜을 고른 뒤 실제로 한 만큼 누르거나 드래그해서 칠해요. 한 칸이 10분이고, 같은 색을 다시 누르면 지워져요.</p>
@@ -217,8 +237,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{}});
-  const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};return b};
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false}});
+  const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false},b.routine||{});return b};
+  const PT_GOAL=50, CUPS=4;
+  const rtDone=o=>({pt:o.routine.pt>=PT_GOAL,water:o.routine.water>=CUPS,vit:!!o.routine.vit});
 
   let cur=key(new Date()), state=blank(), brush=1, calMonth=new Date(), view="day";
   let settings={cats:[...DEF_CATS],habits:DEF_HABITS.map(h=>({...h}))};
@@ -245,7 +267,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     }catch(e){return null}
   }
   const setStatus=t=>{$("status").textContent=t};
-  const hasContent=o=>o&&(o.plan.some(p=>p.t.trim())||/[1-5]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean));
+  const hasContent=o=>o&&(o.plan.some(p=>p.t.trim())||/[1-5]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit)));
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -305,7 +327,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    markScore();summary();renderCal();
+    markScore();summary();renderCal();renderRoutine();
+  }
+  function renderRoutine(){
+    const r=state.routine,d=rtDone(state);
+    $("ptNum").textContent=r.pt+" / "+PT_GOAL+(d.pt?" ✓":"");$("ptBar").style.width=Math.min(100,r.pt/PT_GOAL*100)+"%";$("rtPt").classList.toggle("done",d.pt);
+    $("waterNum").textContent=(r.water*0.5).toFixed(1).replace(".0","")+" / 2L"+(d.water?" ✓":"");$("rtWater").classList.toggle("done",d.water);
+    [...$("cups").children].forEach((b,i)=>b.setAttribute("aria-pressed",String(i<r.water)));
+    $("vit").setAttribute("aria-pressed",String(d.vit));$("vit").textContent=d.vit?"✓ 먹었어요":"비타민 먹었어요";$("vitNum").textContent=d.vit?"완료 ✓":"아직";$("rtVit").classList.toggle("done",d.vit);
   }
   function setSlot(i,v){state.slots=state.slots.slice(0,i)+v+state.slots.slice(i+1);const c=document.querySelector('.cell[data-s="'+i+'"]');c.className="cell"+(v!=="0"?" c"+v:"")}
   function catCounts(o,acc){for(const ch of o.slots){if(ch!=="0")acc[ch]=(acc[ch]||0)+1}return acc}
@@ -351,7 +380,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
-    settings.habits.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&o.habits[h.id]);if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
+    const rows=[{name:"피티 50개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
+    rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
     const N=$("wNotes");N.innerHTML="";let any=false;
     days.forEach(k=>{const o=get(k);if(!o||!(o.good||o.bad||o.next))return;any=true;const d=parse(k);const row=el("div","note");row.appendChild(el("div","d",DOW[d.getDay()]+" "+(d.getMonth()+1)+"/"+d.getDate()+(o.score?" · "+o.score+"점":"")));
       const body=el("div");[["잘한 점",o.good],["아쉬운 점",o.bad],["내일",o.next]].forEach(([l,v])=>{if(!v)return;const p=el("p");p.append(el("span",null,l),document.createTextNode(v));body.appendChild(p)});row.appendChild(body);N.appendChild(row)});
@@ -364,7 +394,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const L=["[PDS 주간 리포트] "+(a.getMonth()+1)+"/"+a.getDate()+" – "+(b.getMonth()+1)+"/"+b.getDate(),"",
       "기록한 시간 "+fmt(r.total)+" · 계획 완료율 "+(r.planned?Math.round(r.done/r.planned*100)+"%":"—")+" · 평균 점수 "+(r.scores.length?(r.scores.reduce((x,y)=>x+y,0)/r.scores.length).toFixed(1):"—"),""];
     settings.cats.forEach((n,i)=>{const v=r.cnt[i+1]||0;if(v)L.push("· "+n+" "+fmt(v))});
-    L.push("");settings.habits.forEach(h=>{const n=r.days.filter(k=>docs[k]&&docs[k].habits&&docs[k].habits[h.id]).length;L.push("✓ "+h.name+" "+n+"/7")});
+    L.push("");[["피티 50개","pt"],["물 2L","water"],["비타민","vit"]].forEach(([n,f])=>{const c=r.days.filter(k=>docs[k]&&rtDone(norm(docs[k]))[f]).length;L.push("✓ "+n+" "+c+"/7")});
+    settings.habits.forEach(h=>{const n=r.days.filter(k=>docs[k]&&docs[k].habits&&docs[k].habits[h.id]).length;L.push("✓ "+h.name+" "+n+"/7")});
     const notes=r.days.map(k=>docs[k]).filter(o=>o&&o.next);if(notes.length){L.push("","이번 주 내가 바꾸려던 것");notes.forEach(o=>L.push("- "+o.next))}
     return L.join("\n");
   }
@@ -411,6 +442,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     $("prev").onclick=()=>go(addDays(cur,view==="day"?-1:-7));$("next").onclick=()=>go(addDays(cur,view==="day"?1:7));$("today").onclick=()=>go(key(new Date()));
     $("cPrev").onclick=()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()-1,1);renderCal()};
     $("cNext").onclick=()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,1);renderCal()};
+    document.querySelectorAll("[data-pt]").forEach(b=>b.onclick=()=>{const v=+b.dataset.pt;state.routine.pt=v===50?Math.max(state.routine.pt,PT_GOAL):Math.max(0,state.routine.pt+v);renderRoutine();changed()});
+    for(let i=0;i<CUPS;i++){const b=el("button",null,(i+1)*500+"ml");b.type="button";b.setAttribute("aria-label","물 "+(i+1)+"번째 500ml");b.onclick=()=>{state.routine.water=state.routine.water===i+1?i:i+1;renderRoutine();changed()};$("cups").appendChild(b)}
+    $("vit").onclick=()=>{state.routine.vit=!state.routine.vit;renderRoutine();changed()};
     $("catEdit").onclick=()=>{catEditing=!catEditing;buildPalette()};
     $("habEdit").onclick=()=>{habEditing=!habEditing;renderHabits()};
     [["seeGood","good"],["seeBad","bad"],["seeNext","next"]].forEach(([id,f])=>{$(id).oninput=e=>{state[f]=e.target.value;changed(true)}});
