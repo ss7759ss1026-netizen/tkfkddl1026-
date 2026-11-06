@@ -188,6 +188,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.menu .theme{font-family:var(--f-display);font-size:1.05rem;margin:0 0 4px;text-wrap:balance}
+.menu .mgrid{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.menu .mm{border-top:1px dashed var(--line);padding-top:10px}
+.menu .mh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.menu .mh b{font-size:.9rem}
+.menu ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.menu li .dn{font-weight:600;font-size:.9rem}
+.menu li .how{font-size:.82rem;margin:2px 0 0;overflow-wrap:anywhere}
+.menu li .src{font-size:.72rem;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.menu li .src a{color:var(--muted)}
+.menu .kind{font-family:var(--f-mono);font-size:.64rem;border:1px solid var(--line);border-radius:4px;padding:0 4px;margin-right:4px}
+.menu .tips{font-size:.8rem;color:var(--muted);margin:10px 0 0;padding-left:1em}
 .gstrip{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
 .gstrip span{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
 .gstrip b{font-family:var(--f-mono);font-weight:700}
@@ -227,7 +239,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     <section class="page" aria-labelledby="pdLabel">
       <div class="pagehead"><span class="label" id="pdLabel">PLAN / DO</span><button class="ghost" id="catEdit">색 이름 바꾸기</button></div>
       <div class="routine" aria-label="데일리 루틴">
-        <div class="rt" id="rtPt"><h3>피티 <span class="num" id="ptNum">0 / 50</span></h3><div class="bar"><i id="ptBar" style="background:var(--c4);width:0"></i></div><div class="rtbtns"><button type="button" data-pt="-5">−5</button><button type="button" data-pt="5">+5</button><button type="button" data-pt="10">+10</button><button type="button" data-pt="50">50 완료</button></div></div>
+        <div class="rt" id="rtPt"><h3>피티 <span class="num" id="ptNum">0 / 100</span></h3><div class="bar"><i id="ptBar" style="background:var(--c4);width:0"></i></div><div class="rtbtns"><button type="button" data-pt="-5">−5</button><button type="button" data-pt="5">+5</button><button type="button" data-pt="10">+10</button><button type="button" data-pt="25">+25</button><button type="button" data-pt="100">100 완료</button></div></div>
         <div class="rt" id="rtWater"><h3>물 2L <span class="num" id="waterNum">0 / 2L</span></h3><div class="cups" id="cups"></div></div>
         <div class="rt" id="rtVit"><h3>비타민 <span class="num" id="vitNum">아직</span></h3><button type="button" class="vit" id="vit" aria-pressed="false">비타민 먹었어요</button></div>
         <div class="rt" id="rtSt"><h3>스트레칭 <span class="num" id="stNum">0분</span></h3><div class="bar"><i id="stBar" style="background:var(--c6);width:0"></i></div><div class="rtbtns" id="stBtns"><button type="button" data-st="10">10분</button><button type="button" data-st="20">20분</button><button type="button" data-st="30">30분</button></div><p class="sub">목표 10–30분</p></div>
@@ -241,6 +253,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     </section>
 
     <div class="side">
+      <section class="page menu" aria-labelledby="menuLabel">
+        <div class="pagehead"><span class="label" id="menuLabel">TEMPLE MENU · 선재스님 사찰음식 식단</span><span class="status" id="menuDate"></span></div>
+        <div id="menuBody"><p class="hint">매일 아침, 선재스님 레시피를 검색해 만든 제철 식단표가 여기에 올라와요.</p></div>
+      </section>
       <section class="page" aria-labelledby="mealLabel">
         <div class="pagehead"><span class="label" id="mealLabel">MEALS · 식단</span></div>
         <div class="meals">
@@ -325,7 +341,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
-  const PT_GOAL=50, CUPS=4;
+  const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
   const toMin=s=>{const[h,m]=s.split(":").map(Number);return h*60+m};
@@ -356,6 +372,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         save(k,o){return col.doc(k).set(o)},
         del(k){return col.doc(k).delete()},
         subscribe(fn){col.onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})},
+        menu(fn){db.collection("menu").onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})},
         coach(fn){db.collection("coach").onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})}
       };
     }catch(e){return null}
@@ -513,7 +530,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
-    const rows=[{name:"피티 50개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
+    const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
     rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
     LOGS.forEach(l=>{const tr=el("tr");const nm=el("td");const dt=el("span","dot");dt.style.background=dt.style.borderColor="var(--"+l.k+")";nm.append(dt,document.createTextNode(" "+l.name));tr.appendChild(nm);let s=0;
       days.forEach(k=>{const o=get(k),c=o?o.log[l.k].length:0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+l.unit));T.appendChild(tr)});
@@ -529,7 +546,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const L=["[PDS 주간 리포트] "+(a.getMonth()+1)+"/"+a.getDate()+" – "+(b.getMonth()+1)+"/"+b.getDate(),"",
       "기록한 시간 "+fmt(r.total)+" · 계획 완료율 "+(r.planned?Math.round(r.done/r.planned*100)+"%":"—")+" · 평균 점수 "+(r.scores.length?(r.scores.reduce((x,y)=>x+y,0)/r.scores.length).toFixed(1):"—"),""];
     settings.cats.forEach((n,i)=>{const v=r.cnt[i+1]||0;if(v)L.push("· "+n+" "+fmt(v))});
-    L.push("");[["피티 50개","pt"],["물 2L","water"],["비타민","vit"],["스트레칭 10분+","stretch"],["걷기 30분+","walk"],["수면 7시간+","sleep"]].forEach(([n,f])=>{const c=r.days.filter(k=>docs[k]&&rtDone(norm(docs[k]))[f]).length;L.push("✓ "+n+" "+c+"/7")});
+    L.push("");[["피티 100개","pt"],["물 2L","water"],["비타민","vit"],["스트레칭 10분+","stretch"],["걷기 30분+","walk"],["수면 7시간+","sleep"]].forEach(([n,f])=>{const c=r.days.filter(k=>docs[k]&&rtDone(norm(docs[k]))[f]).length;L.push("✓ "+n+" "+c+"/7")});
     settings.habits.forEach(h=>{const n=r.days.filter(k=>docs[k]&&docs[k].habits&&docs[k].habits[h.id]).length;L.push("✓ "+h.name+" "+n+"/7")});
     L.push("");LOGS.forEach(l=>{const s=r.days.reduce((a,k)=>a+(docs[k]?norm(docs[k]).log[l.k].length:0),0);L.push("· "+l.name+" 주간 "+s+l.unit)});
     if(r.bps.length)L.push("· 평균 혈압 "+Math.round(r.bps.reduce((a,b)=>a+b[0],0)/r.bps.length)+"/"+Math.round(r.bps.reduce((a,b)=>a+b[1],0)/r.bps.length)+" ("+r.bps.length+"회 측정)");
@@ -592,7 +609,24 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   }
 
   // ---------- coach & sync ----------
-  let coach={},profile=null;
+  let coach={},profile=null,menus={};
+  function renderMenu(){
+    const body=$("menuBody");if(!body)return;const m=menus[cur];body.innerHTML="";
+    if(!m){body.appendChild(el("p","hint",Object.keys(menus).length?"이 날짜의 식단표는 아직 없어요.":"매일 아침, 선재스님 레시피를 검색해 만든 제철 식단표가 여기에 올라와요."));$("menuDate").textContent="";return}
+    $("menuDate").textContent=m.season?String(m.season):"";
+    if(m.theme)body.appendChild(el("p","theme",String(m.theme)));
+    const g=el("div","mgrid");
+    [["b","아침"],["l","점심"],["d","저녁"]].forEach(([f,label])=>{const list=m.meals&&Array.isArray(m.meals[f])?m.meals[f]:[];if(!list.length)return;
+      const box=el("div","mm");const h=el("div","mh");h.appendChild(el("b",null,label));
+      const use=el("button","ghost","이대로 먹었어요");use.type="button";use.onclick=()=>{const txt=list.map(x=>String(x.name||"")).filter(Boolean).join(", ");state.meals[f]=txt;const id={b:"mB",l:"mL",d:"mD"}[f];$(id).value=txt;changed();renderNut();setStatus(label+" 식단에 넣었어요")};h.appendChild(use);box.appendChild(h);
+      const ul=el("ul");list.forEach(x=>{const li=el("li");li.appendChild(el("div","dn",String(x.name||"")));if(x.how)li.appendChild(el("p","how",String(x.how)));
+        if(x.note)li.appendChild(el("p","how","💡 "+String(x.note)));
+        if(x.src&&(x.src.title||x.src.url)){const sr=el("div","src");if(x.src.kind)sr.appendChild(el("span","kind",String(x.src.kind)));
+          if(x.src.url&&/^https:\/\//.test(String(x.src.url))){const a=el("a",null,String(x.src.title||x.src.url));a.href=String(x.src.url);a.target="_blank";a.rel="noopener";sr.appendChild(a)}else sr.appendChild(document.createTextNode(String(x.src.title)));li.appendChild(sr)}
+        ul.appendChild(li)});box.appendChild(ul);g.appendChild(box)});
+    body.appendChild(g);
+    if(Array.isArray(m.tips)&&m.tips.length){const t=el("ul","tips");m.tips.forEach(x=>t.appendChild(el("li",null,String(x))));body.appendChild(t)}
+  }
   function renderCoach(){
     const ks=Object.keys(coach).filter(k=>DATE.test(k)&&k<=cur).sort();const k=ks[ks.length-1];const body=$("coachBody");
     if(!k){body.innerHTML="";body.appendChild(el("p","hint","매일 아침 8시 무렵, 전날 기록을 바탕으로 한 컨디션 체크가 여기에 올라와요."));$("coachDate").textContent="";renderGoals(body);return}
@@ -642,7 +676,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     state=docs[k]?norm(docs[k]):blank();if(docs[k])docs[k]=state;
     render();
   }
-  function render(){header();renderHabits();renderCoach();if(view==="day")fillDay();else renderWeek()}
+  function render(){header();renderHabits();renderCoach();renderMenu();if(view==="day")fillDay();else renderWeek()}
   function setView(v){view=v;$("dayView").hidden=v!=="day";$("weekView").hidden=v!=="week";$("tDay").setAttribute("aria-pressed",String(v==="day"));$("tWeek").setAttribute("aria-pressed",String(v==="week"));go(cur)}
 
   // ---------- painting ----------
@@ -662,7 +696,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     $("prev").onclick=()=>go(addDays(cur,view==="day"?-1:-7));$("next").onclick=()=>go(addDays(cur,view==="day"?1:7));$("today").onclick=()=>go(key(new Date()));
     $("cPrev").onclick=()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()-1,1);renderCal()};
     $("cNext").onclick=()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,1);renderCal()};
-    document.querySelectorAll("[data-pt]").forEach(b=>b.onclick=()=>{const v=+b.dataset.pt;state.routine.pt=v===50?Math.max(state.routine.pt,PT_GOAL):Math.max(0,state.routine.pt+v);renderRoutine();changed()});
+    document.querySelectorAll("[data-pt]").forEach(b=>b.onclick=()=>{const v=+b.dataset.pt;state.routine.pt=v===100?Math.max(state.routine.pt,PT_GOAL):Math.max(0,state.routine.pt+v);renderRoutine();changed()});
     for(let i=0;i<CUPS;i++){const b=el("button",null,(i+1)*500+"ml");b.type="button";b.setAttribute("aria-label","물 "+(i+1)+"번째 500ml");b.onclick=()=>{state.routine.water=state.routine.water===i+1?i:i+1;renderRoutine();changed()};$("cups").appendChild(b)}
     $("vit").onclick=()=>{state.routine.vit=!state.routine.vit;renderRoutine();changed()};
     document.querySelectorAll("[data-wk]").forEach(b=>b.onclick=()=>{const v=b.dataset.wk,c=+state.routine.walk||0;state.routine.walk=v==="+10"?c+10:(c===+v?0:+v);renderRoutine();changed()});
@@ -694,6 +728,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
     if(store.subscribe)store.subscribe(applyRemote);
+    if(store.menu)store.menu(list=>{menus={};list.forEach(([id,d])=>{menus[id]=d});renderMenu()});
     if(store.coach)store.coach(list=>{coach={};list.forEach(([id,d])=>{coach[id]=d});renderCoach()});
     setStatus(store===local?"이 브라우저에만 저장돼요":(docs[cur]?"저장됨 ✓":"새 페이지"));
   })();
