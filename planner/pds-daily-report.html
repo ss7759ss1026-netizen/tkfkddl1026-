@@ -183,6 +183,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.gstrip{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.gstrip span{font-size:.78rem;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.gstrip b{font-family:var(--f-mono);font-weight:700}
 .coach h2{font-family:var(--f-display);font-weight:400;font-size:1.15rem;margin:0 0 6px;text-wrap:balance}
 .coach .cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:760px){.coach .cgrid{grid-template-columns:minmax(0,1fr)}}
@@ -342,7 +345,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       const uid=await user.id(); if(!uid)return null;
       const col=db.collection("data/users/"+uid);
       return {
-        async loadAll(){const q=await col.get();const days={};let s=null;q.docs.forEach(d=>{if(!d.exists)return;if(d.id==="settings")s=d.data();else if(DATE.test(d.id))days[d.id]=d.data()});return{days,settings:s}},
+        async loadAll(){const q=await col.get();const days={};let s=null,pf=null;q.docs.forEach(d=>{if(!d.exists)return;if(d.id==="settings")s=d.data();else if(d.id==="profile")pf=d.data();else if(DATE.test(d.id))days[d.id]=d.data()});return{days,settings:s,profile:pf}},
         save(k,o){return col.doc(k).set(o)},
         del(k){return col.doc(k).delete()},
         subscribe(fn){col.onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})},
@@ -433,7 +436,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     wt.append(el("span","nm","몸무게"),el("span","ct",diff==null?"":(diff>0?"+":"")+diff.toFixed(1)));
     const wi=el("input","kg");wi.type="number";wi.id="kg";wi.step="0.1";wi.min="20";wi.max="300";wi.inputMode="decimal";wi.placeholder="kg";wi.value=state.body.weight||"";wi.setAttribute("aria-label","몸무게 kg");
     wi.onchange=()=>{state.body.weight=wi.value;renderLogs();changed()};
-    w.append(wt,wi,el("div","times",pw!=null?"지난 기록 "+pw.toFixed(1)+"kg":"kg 단위로 적어요"));box.appendChild(w);
+    const gw=G().weightKg;const hint=(!isNaN(cw)&&gw)?(cw>gw?"목표 "+gw+"kg까지 −"+(cw-gw).toFixed(1)+"kg":"목표 "+gw+"kg 달성 ✓"):(pw!=null?"지난 기록 "+pw.toFixed(1)+"kg":"kg 단위로 적어요");
+    w.append(wt,wi,el("div","times",hint));box.appendChild(w);
     for(let i=0;i<24;i++){const h=$("hr"+i);const old=h.querySelector(".mks");if(old)old.remove()}
     LOGS.forEach(l=>state.log[l.k].forEach(t=>{if(!t)return;const i=(+t.split(":")[0]-3+24)%24;const h=$("hr"+i);let m=h.querySelector(".mks");if(!m){m=el("span","mks");h.appendChild(m)}const d=el("i");d.style.background="var(--"+l.k+")";d.title=l.name+" "+t;m.appendChild(d)}));
   }
@@ -532,15 +536,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 
   // ---------- nutrition ----------
   const NUT=[["kcal","열량","kcal",2200,"near"],["protein_g","단백질","g",60,"min"],["carb_g","탄수화물","g",300,"near"],["fat_g","지방","g",60,"near"],["calcium_mg","칼슘","mg",750,"min"],["sodium_mg","나트륨","mg",2300,"max"],["fiber_g","식이섬유","g",30,"min"]];
+  const G=()=>(profile&&profile.goals)||{};
+  function goalOf(k,def){const g=G(),kc=+g.kcal||2200;if(k==="carb_g")return Math.round(kc*0.55/4);if(k==="fat_g")return Math.round(kc*0.25/9);const v=+g[k];return v>0?v:def}
   const mealSrc=o=>MEALS.map(([,f])=>o.meals[f]||"").join("|");
   function nutTotals(n){const t={};NUT.forEach(([k])=>{t[k]=0});(n.items||[]).forEach(it=>NUT.forEach(([k])=>{const v=+it[k];if(isFinite(v))t[k]+=v}));return t}
   function renderNut(){
     const box=$("nut");box.innerHTML="";const n=state.nutrition;
     if(!n||!Array.isArray(n.items)){if(!mealSrc(state).replace(/\|/g,"").trim())$("nutStatus").textContent="식단을 적고 눌러보세요 · 52세 한국 남성 권장량 기준";return}
     const tot=nutTotals(n);
-    $("nutStatus").textContent=n.src!==mealSrc(state)?"식단이 바뀌었어요 · 다시 계산해 주세요":"추정치 · 52세 한국 남성 권장량 기준";
+    $("nutStatus").textContent=n.src!==mealSrc(state)?"식단이 바뀌었어요 · 다시 계산해 주세요":(profile?"추정치 · 내 검진 결과 맞춤 기준":"추정치 · 52세 한국 남성 권장량 기준");
     const tb=el("table","ntab");const h=el("tr");["영양소","섭취","기준",""].forEach(x=>h.appendChild(el("th",null,x)));tb.appendChild(h);
-    NUT.forEach(([k,name,u,goal,mode])=>{const v=Math.round(tot[k]);const r=v/goal;const tr=el("tr");
+    NUT.forEach(([k,name,u,def,mode])=>{const goal=goalOf(k,def);const v=Math.round(tot[k]);const r=v/goal;const tr=el("tr");
       const cls=mode==="max"?(r>1?"over":""):mode==="min"?(r>=1?"done":""):(r>1.15?"over":r>=0.85?"done":"");
       tr.append(el("td",null,name),el("td",null,v.toLocaleString()+u),el("td",null,(mode==="max"?"≤":"")+goal.toLocaleString()+u));
       const td=el("td","pct "+cls);const b=el("div","bar");const f=el("i");f.style.width=Math.min(100,r*100)+"%";b.appendChild(f);td.appendChild(b);tr.appendChild(td);tb.appendChild(tr)});
@@ -555,9 +561,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     if(!sampler){$("nutStatus").textContent="이 화면에서는 자동 계산을 쓸 수 없어요 · 채팅으로 식단을 보내주시면 계산해 드려요";return}
     const btn=$("nutBtn");btn.disabled=true;$("nutStatus").textContent="계산 중…";const k=cur;
     const w=parseFloat(state.body.weight);
-    const prompt=["너는 한국 음식 영양 추정 전문가다. 사용자는 한국인 남성 52세"+(isNaN(w)?"":", 몸무게 "+w+"kg")+"이다.",
+    const focus=profile&&Array.isArray(profile.focus)?profile.focus.join(" / "):"";
+    const prompt=["너는 한국 음식 영양 추정 전문가다. 사용자는 한국인 남성 52세"+(isNaN(w)?"":", 몸무게 "+w+"kg")+"이다."+(focus?" 건강검진에서 관리할 점: "+focus+". 하루 목표: 열량 "+goalOf("kcal",2200)+"kcal, 단백질 "+goalOf("protein_g",60)+"g, 나트륨 "+goalOf("sodium_mg",2300)+"mg 이하.":""),
       "아래 식단 메모를 음식 항목별로 나누고, 양이 없으면 한국 일반 1인분 기준으로 추정해라. 식품의약품안전처 식품영양성분 DB 수준의 일반값을 쓴다.",
-      "JSON만 출력: {\"items\":[{\"meal\":\"아침|점심|저녁|간식\",\"name\":\"음식\",\"amount\":\"추정 양\",\"kcal\":0,\"protein_g\":0,\"carb_g\":0,\"fat_g\":0,\"calcium_mg\":0,\"sodium_mg\":0,\"fiber_g\":0}],\"comment\":\"52세 남성 기준으로 부족하거나 많은 영양소와 다음 끼니 제안을 한국어 2문장으로\"}",
+      "JSON만 출력: {\"items\":[{\"meal\":\"아침|점심|저녁|간식\",\"name\":\"음식\",\"amount\":\"추정 양\",\"kcal\":0,\"protein_g\":0,\"carb_g\":0,\"fat_g\":0,\"calcium_mg\":0,\"sodium_mg\":0,\"fiber_g\":0}],\"comment\":\"이 사람의 목표 기준으로 부족하거나 많은 영양소와 다음 끼니 제안을 한국어 2문장으로(위 건강을 위해 짠 음식은 꼭 짚어줘)\"}",
       "","아침: "+(state.meals.b||"-"),"점심: "+(state.meals.l||"-"),"저녁: "+(state.meals.d||"-"),"간식: "+(state.meals.s||"-")].join("\n");
     try{const res=await sampler.json(prompt,{modelTier:"default"});
       if(!res||!Array.isArray(res.items))throw{code:"invalid_json"};
@@ -569,18 +576,30 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   }
 
   // ---------- coach & sync ----------
-  let coach={};
+  let coach={},profile=null;
   function renderCoach(){
     const ks=Object.keys(coach).filter(k=>DATE.test(k)&&k<=cur).sort();const k=ks[ks.length-1];const body=$("coachBody");
-    if(!k){body.innerHTML="";body.appendChild(el("p","hint","매일 아침 8시 무렵, 전날 기록을 바탕으로 한 컨디션 체크가 여기에 올라와요."));$("coachDate").textContent="";return}
+    if(!k){body.innerHTML="";body.appendChild(el("p","hint","매일 아침 8시 무렵, 전날 기록을 바탕으로 한 컨디션 체크가 여기에 올라와요."));$("coachDate").textContent="";renderGoals(body);return}
     const c=coach[k];const d=parse(k);$("coachDate").textContent=(d.getMonth()+1)+"/"+d.getDate()+" "+DOW[d.getDay()]+(k!==cur?" · 최근 체크":"");
     body.innerHTML="";if(c.title)body.appendChild(el("h2",null,String(c.title)));if(c.summary)body.appendChild(el("p",null,String(c.summary)));
     const g=el("div","cgrid");[["잘한 점","good"],["살펴볼 점","watch"],["오늘 해볼 것","today"]].forEach(([h,f])=>{if(!Array.isArray(c[f])||!c[f].length)return;const b=el("div");b.appendChild(el("h4",null,h));const u=el("ul");c[f].forEach(x=>u.appendChild(el("li",null,String(x))));b.appendChild(u);g.appendChild(b)});
     body.appendChild(g);
+    renderGoals(body);
+  }
+  function latestWeight(){const ks=Object.keys(docs).filter(x=>x<=cur&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):(profile&&profile.checkup?+profile.checkup.weightKg:null)}
+  function renderGoals(body){
+    if(!profile||!profile.goals)return;const g=profile.goals,c=profile.checkup||{};const st=el("div","gstrip");
+    const add=(label,val)=>{const sp=el("span");sp.append(document.createTextNode(label+" "),el("b",null,val));st.appendChild(sp)};
+    const w=latestWeight();if(w&&g.weightKg)add("몸무게",w.toFixed(1)+" → "+g.weightKg+"kg");
+    if(c.waistCm&&g.waistCm)add("허리",c.waistCm+" → "+g.waistCm+"cm 미만");
+    if(c.bp&&g.bp)add("혈압",c.bp+" → "+g.bp);
+    if(g.nextGastroscopy){const[y,m]=String(g.nextGastroscopy).split("-").map(Number);const dd=Math.ceil((new Date(y,m-1,1)-parse(cur))/864e5);add("위내시경 추적",g.nextGastroscopy+(dd>0?" (D-"+dd+")":" (예약하세요)"))}
+    if(st.children.length){body.appendChild(st)}
   }
   function applyRemote(list){
     let touched=false;
     list.forEach(([id,data])=>{
+      if(id==="profile"){profile=data;touched=true;return}
       if(id==="settings"){if(!ts&&!catEditing&&!habEditing){applySettings(data);touched=true}return}
       if(!DATE.test(id))return;
       if(data&&data.updatedAt&&lastSaved[id]&&data.updatedAt<=lastSaved[id])return;
@@ -654,7 +673,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   (async()=>{
     const timer=new Promise(r=>setTimeout(()=>r(null),10000));
     store=(await Promise.race([connect(),timer]))||local;
-    try{const all=await store.loadAll();docs=all.days||{};applySettings(all.settings)}
+    try{const all=await store.loadAll();docs=all.days||{};applySettings(all.settings);profile=all.profile||null}
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
     if(store.subscribe)store.subscribe(applyRemote);
