@@ -168,6 +168,20 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .meal{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start}
 .meal span{font-weight:600;font-size:.84rem;padding-top:6px}
 .meal textarea{width:100%;min-height:38px;resize:vertical;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:6px 8px;font:inherit;line-height:1.5}
+.nutbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.nutbar .go{font:inherit;font-size:.84rem;font-weight:600;border:0;background:var(--ink);color:var(--sheet);border-radius:6px;padding:7px 12px;cursor:pointer}
+.nutbar .go:disabled{opacity:.5;cursor:wait}
+.ntab{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:10px}
+.ntab th,.ntab td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.ntab th:first-child,.ntab td:first-child{text-align:left}
+.ntab th{font-family:var(--f-mono);font-size:.68rem;color:var(--muted);font-weight:400}
+.ntab .pct{width:34%}
+.ntab .bar{height:8px}
+.ntab .over i{background:var(--c3)!important}
+.ntab .bar i{background:var(--c1)}
+.ntab .done i{background:var(--c4)!important}
+.nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
+.ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
 .coach h2{font-family:var(--f-display);font-weight:400;font-size:1.15rem;margin:0 0 6px;text-wrap:balance}
 .coach .cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -226,6 +240,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
           <label class="meal" for="mD"><span>저녁</span><textarea id="mD" placeholder="예) 닭가슴살 샐러드"></textarea></label>
           <label class="meal" for="mS"><span>간식</span><textarea id="mS" placeholder="예) 초콜릿 3조각"></textarea></label>
         </div>
+        <div class="nutbar"><button type="button" class="go" id="nutBtn">영양 계산하기</button><span class="status" id="nutStatus">52세 한국 남성 권장량 기준</span></div>
+        <div id="nut"></div>
       </section>
       <section class="page see" aria-labelledby="seeLabel">
         <div class="pagehead"><span class="label" id="seeLabel">SEE</span><span class="status" id="planRate"></span></div>
@@ -297,7 +313,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:""},meals:{b:"",l:"",d:"",s:""}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
   const PT_GOAL=50, CUPS=4;
@@ -395,7 +411,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});
+    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();
     markScore();summary();renderCal();renderRoutine();
   }
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
@@ -514,6 +530,44 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   }
   function saveSettings(){clearTimeout(ts);ts=setTimeout(async()=>{ts=null;if(!store)return;try{await store.save("settings",JSON.parse(JSON.stringify(settings)));setStatus("저장됨 ✓")}catch(e){setStatus("설정 저장 실패")}},700)}
 
+  // ---------- nutrition ----------
+  const NUT=[["kcal","열량","kcal",2200,"near"],["protein_g","단백질","g",60,"min"],["carb_g","탄수화물","g",300,"near"],["fat_g","지방","g",60,"near"],["calcium_mg","칼슘","mg",750,"min"],["sodium_mg","나트륨","mg",2300,"max"],["fiber_g","식이섬유","g",30,"min"]];
+  const mealSrc=o=>MEALS.map(([,f])=>o.meals[f]||"").join("|");
+  function nutTotals(n){const t={};NUT.forEach(([k])=>{t[k]=0});(n.items||[]).forEach(it=>NUT.forEach(([k])=>{const v=+it[k];if(isFinite(v))t[k]+=v}));return t}
+  function renderNut(){
+    const box=$("nut");box.innerHTML="";const n=state.nutrition;
+    if(!n||!Array.isArray(n.items)){if(!mealSrc(state).replace(/\|/g,"").trim())$("nutStatus").textContent="식단을 적고 눌러보세요 · 52세 한국 남성 권장량 기준";return}
+    const tot=nutTotals(n);
+    $("nutStatus").textContent=n.src!==mealSrc(state)?"식단이 바뀌었어요 · 다시 계산해 주세요":"추정치 · 52세 한국 남성 권장량 기준";
+    const tb=el("table","ntab");const h=el("tr");["영양소","섭취","기준",""].forEach(x=>h.appendChild(el("th",null,x)));tb.appendChild(h);
+    NUT.forEach(([k,name,u,goal,mode])=>{const v=Math.round(tot[k]);const r=v/goal;const tr=el("tr");
+      const cls=mode==="max"?(r>1?"over":""):mode==="min"?(r>=1?"done":""):(r>1.15?"over":r>=0.85?"done":"");
+      tr.append(el("td",null,name),el("td",null,v.toLocaleString()+u),el("td",null,(mode==="max"?"≤":"")+goal.toLocaleString()+u));
+      const td=el("td","pct "+cls);const b=el("div","bar");const f=el("i");f.style.width=Math.min(100,r*100)+"%";b.appendChild(f);td.appendChild(b);tr.appendChild(td);tb.appendChild(tr)});
+    box.appendChild(el("div","ovx")).appendChild(tb);
+    const ul=el("ul","nitems");(n.items||[]).forEach(it=>ul.appendChild(el("li",null,(it.meal?it.meal+" · ":"")+(it.name||"")+(it.amount?" ("+it.amount+")":"")+" — "+Math.round(+it.kcal||0)+"kcal, 단백질 "+Math.round(+it.protein_g||0)+"g")));box.appendChild(ul);
+    if(n.comment)box.appendChild(el("p","ncomment",String(n.comment)));
+  }
+  let sampler;
+  async function calcNutrition(){
+    const src=mealSrc(state);if(!src.replace(/\|/g,"").trim()){$("nutStatus").textContent="먼저 식단을 적어주세요";return}
+    if(sampler===undefined){try{sampler=window.claude&&claude.use?await claude.use("sample"):null}catch(e){sampler=null}}
+    if(!sampler){$("nutStatus").textContent="이 화면에서는 자동 계산을 쓸 수 없어요 · 채팅으로 식단을 보내주시면 계산해 드려요";return}
+    const btn=$("nutBtn");btn.disabled=true;$("nutStatus").textContent="계산 중…";const k=cur;
+    const w=parseFloat(state.body.weight);
+    const prompt=["너는 한국 음식 영양 추정 전문가다. 사용자는 한국인 남성 52세"+(isNaN(w)?"":", 몸무게 "+w+"kg")+"이다.",
+      "아래 식단 메모를 음식 항목별로 나누고, 양이 없으면 한국 일반 1인분 기준으로 추정해라. 식품의약품안전처 식품영양성분 DB 수준의 일반값을 쓴다.",
+      "JSON만 출력: {\"items\":[{\"meal\":\"아침|점심|저녁|간식\",\"name\":\"음식\",\"amount\":\"추정 양\",\"kcal\":0,\"protein_g\":0,\"carb_g\":0,\"fat_g\":0,\"calcium_mg\":0,\"sodium_mg\":0,\"fiber_g\":0}],\"comment\":\"52세 남성 기준으로 부족하거나 많은 영양소와 다음 끼니 제안을 한국어 2문장으로\"}",
+      "","아침: "+(state.meals.b||"-"),"점심: "+(state.meals.l||"-"),"저녁: "+(state.meals.d||"-"),"간식: "+(state.meals.s||"-")].join("\n");
+    try{const res=await sampler.json(prompt,{modelTier:"default"});
+      if(!res||!Array.isArray(res.items))throw{code:"invalid_json"};
+      const items=res.items.slice(0,40).map(it=>{const o={meal:String(it.meal||""),name:String(it.name||""),amount:String(it.amount||"")};NUT.forEach(([kk])=>{const v=+it[kk];o[kk]=isFinite(v)&&v>=0?Math.round(v*10)/10:0});return o});
+      const nut={items,comment:String(res.comment||"").slice(0,400),src,at:new Date().toISOString(),by:"page"};
+      if(cur===k){state.nutrition=nut;renderNut();changed()}
+    }catch(e){$("nutStatus").textContent=e&&e.code==="not_granted"?"자동 계산 권한이 꺼져 있어요":e&&e.code==="rate_limited"?"잠시 후 다시 눌러주세요":"계산하지 못했어요 · 다시 눌러주세요"}
+    finally{btn.disabled=false}
+  }
+
   // ---------- coach & sync ----------
   let coach={};
   function renderCoach(){
@@ -590,7 +644,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     $("wCopy").onclick=()=>{const txt=weekText(),box=$("wCopyBox");box.value=txt;
       const show=()=>{box.hidden=false;box.focus();box.select();setStatus("텍스트를 선택해 두었어요. 직접 복사해 주세요")};
       try{navigator.clipboard.writeText(txt).then(()=>setStatus("주간 요약을 복사했어요"),show)}catch(e){show()}};
-    MEALS.forEach(([id,f])=>{$(id).oninput=e=>{state.meals[f]=e.target.value;changed(true)}});
+    MEALS.forEach(([id,f])=>{$(id).oninput=e=>{state.meals[f]=e.target.value;changed(true);if(state.nutrition)renderNut()}});
+    $("nutBtn").onclick=calcNutrition;
     document.addEventListener("visibilitychange",()=>{if(document.hidden){if(t)flush()}else checkDay()});
     window.addEventListener("focus",checkDay);setInterval(checkDay,60000);
   }
