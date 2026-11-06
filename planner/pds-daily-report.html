@@ -156,8 +156,13 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .lg .times{display:flex;flex-wrap:wrap;gap:4px;font-family:var(--f-mono);font-size:.68rem;color:var(--muted);min-height:1em}
 .mks{display:flex;flex-wrap:wrap;gap:1px;margin-left:auto;padding-right:2px;max-width:16px}
 .mks i{width:5px;height:5px;border-radius:50%;display:block}
-.logs{grid-template-columns:repeat(4,minmax(0,1fr))}
-@media (max-width:640px){.logs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.logs{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+#wkBtns button[aria-pressed="true"]{background:var(--c5);border-color:var(--c5)}
+.bpin{display:flex;align-items:center;gap:4px}
+.bpin input{width:100%;min-width:0}
+.bpin span{color:var(--muted)}
+.bptag{font-size:.72rem;font-weight:600;border-radius:999px;padding:1px 8px;align-self:flex-start}
+.bptag.n{background:var(--c4);color:#fff}.bptag.w{background:var(--poo);color:#fff}.bptag.p{background:var(--pee);color:#fff}.bptag.h{background:var(--c3);color:#fff}
 .lg .times button{font:inherit;font-size:.68rem;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:1px 7px;cursor:pointer}
 .lg .times button:hover{color:var(--ink);border-color:var(--ink)}
 .lg .btn button.add.flash{box-shadow:0 0 0 3px var(--lc)}
@@ -226,7 +231,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         <div class="rt" id="rtWater"><h3>물 2L <span class="num" id="waterNum">0 / 2L</span></h3><div class="cups" id="cups"></div></div>
         <div class="rt" id="rtVit"><h3>비타민 <span class="num" id="vitNum">아직</span></h3><button type="button" class="vit" id="vit" aria-pressed="false">비타민 먹었어요</button></div>
         <div class="rt" id="rtSt"><h3>스트레칭 <span class="num" id="stNum">0분</span></h3><div class="bar"><i id="stBar" style="background:var(--c6);width:0"></i></div><div class="rtbtns" id="stBtns"><button type="button" data-st="10">10분</button><button type="button" data-st="20">20분</button><button type="button" data-st="30">30분</button></div><p class="sub">목표 10–30분</p></div>
-        <div class="rt wide" id="rtSl"><h3>수면 <span class="num" id="slNum">—</span></h3><div class="sleep"><label for="slBed">어젯밤 잔 시간<input type="time" id="slBed"></label><label for="slWake">일어난 시간<input type="time" id="slWake"></label></div><p class="sub" id="slSub">목표 7시간 이상 · 시간을 안 적으면 DO에 칠한 수면 색으로 계산해요</p></div>
+        <div class="rt" id="rtWk"><h3>걷기 <span class="num" id="wkNum">0분</span></h3><div class="bar"><i id="wkBar" style="background:var(--c5);width:0"></i></div><div class="rtbtns" id="wkBtns"><button type="button" data-wk="10">10분</button><button type="button" data-wk="20">20분</button><button type="button" data-wk="30">30분</button><button type="button" data-wk="+10">+10</button></div><p class="sub">검진 처방 · 30분 이상, 주 4회</p></div>
+        <div class="rt" id="rtSl"><h3>수면 <span class="num" id="slNum">—</span></h3><div class="sleep"><label for="slBed">어젯밤 잔 시간<input type="time" id="slBed"></label><label for="slWake">일어난 시간<input type="time" id="slWake"></label></div><p class="sub" id="slSub">목표 7시간 이상 · 시간을 안 적으면 DO에 칠한 수면 색으로 계산해요</p></div>
         <div class="rt full"><h3>몸 기록 <label class="when" for="logAt">기록 시각 <input type="time" id="logAt"> <span>비우면 지금</span></label></h3><div class="logs" id="logs"></div></div>
       </div>
       <div class="palette" id="palette" role="toolbar" aria-label="형광펜 색 선택"></div>
@@ -316,15 +322,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
-  const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
+  const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
   const PT_GOAL=50, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
   const toMin=s=>{const[h,m]=s.split(":").map(Number);return h*60+m};
   const sleepMin=o=>{const r=o.routine;if(r.bed&&r.wake)return (toMin(r.wake)-toMin(r.bed)+1440)%1440;let n=0;for(const ch of o.slots)if(ch==="7")n++;return n*10};
-  const rtDone=o=>({pt:o.routine.pt>=PT_GOAL,water:o.routine.water>=CUPS,vit:!!o.routine.vit,stretch:o.routine.stretch>=10,sleep:sleepMin(o)>=SLEEP_GOAL});
+  const rtDone=o=>({pt:o.routine.pt>=PT_GOAL,water:o.routine.water>=CUPS,vit:!!o.routine.vit,stretch:o.routine.stretch>=10,walk:(+o.routine.walk||0)>=30,sleep:sleepMin(o)>=SLEEP_GOAL});
+  const bpClass=(sy,di)=>{sy=+sy;di=+di;if(!sy||!di)return null;if(sy>=140||di>=90)return["h","고혈압 범위 · 다시 재고 계속 높으면 진료"];if(sy>=130||di>=80)return["p","고혈압 전단계"];if(sy>=120)return["w","주의 혈압"];return["n","정상"]};
   const hm=m=>Math.floor(m/60)+"h "+(m%60)+"m";
 
   let cur=key(new Date()), state=blank(), brush=1, calMonth=new Date(), view="day";
@@ -354,7 +361,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     }catch(e){return null}
   }
   const setStatus=t=>{$("status").textContent=t};
-  const hasContent=o=>o&&(o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&o.body.weight)||(o.meals&&Object.values(o.meals).some(Boolean)));
+  const hasContent=o=>o&&(o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean)));
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -438,6 +445,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     wi.onchange=()=>{state.body.weight=wi.value;renderLogs();changed()};
     const gw=G().weightKg;const hint=(!isNaN(cw)&&gw)?(cw>gw?"목표 "+gw+"kg까지 −"+(cw-gw).toFixed(1)+"kg":"목표 "+gw+"kg 달성 ✓"):(pw!=null?"지난 기록 "+pw.toFixed(1)+"kg":"kg 단위로 적어요");
     w.append(wt,wi,el("div","times",hint));box.appendChild(w);
+    const bp=el("div","lg");bp.style.setProperty("--lc","var(--c3)");const bt2=el("div","top");bt2.appendChild(el("span","nm","혈압"));
+    const cls=bpClass(state.body.sys,state.body.dia);if(cls){const tg=el("span","bptag "+cls[0],cls[1].split(" · ")[0]);bt2.appendChild(tg)}
+    const row=el("div","bpin");const mk=(id,ph,f)=>{const i=el("input","kg");i.type="number";i.id=id;i.inputMode="numeric";i.min="50";i.max="250";i.placeholder=ph;i.value=state.body[f]||"";i.setAttribute("aria-label",ph);
+      i.onchange=()=>{state.body[f]=i.value;const n=new Date();if(state.body.sys&&state.body.dia&&!state.body.bpAt)state.body.bpAt=cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"";renderLogs();changed()};return i};
+    row.append(mk("bpS","수축기","sys"),el("span",null,"/"),mk("bpD","이완기","dia"));
+    bp.append(bt2,row,el("div","times",cls?(cls[0]==="h"?cls[1]:"목표 120/80 미만"+(state.body.bpAt?" · "+state.body.bpAt+" 측정":"")):"집·약국에서 잰 값 · 목표 120/80 미만"));box.appendChild(bp);
     for(let i=0;i<24;i++){const h=$("hr"+i);const old=h.querySelector(".mks");if(old)old.remove()}
     LOGS.forEach(l=>state.log[l.k].forEach(t=>{if(!t)return;const i=(+t.split(":")[0]-3+24)%24;const h=$("hr"+i);let m=h.querySelector(".mks");if(!m){m=el("span","mks");h.appendChild(m)}const d=el("i");d.style.background="var(--"+l.k+")";d.title=l.name+" "+t;m.appendChild(d)}));
   }
@@ -450,6 +463,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     $("vit").setAttribute("aria-pressed",String(d.vit));$("vit").textContent=d.vit?"✓ 먹었어요":"비타민 먹었어요";$("vitNum").textContent=d.vit?"완료 ✓":"아직";$("rtVit").classList.toggle("done",d.vit);
     $("stNum").textContent=r.stretch+"분"+(d.stretch?" ✓":"");$("stBar").style.width=Math.min(100,r.stretch/30*100)+"%";$("rtSt").classList.toggle("done",d.stretch);
     [...$("stBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.st===r.stretch)));
+    const wkm=+r.walk||0;$("wkNum").textContent=wkm+"분"+(d.walk?" ✓":"");$("wkBar").style.width=Math.min(100,wkm/30*100)+"%";$("rtWk").classList.toggle("done",d.walk);
+    [...$("wkBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.wk!=="+10"&&+b.dataset.wk===wkm)));
     $("slBed").value=r.bed||"";$("slWake").value=r.wake||"";const sm=sleepMin(state);
     $("slNum").textContent=sm?hm(sm)+(d.sleep?" ✓":""):"—";$("rtSl").classList.toggle("done",d.sleep);
     $("slSub").textContent=(r.bed&&r.wake)?"목표 7시간 이상 · 잔 시간–일어난 시간 기준":(sm?"목표 7시간 이상 · DO에 칠한 수면 색 기준":"목표 7시간 이상 · 시간을 안 적으면 DO에 칠한 수면 색으로 계산해요");
@@ -486,19 +501,19 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const wk=$("wk");wk.innerHTML="";wk.appendChild(el("div"));
     days.forEach(k=>{const d=parse(k);const b=el("button","wkday");b.type="button";const w=el("b",d.getDay()===0?"sun":null,DOW[d.getDay()]);b.append(w,el("small",null,(d.getMonth()+1)+"/"+d.getDate()));b.onclick=()=>{cur=k;setView("day")};wk.appendChild(b)});
     const hrs=el("div","wkhours");HOURS.forEach((h,i)=>hrs.appendChild(el("span",null,i%3===0?String(h):"")));wk.appendChild(hrs);
-    const cnt={};let planned=0,done=0,scores=[],rec=0,sleeps=[],wts=[];
+    const cnt={};let planned=0,done=0,scores=[],rec=0,sleeps=[],wts=[],bps=[];
     days.forEach(k=>{const o=get(k);const col=el("div","wkcol");col.setAttribute("aria-label",k+" DO 기록");
       for(let i=0;i<SLOTS;i++){const v=o?o.slots[i]:"0";col.appendChild(el("span",v!=="0"?"c"+v:null))}
       wk.appendChild(col);
-      if(o){catCounts(o,cnt);planned+=o.plan.filter(p=>p.t.trim()).length;done+=o.plan.filter(p=>p.t.trim()&&p.d).length;if(o.score)scores.push(o.score);if(hasContent(o))rec++;const sm=sleepMin(o);if(sm)sleeps.push(sm);const w=parseFloat(o.body.weight);if(!isNaN(w))wts.push(w)}});
+      if(o){catCounts(o,cnt);planned+=o.plan.filter(p=>p.t.trim()).length;done+=o.plan.filter(p=>p.t.trim()&&p.d).length;if(o.score)scores.push(o.score);if(hasContent(o))rec++;const sm=sleepMin(o);if(sm)sleeps.push(sm);const w=parseFloat(o.body.weight);if(!isNaN(w))wts.push(w);if(+o.body.sys&&+o.body.dia)bps.push([+o.body.sys,+o.body.dia])}});
     const lg=$("wkLegend");lg.innerHTML="";settings.cats.forEach((n,i)=>{const c=el("span","chip");c.style.cursor="default";const sw=el("i");sw.style.background="var(--c"+(i+1)+")";c.append(sw,document.createTextNode(n||("색 "+(i+1))));lg.appendChild(c)});
     const total=Object.values(cnt).reduce((a,b)=>a+b,0);
     const K=$("wKpis");K.innerHTML="";
-    [[fmt(total),"기록한 시간"],[planned?Math.round(done/planned*100)+"%":"—","계획 완료율"],[scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"—","평균 점수"],[sleeps.length?hm(Math.round(sleeps.reduce((a,b)=>a+b,0)/sleeps.length)):"—","평균 수면"],[wts.length?wts[wts.length-1].toFixed(1)+(wts.length>1?" ("+((wts[wts.length-1]-wts[0])>0?"+":"")+(wts[wts.length-1]-wts[0]).toFixed(1)+")":""):"—","몸무게 kg"],[rec+"/7","기록한 날"]]
+    [[fmt(total),"기록한 시간"],[planned?Math.round(done/planned*100)+"%":"—","계획 완료율"],[scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"—","평균 점수"],[sleeps.length?hm(Math.round(sleeps.reduce((a,b)=>a+b,0)/sleeps.length)):"—","평균 수면"],[wts.length?wts[wts.length-1].toFixed(1)+(wts.length>1?" ("+((wts[wts.length-1]-wts[0])>0?"+":"")+(wts[wts.length-1]-wts[0]).toFixed(1)+")":""):"—","몸무게 kg"],[bps.length?Math.round(bps.reduce((a,b)=>a+b[0],0)/bps.length)+"/"+Math.round(bps.reduce((a,b)=>a+b[1],0)/bps.length):"—","평균 혈압"],[rec+"/7","기록한 날"]]
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
-    const rows=[{name:"피티 50개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
+    const rows=[{name:"피티 50개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
     rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
     LOGS.forEach(l=>{const tr=el("tr");const nm=el("td");const dt=el("span","dot");dt.style.background=dt.style.borderColor="var(--"+l.k+")";nm.append(dt,document.createTextNode(" "+l.name));tr.appendChild(nm);let s=0;
       days.forEach(k=>{const o=get(k),c=o?o.log[l.k].length:0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+l.unit));T.appendChild(tr)});
@@ -507,16 +522,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       const body=el("div");[["잘한 점",o.good],["아쉬운 점",o.bad],["내일",o.next]].forEach(([l,v])=>{if(!v)return;const p=el("p");p.append(el("span",null,l),document.createTextNode(v));body.appendChild(p)});row.appendChild(body);N.appendChild(row)});
     if(!any)N.appendChild(el("p","hint","이번 주에 적은 SEE가 아직 없어요. 데일리에서 회고를 쓰면 여기에 모여요."));
     $("wCopyBox").hidden=true;
-    return {days,cnt,total,planned,done,scores,rec,wts};
+    return {days,cnt,total,planned,done,scores,rec,wts,bps};
   }
   function weekText(){
     const r=renderWeek(),a=parse(r.days[0]),b=parse(r.days[6]);
     const L=["[PDS 주간 리포트] "+(a.getMonth()+1)+"/"+a.getDate()+" – "+(b.getMonth()+1)+"/"+b.getDate(),"",
       "기록한 시간 "+fmt(r.total)+" · 계획 완료율 "+(r.planned?Math.round(r.done/r.planned*100)+"%":"—")+" · 평균 점수 "+(r.scores.length?(r.scores.reduce((x,y)=>x+y,0)/r.scores.length).toFixed(1):"—"),""];
     settings.cats.forEach((n,i)=>{const v=r.cnt[i+1]||0;if(v)L.push("· "+n+" "+fmt(v))});
-    L.push("");[["피티 50개","pt"],["물 2L","water"],["비타민","vit"],["스트레칭 10분+","stretch"],["수면 7시간+","sleep"]].forEach(([n,f])=>{const c=r.days.filter(k=>docs[k]&&rtDone(norm(docs[k]))[f]).length;L.push("✓ "+n+" "+c+"/7")});
+    L.push("");[["피티 50개","pt"],["물 2L","water"],["비타민","vit"],["스트레칭 10분+","stretch"],["걷기 30분+","walk"],["수면 7시간+","sleep"]].forEach(([n,f])=>{const c=r.days.filter(k=>docs[k]&&rtDone(norm(docs[k]))[f]).length;L.push("✓ "+n+" "+c+"/7")});
     settings.habits.forEach(h=>{const n=r.days.filter(k=>docs[k]&&docs[k].habits&&docs[k].habits[h.id]).length;L.push("✓ "+h.name+" "+n+"/7")});
     L.push("");LOGS.forEach(l=>{const s=r.days.reduce((a,k)=>a+(docs[k]?norm(docs[k]).log[l.k].length:0),0);L.push("· "+l.name+" 주간 "+s+l.unit)});
+    if(r.bps.length)L.push("· 평균 혈압 "+Math.round(r.bps.reduce((a,b)=>a+b[0],0)/r.bps.length)+"/"+Math.round(r.bps.reduce((a,b)=>a+b[1],0)/r.bps.length)+" ("+r.bps.length+"회 측정)");
     if(r.wts.length)L.push("· 몸무게 "+r.wts[0].toFixed(1)+" → "+r.wts[r.wts.length-1].toFixed(1)+"kg");
     const notes=r.days.map(k=>docs[k]).filter(o=>o&&o.next);if(notes.length){L.push("","이번 주 내가 바꾸려던 것");notes.forEach(o=>L.push("- "+o.next))}
     return L.join("\n");
@@ -649,6 +665,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     document.querySelectorAll("[data-pt]").forEach(b=>b.onclick=()=>{const v=+b.dataset.pt;state.routine.pt=v===50?Math.max(state.routine.pt,PT_GOAL):Math.max(0,state.routine.pt+v);renderRoutine();changed()});
     for(let i=0;i<CUPS;i++){const b=el("button",null,(i+1)*500+"ml");b.type="button";b.setAttribute("aria-label","물 "+(i+1)+"번째 500ml");b.onclick=()=>{state.routine.water=state.routine.water===i+1?i:i+1;renderRoutine();changed()};$("cups").appendChild(b)}
     $("vit").onclick=()=>{state.routine.vit=!state.routine.vit;renderRoutine();changed()};
+    document.querySelectorAll("[data-wk]").forEach(b=>b.onclick=()=>{const v=b.dataset.wk,c=+state.routine.walk||0;state.routine.walk=v==="+10"?c+10:(c===+v?0:+v);renderRoutine();changed()});
     document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{const v=+b.dataset.st;state.routine.stretch=state.routine.stretch===v?0:v;renderRoutine();changed()});
     [["slBed","bed"],["slWake","wake"]].forEach(([id,f])=>{$(id).onchange=e=>{state.routine[f]=e.target.value;renderRoutine();changed()}});
     $("catEdit").onclick=()=>{catEditing=!catEditing;buildPalette()};
