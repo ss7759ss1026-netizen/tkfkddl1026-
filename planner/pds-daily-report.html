@@ -188,6 +188,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sheet);font-size:.9rem;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 32px);text-align:center}
+.lg .empty{font-size:.7rem;color:var(--muted)}
+.rt.full h3{flex-wrap:wrap;white-space:nowrap}
+.rt.full h3 .when{flex-wrap:wrap;white-space:nowrap}
+.wdiff{font-family:var(--f-mono);font-size:.74rem;font-weight:700;border-radius:999px;padding:1px 8px;background:var(--empty);color:var(--ink)}
+.wdiff.dn{background:var(--c4);color:#fff}.wdiff.up{background:var(--pee);color:#fff}
 .menu .theme{font-family:var(--f-display);font-size:1.05rem;margin:0 0 4px;text-wrap:balance}
 .menu .mgrid{display:flex;flex-direction:column;gap:12px;margin-top:8px}
 .menu .mm{border-top:1px dashed var(--line);padding-top:10px}
@@ -212,6 +218,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 @media (prefers-reduced-motion:no-preference){.cell{transition:background-color .12s}}
 </style>
 
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="wrap">
   <header>
     <h1><small>PLAN · DO · SEE</small><span id="title">오늘의 데일리 리포트</span></h1>
@@ -378,7 +385,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     }catch(e){return null}
   }
   const setStatus=t=>{$("status").textContent=t};
-  const hasContent=o=>o&&(o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean)));
+  let toastT=null;
+  const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean)));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -450,22 +459,24 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       add.onclick=()=>{const n=new Date(),at=$("logAt").value;const tm=at||(cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"");
         state.log[l.k].push(tm);state.log[l.k].sort();$("logAt").value="";renderLogs();changed();
         const nb=$("logs").querySelectorAll(".lg")[LOGS.indexOf(l)];const a=nb&&nb.querySelector(".add");if(a){a.classList.add("flash");setTimeout(()=>a.classList.remove("flash"),500)}
-        setStatus(l.name+" 기록됨"+(tm?" · "+tm:""))};
-      const rm=el("button",null,"−1");rm.type="button";rm.setAttribute("aria-label",l.name+" 마지막 기록 지우기");rm.onclick=()=>{if(!state.log[l.k].length)return;state.log[l.k].pop();renderLogs();changed()};bt.append(add,rm);
-      const tms=el("div","times");arr.forEach((v,i)=>{const c=el("button",null,(v||"시각 없음")+" ×");c.type="button";c.setAttribute("aria-label",l.name+" "+(v||"시각 없음")+" 기록 지우기");c.onclick=()=>{state.log[l.k].splice(i,1);renderLogs();changed()};tms.appendChild(c)});
+        toast("✓ "+l.name+" +1"+(tm?" · "+tm:"")+" (오늘 "+state.log[l.k].length+l.unit+")")};
+      const rm=el("button",null,"−1");rm.type="button";rm.setAttribute("aria-label",l.name+" 마지막 기록 지우기");rm.onclick=()=>{if(!state.log[l.k].length){toast(l.name+" 기록이 아직 없어요");return}state.log[l.k].pop();renderLogs();changed();toast(l.name+" 기록 하나를 지웠어요")};bt.append(add,rm);
+      const tms=el("div","times");arr.forEach((v,i)=>{const c=el("button",null,(v||"시각 없음")+" ×");c.type="button";c.setAttribute("aria-label",l.name+" "+(v||"시각 없음")+" 기록 지우기");c.onclick=()=>{state.log[l.k].splice(i,1);renderLogs();changed();toast(l.name+" "+(v||"")+" 기록을 지웠어요")};tms.appendChild(c)});
+      if(!arr.length)tms.appendChild(el("span","empty","+1을 누르면 시각이 여기 남아요"));
       g.append(top,bt,tms);box.appendChild(g)});
     const w=el("div","lg");w.style.setProperty("--lc","var(--ink)");
     const wt=el("div","top");const pw=prevWeight(cur),cw=parseFloat(state.body.weight);
     const diff=(pw!=null&&!isNaN(cw))?(cw-pw):null;
-    wt.append(el("span","nm","몸무게"),el("span","ct",diff==null?"":(diff>0?"+":"")+diff.toFixed(1)));
+    wt.appendChild(el("span","nm","몸무게"));
+    if(diff!=null){const z=Math.abs(diff)<0.05;wt.appendChild(el("span","wdiff"+(z?"":diff<0?" dn":" up"),z?"지난번과 같음":(diff>0?"▲ +":"▼ ")+diff.toFixed(1)+"kg"))}
     const wi=el("input","kg");wi.type="number";wi.id="kg";wi.step="0.1";wi.min="20";wi.max="300";wi.inputMode="decimal";wi.placeholder="kg";wi.value=state.body.weight||"";wi.setAttribute("aria-label","몸무게 kg");
-    wi.onchange=()=>{state.body.weight=wi.value;renderLogs();changed()};
+    wi.onchange=()=>{state.body.weight=wi.value;renderLogs();changed();if(wi.value)toast("✓ 몸무게 "+wi.value+"kg 저장")};
     const gw=G().weightKg;const hint=(!isNaN(cw)&&gw)?(cw>gw?"목표 "+gw+"kg까지 −"+(cw-gw).toFixed(1)+"kg":"목표 "+gw+"kg 달성 ✓"):(pw!=null?"지난 기록 "+pw.toFixed(1)+"kg":"kg 단위로 적어요");
     w.append(wt,wi,el("div","times",hint));box.appendChild(w);
     const bp=el("div","lg");bp.style.setProperty("--lc","var(--c3)");const bt2=el("div","top");bt2.appendChild(el("span","nm","혈압"));
     const cls=bpClass(state.body.sys,state.body.dia);if(cls){const tg=el("span","bptag "+cls[0],cls[1].split(" · ")[0]);bt2.appendChild(tg)}
     const row=el("div","bpin");const mk=(id,ph,f)=>{const i=el("input","kg");i.type="number";i.id=id;i.inputMode="numeric";i.min="50";i.max="250";i.placeholder=ph;i.value=state.body[f]||"";i.setAttribute("aria-label",ph);
-      i.onchange=()=>{state.body[f]=i.value;const n=new Date();if(state.body.sys&&state.body.dia&&!state.body.bpAt)state.body.bpAt=cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"";renderLogs();changed()};return i};
+      i.onchange=()=>{state.body[f]=i.value;const n=new Date();if(state.body.sys&&state.body.dia&&!state.body.bpAt)state.body.bpAt=cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"";renderLogs();changed();if(state.body.sys&&state.body.dia)toast("✓ 혈압 "+state.body.sys+"/"+state.body.dia+" 저장")};return i};
     row.append(mk("bpS","수축기","sys"),el("span",null,"/"),mk("bpD","이완기","dia"));
     bp.append(bt2,row,el("div","times",cls?(cls[0]==="h"?cls[1]:"목표 120/80 미만"+(state.body.bpAt?" · "+state.body.bpAt+" 측정":"")):"집·약국에서 잰 값 · 목표 120/80 미만"));box.appendChild(bp);
     for(let i=0;i<24;i++){const h=$("hr"+i);const old=h.querySelector(".mks");if(old)old.remove()}
@@ -618,7 +629,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const g=el("div","mgrid");
     [["b","아침"],["l","점심"],["d","저녁"]].forEach(([f,label])=>{const list=m.meals&&Array.isArray(m.meals[f])?m.meals[f]:[];if(!list.length)return;
       const box=el("div","mm");const h=el("div","mh");h.appendChild(el("b",null,label));
-      const use=el("button","ghost","이대로 먹었어요");use.type="button";use.onclick=()=>{const txt=list.map(x=>String(x.name||"")).filter(Boolean).join(", ");state.meals[f]=txt;const id={b:"mB",l:"mL",d:"mD"}[f];$(id).value=txt;changed();renderNut();setStatus(label+" 식단에 넣었어요")};h.appendChild(use);box.appendChild(h);
+      const use=el("button","ghost","이대로 먹었어요");use.type="button";use.onclick=()=>{const txt=list.map(x=>String(x.name||"")).filter(Boolean).join(", ");state.meals[f]=txt;const id={b:"mB",l:"mL",d:"mD"}[f];$(id).value=txt;changed();renderNut();toast("✓ "+label+" 식단에 넣었어요")};h.appendChild(use);box.appendChild(h);
       const ul=el("ul");list.forEach(x=>{const li=el("li");li.appendChild(el("div","dn",String(x.name||"")));if(x.how)li.appendChild(el("p","how",String(x.how)));
         if(x.note)li.appendChild(el("p","how","💡 "+String(x.note)));
         if(x.src&&(x.src.title||x.src.url)){const sr=el("div","src");if(x.src.kind)sr.appendChild(el("span","kind",String(x.src.kind)));
