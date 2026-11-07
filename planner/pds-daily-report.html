@@ -188,6 +188,15 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.att{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.meals .att{margin:-2px 0 4px 52px}
+.att .add{font:inherit;font-size:.78rem;border:1px dashed var(--rail);background:transparent;color:var(--muted);border-radius:6px;padding:5px 10px;cursor:pointer;min-height:34px}
+.att .add:hover{color:var(--ink);border-color:var(--ink)}
+.att .th{position:relative;width:64px;height:64px;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:var(--empty);display:block}
+.att .th img{width:100%;height:100%;object-fit:cover;display:block}
+.att .fc{position:relative;display:flex;align-items:center;gap:4px;max-width:180px;font-size:.76rem;border:1px solid var(--line);border-radius:6px;padding:6px 26px 6px 8px;color:var(--ink);text-decoration:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.att .rmv{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px;padding:0;cursor:pointer}
+.att .busy{font-size:.74rem;color:var(--muted)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sheet);font-size:.9rem;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 32px);text-align:center}
 .lg .empty{font-size:.7rem;color:var(--muted)}
 .rt.full h3{flex-wrap:wrap;white-space:nowrap}
@@ -345,10 +354,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{}});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -388,7 +397,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const setStatus=t=>{$("status").textContent=t};
   let toastT=null;
   const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
-  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean)));}
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -444,11 +453,51 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       for(let m=0;m<6;m++){const c=el("div","cell");c.dataset.s=i*6+m;c.tabIndex=0;c.setAttribute("role","button");c.setAttribute("aria-label",hr+"시 "+m+"0분");g.appendChild(c)}
     });
   }
+  // ---------- attachments ----------
+  const ATT=[["seeGood","good"],["seeBad","bad"],["seeNext","next"],["mB","meal_b"],["mL","meal_l"],["mD","meal_d"],["mS","meal_s"]];
+  let assetsApi;const urlCache={};
+  const TEXT_T={csv:"text/csv",md:"text/markdown",json:"application/json",txt:"text/plain"};
+  function buildAttach(){ATT.forEach(([id,key])=>{const ta=$(id);const host=ta.closest("label.meal")||ta;const d=el("div","att");d.id="att_"+key;host.insertAdjacentElement("afterend",d)})}
+  async function shrink(file){
+    if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size<1.2e6||!window.createImageBitmap)return file;
+    try{const bm=await createImageBitmap(file);const sc=Math.min(1,1600/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
+      const b=await new Promise(r=>c.toBlob(r,"image/jpeg",0.85));return b&&b.size<file.size?b:file}catch(e){return file}
+  }
+  async function addFiles(key,list){
+    const k=cur;const files=[...list].slice(0,6);if(!files.length)return;
+    if(!assetsApi){toast("이 화면에서는 첨부를 쓸 수 없어요");return}
+    const box=$("att_"+key);const busy=el("span","busy","올리는 중… 0/"+files.length);box.appendChild(busy);let ok=0;
+    for(const f of files){
+      try{const ext=(f.name.split(".").pop()||"").toLowerCase();const blob=await shrink(f);
+        const opt={};if(!/^(image\/|application\/pdf$|video\/)/.test(blob.type||"")){if(TEXT_T[ext])opt.type=TEXT_T[ext];else if(!blob.type)opt.type="application/octet-stream"}
+        if(blob!==f)opt.type="image/jpeg";
+        let res;try{res=await assetsApi.upload(blob,opt)}catch(e){if(e&&e.code==="store_unavailable"){await new Promise(r=>setTimeout(r,1500));res=await assetsApi.upload(blob,opt)}else throw e}
+        urlCache[res.id]=res.url;
+        if(cur!==k){const o=norm(docs[k]);(o.files[key]=o.files[key]||[]).push({id:res.id,name:f.name,type:res.contentType,size:res.sizeBytes});docs[k]=o;store&&store.save(k,JSON.parse(JSON.stringify(o)))}
+        else{(state.files[key]=state.files[key]||[]).push({id:res.id,name:f.name,type:res.contentType,size:res.sizeBytes});changed()}
+        ok++;busy.textContent="올리는 중… "+ok+"/"+files.length;
+      }catch(e){const c=e&&e.code;toast(c==="too_large"?"파일이 너무 커요 (20MB까지)":c==="unsupported_type"?"이 파일 형식은 올릴 수 없어요 · 사진·PDF·텍스트를 써주세요":c==="quota_exceeded"?"저장 공간이 가득 찼어요":"올리지 못했어요 · 다시 시도해 주세요")}
+    }
+    busy.remove();renderAttach();if(ok)toast("✓ "+(ok===1?"파일":"파일 "+ok+"개")+" 첨부했어요");
+  }
+  function renderAttach(){
+    ATT.forEach(([id,key])=>{const box=$("att_"+key);if(!box)return;box.innerHTML="";const arr=state.files[key]||[];
+      arr.forEach((f,i)=>{const url=urlCache[f.id]||("/_blob/"+f.id);const img=/^image\//.test(f.type||"");
+        const a=el("a",img?"th":"fc");a.href=url;a.target="_blank";a.rel="noopener";a.title=f.name||"";
+        if(img){const im=el("img");im.src=url;im.alt=f.name||"첨부 사진";im.loading="lazy";a.appendChild(im)}else a.textContent="📄 "+(f.name||"파일");
+        if(assetsApi){const x=el("button","rmv","×");x.type="button";x.setAttribute("aria-label",(f.name||"첨부")+" 지우기");
+          x.onclick=ev=>{ev.preventDefault();ev.stopPropagation();state.files[key].splice(i,1);changed();renderAttach();toast("첨부를 지웠어요");assetsApi.delete(f.id).catch(()=>{})};a.appendChild(x)}
+        box.appendChild(a)});
+      if(assetsApi){const inp=el("input");inp.type="file";inp.multiple=true;inp.accept="image/*,application/pdf,.txt,.md,.csv,.json";inp.hidden=true;inp.id="fi_"+key;
+        inp.onchange=()=>{addFiles(key,inp.files);inp.value=""};
+        const b=el("button","add","📎 사진·파일");b.type="button";b.setAttribute("aria-label",key.startsWith("meal")?"식단 사진·파일 첨부":"회고에 사진·파일 첨부");b.onclick=()=>inp.click();box.append(b,inp)}
+    });
+  }
   function fillDay(){
     state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();
+    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();
     markScore();summary();renderCal();renderRoutine();
   }
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
@@ -732,7 +781,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     window.addEventListener("focus",checkDay);setInterval(checkDay,60000);
   }
 
-  buildPalette();buildGrid();bindPaint();wire();render();
+  buildAttach();buildPalette();buildGrid();bindPaint();wire();render();
   (async()=>{
     const timer=new Promise(r=>setTimeout(()=>r(null),10000));
     store=(await Promise.race([connect(),timer]))||local;
@@ -740,6 +789,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
     if(store.subscribe)store.subscribe(applyRemote);
+    (async()=>{try{assetsApi=window.claude&&claude.use?await claude.use("assets"):null}catch(e){assetsApi=null}if(view==="day")renderAttach()})();
     if(store.menu)store.menu(list=>{menus={};list.forEach(([id,d])=>{menus[id]=d});renderMenu()});
     if(store.coach)store.coach(list=>{coach={};list.forEach(([id,d])=>{coach[id]=d});renderCoach()});
     setStatus(store===local?"이 브라우저에만 저장돼요":(docs[cur]?"저장됨 ✓":"새 페이지"));
