@@ -347,7 +347,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
   const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
-  const norm=o=>{const b=Object.assign(blank(),o||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
+  const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -671,7 +672,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     });
     if(touched){const a=document.activeElement;const typing=a&&/INPUT|TEXTAREA/.test(a.tagName)&&!a.closest(".cal");if(!typing){buildPalette();render()}}
   }
-  function applySettings(s){if(!s)return;settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
+  function applySettings(s){if(!s)return;s=clone(s);settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
   let followToday=true;
   function checkDay(){const today=key(new Date());if(followToday&&cur!==today)go(today)}
 
