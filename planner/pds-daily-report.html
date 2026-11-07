@@ -197,6 +197,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .att .fc{position:relative;display:flex;align-items:center;gap:4px;max-width:180px;font-size:.76rem;border:1px solid var(--line);border-radius:6px;padding:6px 26px 6px 8px;color:var(--ink);text-decoration:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .att .rmv{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px;padding:0;cursor:pointer}
 .att .busy{font-size:.74rem;color:var(--muted)}
+.att label.add{display:inline-flex;align-items:center;position:relative;overflow:hidden}
+.att label.add.off{opacity:.55}
+.att .vh{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+.att .help{flex-basis:100%;font-size:.76rem;color:var(--ink);background:var(--empty);border-radius:6px;padding:8px 10px;margin:2px 0 0;line-height:1.5}
+.att .help button{font:inherit;font-size:.74rem;margin-left:6px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:5px;padding:2px 8px;cursor:pointer}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sheet);font-size:.9rem;font-weight:600;padding:10px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.25);z-index:50;max-width:calc(100% - 32px);text-align:center}
 .lg .empty{font-size:.7rem;color:var(--muted)}
 .rt.full h3{flex-wrap:wrap;white-space:nowrap}
@@ -455,7 +460,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   }
   // ---------- attachments ----------
   const ATT=[["seeGood","good"],["seeBad","bad"],["seeNext","next"],["mB","meal_b"],["mL","meal_l"],["mD","meal_d"],["mS","meal_s"]];
-  let assetsApi;const urlCache={};
+  let assetsApi,assetsState="loading";const urlCache={};const PAGE_URL="https://claude.ai/artifact/GW6UoVWo7x7mXGwVKSyKQc";
   const TEXT_T={csv:"text/csv",md:"text/markdown",json:"application/json",txt:"text/plain"};
   function buildAttach(){ATT.forEach(([id,key])=>{const ta=$(id);const host=ta.closest("label.meal")||ta;const d=el("div","att");d.id="att_"+key;host.insertAdjacentElement("afterend",d)})}
   async function shrink(file){
@@ -476,9 +481,19 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         if(cur!==k){const o=norm(docs[k]);(o.files[key]=o.files[key]||[]).push({id:res.id,name:f.name,type:res.contentType,size:res.sizeBytes});docs[k]=o;store&&store.save(k,JSON.parse(JSON.stringify(o)))}
         else{(state.files[key]=state.files[key]||[]).push({id:res.id,name:f.name,type:res.contentType,size:res.sizeBytes});changed()}
         ok++;busy.textContent="올리는 중… "+ok+"/"+files.length;
-      }catch(e){const c=e&&e.code;toast(c==="too_large"?"파일이 너무 커요 (20MB까지)":c==="unsupported_type"?"이 파일 형식은 올릴 수 없어요 · 사진·PDF·텍스트를 써주세요":c==="quota_exceeded"?"저장 공간이 가득 찼어요":"올리지 못했어요 · 다시 시도해 주세요")}
+      }catch(e){const c=e&&e.code;toast(c==="too_large"?"파일이 너무 커요 (20MB까지)":c==="unsupported_type"?"이 파일 형식은 올릴 수 없어요 · 사진·PDF·텍스트를 써주세요":c==="quota_exceeded"?"저장 공간이 가득 찼어요":c==="not_granted"?"첨부 권한이 없어요 · 페이지 권한 설정을 확인해 주세요":"올리지 못했어요 ("+(c||"알 수 없는 오류")+") · 다시 시도해 주세요")}
     }
     busy.remove();renderAttach();if(ok)toast("✓ "+(ok===1?"파일":"파일 "+ok+"개")+" 첨부했어요");
+  }
+  let pickerUsed=false;
+  function showHelp(key,msg,withLink){const box=$("att_"+key);if(!box)return;const old=box.querySelector(".help");if(old)old.remove();const h=el("p","help",msg);
+    if(withLink){const b=el("button",null,"주소 복사");b.type="button";b.onclick=()=>{try{navigator.clipboard.writeText(PAGE_URL).then(()=>toast("✓ 주소를 복사했어요 · 크롬에 붙여넣으세요"),()=>toast(PAGE_URL))}catch(e){toast(PAGE_URL)}};h.appendChild(b)}
+    box.appendChild(h)}
+  function watchPicker(key){
+    pickerUsed=false;let left=false;const mark=()=>{left=true};
+    document.addEventListener("visibilitychange",mark,{once:true});window.addEventListener("blur",mark,{once:true});
+    setTimeout(()=>{document.removeEventListener("visibilitychange",mark);window.removeEventListener("blur",mark);
+      if(!left&&!pickerUsed)showHelp(key,"사진 선택 창이 안 열렸나요? Claude 앱 안에서는 파일 선택이 막혀 있을 수 있어요. 휴대폰 크롬 브라우저에서 이 페이지를 열어 첨부해 주세요.",true)},2500);
   }
   function renderAttach(){
     ATT.forEach(([id,key])=>{const box=$("att_"+key);if(!box)return;box.innerHTML="";const arr=state.files[key]||[];
@@ -488,9 +503,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         if(assetsApi){const x=el("button","rmv","×");x.type="button";x.setAttribute("aria-label",(f.name||"첨부")+" 지우기");
           x.onclick=ev=>{ev.preventDefault();ev.stopPropagation();state.files[key].splice(i,1);changed();renderAttach();toast("첨부를 지웠어요");assetsApi.delete(f.id).catch(()=>{})};a.appendChild(x)}
         box.appendChild(a)});
-      if(assetsApi){const inp=el("input");inp.type="file";inp.multiple=true;inp.accept="image/*,application/pdf,.txt,.md,.csv,.json";inp.hidden=true;inp.id="fi_"+key;
-        inp.onchange=()=>{addFiles(key,inp.files);inp.value=""};
-        const b=el("button","add","📎 사진·파일");b.type="button";b.setAttribute("aria-label",key.startsWith("meal")?"식단 사진·파일 첨부":"회고에 사진·파일 첨부");b.onclick=()=>inp.click();box.append(b,inp)}
+      const lb=el("label","add"+(assetsState==="ok"?"":" off"));lb.appendChild(document.createTextNode(assetsState==="loading"?"📎 사진·파일 (준비 중…)":"📎 사진·파일"));
+      const inp=el("input","vh");inp.type="file";inp.multiple=true;inp.accept="image/*,application/pdf,.txt,.md,.csv,.json";inp.id="fi_"+key;inp.setAttribute("aria-label",key.startsWith("meal")?"식단 사진·파일 첨부":"회고에 사진·파일 첨부");
+      if(assetsState!=="ok"){lb.setAttribute("role","button");lb.tabIndex=0;lb.onclick=()=>showHelp(key,assetsState==="loading"?"첨부 기능을 준비하고 있어요. 몇 초 뒤에 다시 눌러주세요.":"이 화면에서는 첨부 기능이 열리지 않았어요(앱이 첨부를 지원하지 않거나 권한이 없음). 휴대폰 크롬 브라우저에서 이 페이지를 열면 첨부할 수 있어요.",assetsState!=="loading")}
+      else{inp.addEventListener("click",()=>watchPicker(key));inp.onchange=()=>{pickerUsed=true;const fs=[...inp.files];inp.value="";addFiles(key,fs)}}
+      if(assetsState==="ok")lb.appendChild(inp);box.appendChild(lb);
     });
   }
   function fillDay(){
@@ -785,11 +802,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   (async()=>{
     const timer=new Promise(r=>setTimeout(()=>r(null),10000));
     store=(await Promise.race([connect(),timer]))||local;
+    if(store===local){assetsState="none";renderAttach()}
     try{const all=await store.loadAll();docs=all.days||{};applySettings(all.settings);profile=all.profile||null}
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
     if(store.subscribe)store.subscribe(applyRemote);
-    (async()=>{try{assetsApi=window.claude&&claude.use?await claude.use("assets"):null}catch(e){assetsApi=null}if(view==="day")renderAttach()})();
+    (async()=>{try{assetsApi=window.claude&&claude.use?await claude.use("assets"):null}catch(e){assetsApi=null}assetsState=assetsApi?"ok":"none";if(view==="day")renderAttach()})();
     if(store.menu)store.menu(list=>{menus={};list.forEach(([id,d])=>{menus[id]=d});renderMenu()});
     if(store.coach)store.coach(list=>{coach={};list.forEach(([id,d])=>{coach[id]=d});renderCoach()});
     setStatus(store===local?"이 브라우저에만 저장돼요":(docs[cur]?"저장됨 ✓":"새 페이지"));
