@@ -384,10 +384,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},note:""}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""}});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.church=Object.assign({c:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -398,7 +398,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const hm=m=>Math.floor(m/60)+"h "+(m%60)+"m";
 
   let cur=key(new Date()), state=blank(), brush=1, calMonth=new Date(), view="day";
-  const DEF_CHURCH={days:[2,6],items:[{id:"wor",name:"예배 참석"},{id:"bib",name:"성경·찬송 챙기기"},{id:"memo",name:"말씀 메모"}]};
+  const DEF_CHURCH={days:[2,6],services:{"2":["19:30"],"6":["10:00","14:00","19:30"]},items:[{id:"bib",name:"성경·찬송 챙기기"},{id:"memo",name:"말씀 메모"}]};
+  const svcOf=dow=>{const sv=(settings.church&&settings.church.services)||DEF_CHURCH.services;return sv[String(dow)]||[]};
   let settings={cats:[...DEF_CATS],habits:DEF_HABITS.map(h=>({...h})),church:clone(DEF_CHURCH)};
   let store=null, docs={}, catEditing=false, habEditing=false;
 
@@ -431,7 +432,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const setStatus=t=>{$("status").textContent=t};
   let toastT=null;
   const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
-  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||!!o.church.note||o.plan.some(p=>p.hl));}
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||Object.values(o.church.s).some(Boolean)||!!o.church.note||o.plan.some(p=>p.hl));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -498,9 +499,13 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       const b=await new Promise(r=>c.toBlob(r,"image/jpeg",0.85));return b&&b.size<file.size?b:file}catch(e){return file}
   }
   const inlineCache={};
+  function loadImg(file){return new Promise(async(res,rej)=>{
+    try{if(window.createImageBitmap){const bm=await createImageBitmap(file);return res(bm)}}catch(e){}
+    const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>res(im);im.onerror=()=>rej({code:"image_unreadable"});im.src=u})}
   async function toDataUrl(file){
-    if(/^image\//.test(file.type)&&window.createImageBitmap){
-      const bm=await createImageBitmap(file);let side=1280,q=0.72,out="";
+    const isImg=/^image\//.test(file.type||"")||/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name||"");
+    if(isImg){
+      const bm=await loadImg(file);let side=1280,q=0.72,out="";
       for(let n=0;n<7;n++){const sc=Math.min(1,side/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
         out=c.toDataURL("image/jpeg",q);if(out.length<235000)return {data:out,type:"image/jpeg"};side=Math.round(side*0.78);q=Math.max(0.5,q-0.06)}
       if(out.length>=250000)throw {code:"too_large_inline"};return {data:out,type:"image/jpeg"};
@@ -510,18 +515,20 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     return {data,type:file.type||"application/octet-stream"};
   }
   async function addInline(key,files,k){
-    const box=$("att_"+key);const busy=el("span","busy","저장 중… 0/"+files.length);box.appendChild(busy);let ok=0;
+    const box=$("att_"+key);const busy=el("span","busy","사진 처리 중… ("+files.length+"개)");box.appendChild(busy);toast("사진 처리 중…");let ok=0;
     for(const f of files){try{const {data,type}=await toDataUrl(f);const fid="f"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-        await store.attSave(k,fid,{name:f.name,type,data,at:new Date().toISOString()});inlineCache[fid]=data;
+        busy.textContent="저장 중… "+(ok+1)+"/"+files.length;
+        await Promise.race([store.attSave(k,fid,{name:f.name,type,data,at:new Date().toISOString()}),new Promise((_,rej)=>setTimeout(()=>rej({code:"timeout"}),20000))]);inlineCache[fid]=data;
         const ent={id:fid,inline:true,name:f.name,type};
         if(cur!==k){const o=norm(docs[k]);(o.files[key]=o.files[key]||[]).push(ent);docs[k]=o;store.save(k,JSON.parse(JSON.stringify(o)))}else{(state.files[key]=state.files[key]||[]).push(ent);changed()}
         ok++;busy.textContent="저장 중… "+ok+"/"+files.length}
-      catch(e){const c=e&&e.code;toast(c==="too_large_inline"?"이 파일은 너무 커요 · 사진이 아닌 파일은 170KB까지예요":"저장하지 못했어요 ("+(c||"오류")+")")}}
+      catch(e){const c=(e&&(e.code||e.name))||"오류";showHelp(key,"사진을 저장하지 못했어요 ("+c+"). 이 사진을 채팅으로 보내주시면 제가 넣어드릴게요.",false);toast(c==="too_large_inline"?"이 파일은 너무 커요 · 사진이 아닌 파일은 170KB까지예요":"저장하지 못했어요 ("+c+")")}}
     busy.remove();renderAttach();if(ok)toast("✓ "+(ok===1?"사진":"사진 "+ok+"개")+" 저장했어요");
   }
   async function addFiles(key,list){
     const k=cur;const files=[...list].slice(0,6);if(!files.length)return;
-    if(!assetsApi){if(store&&store.attSave)return addInline(key,files,k);toast("이 화면에서는 첨부를 쓸 수 없어요");return}
+    if(store&&store.attSave)return addInline(key,files,k);
+    if(!assetsApi){toast("이 화면에서는 첨부를 쓸 수 없어요");return}
     const box=$("att_"+key);const busy=el("span","busy","올리는 중… 0/"+files.length);box.appendChild(busy);let ok=0;
     for(const f of files){
       try{const ext=(f.name.split(".").pop()||"").toLowerCase();const blob=await shrink(f);
@@ -560,7 +567,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       const lb=el("label","add"+(assetsState==="ok"?"":" off"));lb.appendChild(document.createTextNode(assetsState==="loading"?"📎 사진·파일 (준비 중…)":"📎 사진·파일"));
       const inp=el("input","vh");inp.type="file";inp.multiple=true;inp.accept="image/*,application/pdf,.txt,.md,.csv,.json";inp.id="fi_"+key;inp.setAttribute("aria-label",key.startsWith("meal")?"식단 사진·파일 첨부":"회고에 사진·파일 첨부");
       if(assetsState!=="ok"){lb.setAttribute("role","button");lb.tabIndex=0;lb.onclick=()=>showHelp(key,assetsState==="loading"?"첨부 기능을 준비하고 있어요. 몇 초 뒤에 다시 눌러주세요.":"이 화면에서는 첨부 기능이 열리지 않았어요(앱이 첨부를 지원하지 않거나 권한이 없음). 휴대폰 크롬 브라우저에서 이 페이지를 열면 첨부할 수 있어요.",assetsState!=="loading")}
-      else{inp.addEventListener("click",()=>watchPicker(key));inp.onchange=()=>{pickerUsed=true;const fs=[...inp.files];inp.value="";addFiles(key,fs)}}
+      else{inp.addEventListener("click",()=>watchPicker(key));inp.onchange=()=>{pickerUsed=true;const fs=[...(inp.files||[])];inp.value="";if(!fs.length){showHelp(key,"사진이 전달되지 않았어요. 앱이 사진을 넘겨주지 않는 것 같아요. 채팅으로 보내주시면 제가 넣어드릴게요.",true);return}addFiles(key,fs)}}
       if(assetsState==="ok")lb.appendChild(inp);box.appendChild(lb);
     });
   }
@@ -662,7 +669,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
-    const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"⛪ 교회 예배 (화·토)",on:o=>{const it=(settings.church||DEF_CHURCH).items[0];return !!(it&&o.church.c[it.id])}},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
+    const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"⛪ 교회 예배 (화·토)",on:o=>Object.values(o.church.s).some(Boolean)||!!o.church.c.wor},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
     rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
     LOGS.forEach(l=>{const tr=el("tr");const nm=el("td");const dt=el("span","dot");dt.style.background=dt.style.borderColor="var(--"+l.k+")";nm.append(dt,document.createTextNode(" "+l.name));tr.appendChild(nm);let s=0;
       days.forEach(k=>{const o=get(k),c=o?o.log[l.k].length:0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+l.unit));T.appendChild(tr)});
@@ -792,7 +799,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     });
     if(touched){const a=document.activeElement;const typing=a&&/INPUT|TEXTAREA/.test(a.tagName)&&!a.closest(".cal");if(!typing){buildPalette();render()}}
   }
-  function applySettings(s){if(!s)return;s=clone(s);if(s.church&&Array.isArray(s.church.items)&&Array.isArray(s.church.days))settings.church=s.church;settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
+  function applySettings(s){if(!s)return;s=clone(s);if(s.church&&Array.isArray(s.church.items)&&Array.isArray(s.church.days)){settings.church=s.church;if(!settings.church.services)settings.church.services=clone(DEF_CHURCH.services)}settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
   let followToday=true;
   function checkDay(){const today=key(new Date());if(followToday&&cur!==today)go(today)}
 
@@ -840,13 +847,17 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   let churchEditing=false;
   function renderChurch(){
     const box=$("church");const ch=settings.church||DEF_CHURCH;const dow=parse(cur).getDay();
-    if(!ch.days.includes(dow)&&!Object.values(state.church.c).some(Boolean)){box.hidden=true;return}
-    box.hidden=false;box.innerHTML="";const done=ch.items.length&&ch.items.every(it=>state.church.c[it.id]);box.classList.toggle("done",!!done);
+    const svcs=svcOf(dow);
+    if(!ch.days.includes(dow)&&!svcs.length&&!Object.values(state.church.c).some(Boolean)&&!Object.values(state.church.s).some(Boolean)){box.hidden=true;return}
+    box.hidden=false;box.innerHTML="";const done=svcs.length?svcs.every(t=>state.church.s[t]):(ch.items.length&&ch.items.every(it=>state.church.c[it.id]));box.classList.toggle("done",!!done);
     const h=el("h3");h.appendChild(el("span",null,"⛪ 하나님의 교회 가는 날 ("+DOW[dow]+")"));const eb=el("button","ghost",churchEditing?"완료":"항목 편집");eb.type="button";eb.onclick=()=>{churchEditing=!churchEditing;renderChurch()};h.appendChild(eb);box.appendChild(h);
     if(churchEditing){const list=el("div","editlist");ch.items.forEach((it,i)=>{const r=el("div","editrow");const inp=el("input");inp.type="text";inp.id="chi"+it.id;inp.value=it.name;inp.setAttribute("aria-label","교회 체크 항목");inp.oninput=()=>{it.name=inp.value;saveSettings()};
         const x=el("button","ghost","삭제");x.type="button";x.onclick=()=>{ch.items.splice(i,1);saveSettings();renderChurch()};r.append(inp,x);list.appendChild(r)});
       if(ch.items.length<6){const a=el("button","ghost","+ 항목 추가");a.type="button";a.onclick=()=>{ch.items.push({id:"c"+Date.now().toString(36),name:"새 항목"});saveSettings();renderChurch()};list.appendChild(a)}
       box.appendChild(list);return}
+    if(svcs.length){const sv=el("div","items");svcs.forEach(t=>{const on=!!state.church.s[t];const b=el("button","habit");b.type="button";b.setAttribute("aria-pressed",String(on));
+        const hh=+t.split(":")[0];const lab=(hh<12?"오전 ":"오후 ")+((hh%12)||12)+(t.endsWith(":00")?"시":"시 "+t.split(":")[1]+"분")+" 예배";
+        b.append(el("span","box",on?"✓":""),el("span",null,lab));b.onclick=()=>{state.church.s[t]=!state.church.s[t];changed();renderChurch();if(state.church.s[t])toast("✓ "+lab+" 참석")};sv.appendChild(b)});box.appendChild(sv)}
     const items=el("div","items");ch.items.forEach(it=>{const on=!!state.church.c[it.id];const b=el("button","habit");b.type="button";b.setAttribute("aria-pressed",String(on));b.append(el("span","box",on?"✓":""),el("span",null,it.name));
       b.onclick=()=>{state.church.c[it.id]=!state.church.c[it.id];changed();renderChurch();if(state.church.c[it.id])toast("✓ "+it.name)};items.appendChild(b)});box.appendChild(items);
     const n=el("textarea","note");n.id="churchNote";n.placeholder="오늘 말씀·느낀 점 한 줄";n.value=state.church.note||"";n.setAttribute("aria-label","교회 메모");n.oninput=()=>{state.church.note=n.value;changed(true)};box.appendChild(n);
@@ -887,7 +898,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   (async()=>{
     const timer=new Promise(r=>setTimeout(()=>r(null),10000));
     store=(await Promise.race([connect(),timer]))||local;
-    if(store===local){assetsState="none";renderAttach()}
+    if(store===local){assetsState="none";renderAttach()}else if(store.attSave){assetsState="ok";renderAttach()}
     try{const all=await store.loadAll();docs=all.days||{};applySettings(all.settings);profile=all.profile||null}
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
