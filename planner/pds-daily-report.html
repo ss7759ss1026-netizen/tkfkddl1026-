@@ -3,7 +3,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=IBM+Plex+Sans+KR:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
 <style>
 /* Layout: a planner spread — habit strip on top; daily view = PLAN | hour rail | DO 10-min grid + SEE/summary; weekly view = 7-day highlighter heatmap + totals */
+/* highlighter + church additions use --hly/--hlp tokens */
 :root{
+  --hly:rgba(214,255,0,.55); --hlp:rgba(255,64,170,.42); --hlyS:#d6ff00; --hlpS:#ff40aa;
   --paper:#f6f3ee; --sheet:#fffdf9; --ink:#2f2b28; --muted:#8b847c; --line:#e4ded5; --rail:#c9c4bd; --railInk:#4a4540; --empty:#efeae3;
   --accent:#d96c3f; --ok:#4f8a5b;
   --c1:#1e88ff; --c2:#ff2e88; --c3:#ff3b30; --c4:#00c853; --c5:#00bcd4; --c6:#9b51e0; --c7:#3d4bb8;
@@ -16,12 +18,12 @@
   --paper:#1c1a18; --sheet:#262320; --ink:#ece6de; --muted:#9a938a; --line:#3a3632; --rail:#4a4540; --railInk:#e8e2da; --empty:#2f2b28;
   --accent:#f0895c; --ok:#7cc08a;
   --c1:#2f8fff; --c2:#ff3d93; --c3:#ff4d42; --c4:#14d160; --c5:#14c6dc; --c6:#a865ec; --c7:#5865d6;
-  --pee:#ff8a1f; --poo:#e0ae0a; --coffee:#a86c3f; color-scheme:dark}}
+  --pee:#ff8a1f; --poo:#e0ae0a; --coffee:#a86c3f; --hly:rgba(214,255,0,.5); --hlp:rgba(255,64,170,.6); color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#1c1a18; --sheet:#262320; --ink:#ece6de; --muted:#9a938a; --line:#3a3632; --rail:#4a4540; --railInk:#e8e2da; --empty:#2f2b28;
   --accent:#f0895c; --ok:#7cc08a;
   --c1:#2f8fff; --c2:#ff3d93; --c3:#ff4d42; --c4:#14d160; --c5:#14c6dc; --c6:#a865ec; --c7:#5865d6;
-  --pee:#ff8a1f; --poo:#e0ae0a; --coffee:#a86c3f; color-scheme:dark}
+  --pee:#ff8a1f; --poo:#e0ae0a; --coffee:#a86c3f; --hly:rgba(214,255,0,.5); --hlp:rgba(255,64,170,.6); color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5}
 .wrap{max-width:1120px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
@@ -60,7 +62,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .chip i{width:14px;height:14px;border-radius:3px;display:block}
 .chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .chip.erase i{background:repeating-linear-gradient(45deg,var(--line) 0 3px,transparent 3px 6px);border:1px solid var(--rail)}
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 44px repeat(6,minmax(18px,26px));border-top:1px solid var(--line);user-select:none;-webkit-user-select:none}
+.grid{display:grid;grid-template-columns:minmax(96px,1fr) 44px repeat(6,minmax(14px,26px));border-top:1px solid var(--line);user-select:none;-webkit-user-select:none}
 .ghead{font-family:var(--f-mono);font-size:.66rem;color:var(--muted);text-align:center;padding:4px 0;border-bottom:1px solid var(--line)}
 .ghead.plan{text-align:left;padding-left:30px}
 .prow{display:flex;align-items:center;gap:6px;border-bottom:1px dashed var(--line);min-width:0;padding-right:6px;height:30px}
@@ -70,7 +72,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .prow.done input[type=text]{text-decoration:line-through;color:var(--muted)}
 .hour{background:var(--rail);color:var(--railInk);font-family:var(--f-mono);font-size:.78rem;font-weight:700;display:flex;align-items:center;gap:2px;padding-left:5px;border-bottom:1px solid var(--sheet);height:30px}
 .hour sub{font-weight:400;font-size:.56rem;opacity:.8;bottom:0}
-.cell{border-right:1px dotted var(--line);border-bottom:1px dashed var(--line);cursor:pointer;height:30px;touch-action:manipulation}
+.cell{border-right:1px dotted var(--line);border-bottom:1px dashed var(--line);cursor:pointer;height:30px;touch-action:none}
 .c1{background:var(--c1)}.c2{background:var(--c2)}.c3{background:var(--c3)}.c4{background:var(--c4)}.c5{background:var(--c5)}.c6{background:var(--c6)}.c7{background:var(--c7)}
 .side{display:flex;flex-direction:column;gap:16px;min-width:0}
 .see label{display:block;font-weight:600;font-size:.86rem;margin:10px 0 4px}
@@ -188,6 +190,26 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.paintmode .cell{cursor:crosshair}
+.light{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.light[hidden],.toast[hidden],.church[hidden]{display:none!important}
+.light img{max-width:100%;max-height:100%;border-radius:6px}
+.light button{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(12px + env(safe-area-inset-right,0px));width:40px;height:40px;border-radius:50%;border:0;background:#fff;color:#000;font-size:20px;cursor:pointer}
+.hlbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px}
+.hlbar .lbl{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.12em;color:var(--muted);margin-right:2px}
+.hlbtn{font:inherit;font-size:.82rem;font-weight:600;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:5px 12px 5px 8px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hlbtn i{width:22px;height:12px;border-radius:3px;display:block;transform:skewX(-12deg)}
+.hlbtn[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.hlhint{flex-basis:100%;font-size:.74rem;color:var(--muted);margin:0}
+.prow.hl-y input[type=text]{background:linear-gradient(transparent 18%,var(--hly) 18%,var(--hly) 88%,transparent 88%)}
+.prow.hl-p input[type=text]{background:linear-gradient(transparent 18%,var(--hlp) 18%,var(--hlp) 88%,transparent 88%)}
+.grid.hlmode .prow{touch-action:none;cursor:crosshair}
+.grid.hlmode .prow input{pointer-events:none}
+.church{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+.church.done{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.church h3{margin:0;font-size:.92rem;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.church .items{display:flex;flex-wrap:wrap;gap:6px}
+.church .note{width:100%;font:inherit;font-size:.86rem;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:6px 8px;min-height:38px;resize:vertical}
 .att{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
 .meals .att{margin:-2px 0 4px 52px}
 .att .add{font:inherit;font-size:.78rem;border:1px dashed var(--rail);background:transparent;color:var(--muted);border-radius:6px;padding:5px 10px;cursor:pointer;min-height:34px}
@@ -233,6 +255,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 </style>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="light" id="light" hidden><img id="lightImg" alt="첨부 사진 크게 보기"><button type="button" id="lightX" aria-label="닫기">×</button></div>
 <div class="wrap">
   <header>
     <h1><small>PLAN · DO · SEE</small><span id="title">오늘의 데일리 리포트</span></h1>
@@ -259,6 +282,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   <div id="dayView" class="spread">
     <section class="page" aria-labelledby="pdLabel">
       <div class="pagehead"><span class="label" id="pdLabel">PLAN / DO</span><button class="ghost" id="catEdit">색 이름 바꾸기</button></div>
+      <div class="church" id="church" hidden></div>
       <div class="routine" aria-label="데일리 루틴">
         <div class="rt" id="rtPt"><h3>피티 <span class="num" id="ptNum">0 / 100</span></h3><div class="bar"><i id="ptBar" style="background:var(--c4);width:0"></i></div><div class="rtbtns"><button type="button" data-pt="-5">−5</button><button type="button" data-pt="5">+5</button><button type="button" data-pt="10">+10</button><button type="button" data-pt="25">+25</button><button type="button" data-pt="100">100 완료</button></div></div>
         <div class="rt" id="rtWater"><h3>물 2L <span class="num" id="waterNum">0 / 2L</span></h3><div class="cups" id="cups"></div></div>
@@ -268,9 +292,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         <div class="rt" id="rtSl"><h3>수면 <span class="num" id="slNum">—</span></h3><div class="sleep"><label for="slBed">어젯밤 잔 시간<input type="time" id="slBed"></label><label for="slWake">일어난 시간<input type="time" id="slWake"></label></div><p class="sub" id="slSub">목표 7시간 이상 · 시간을 안 적으면 DO에 칠한 수면 색으로 계산해요</p></div>
         <div class="rt full"><h3>몸 기록 <label class="when" for="logAt">기록 시각 <input type="time" id="logAt"> <span>비우면 지금</span></label></h3><div class="logs" id="logs"></div></div>
       </div>
+      <div class="hlbar" id="hlbar" role="toolbar" aria-label="PLAN 형광펜"></div>
       <div class="palette" id="palette" role="toolbar" aria-label="형광펜 색 선택"></div>
       <div class="grid" id="grid"></div>
-      <p class="hint">PLAN에 시간대별 계획을 적고, 끝내면 체크하세요. DO 칸은 형광펜을 고른 뒤 실제로 한 만큼 누르거나 드래그해서 칠해요. 한 칸이 10분이고, 같은 색을 다시 누르면 지워져요.</p>
+      <p class="hint">PLAN에 시간대별 계획을 적고, 끝내면 체크하세요. DO 칸은 색을 고른 뒤 손가락으로 쭉 드래그해서 칠해요. 한 칸이 10분이고, 칠한 칸에서 같은 색으로 시작하면 지워져요. 화면을 내릴 때는 PLAN이나 시간 칸을 밀어주세요.</p>
     </section>
 
     <div class="side">
@@ -359,10 +384,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},note:""}});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.church=Object.assign({c:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -373,7 +398,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const hm=m=>Math.floor(m/60)+"h "+(m%60)+"m";
 
   let cur=key(new Date()), state=blank(), brush=1, calMonth=new Date(), view="day";
-  let settings={cats:[...DEF_CATS],habits:DEF_HABITS.map(h=>({...h}))};
+  const DEF_CHURCH={days:[2,6],items:[{id:"wor",name:"예배 참석"},{id:"bib",name:"성경·찬송 챙기기"},{id:"memo",name:"말씀 메모"}]};
+  let settings={cats:[...DEF_CATS],habits:DEF_HABITS.map(h=>({...h})),church:clone(DEF_CHURCH)};
   let store=null, docs={}, catEditing=false, habEditing=false;
 
   // ---------- storage ----------
@@ -395,6 +421,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         del(k){return col.doc(k).delete()},
         subscribe(fn){col.onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})},
         menu(fn){db.collection("menu").onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})},
+        attSave(day,fid,o){return db.doc("data/users/"+uid+"/files").collection(day).doc(fid).set(o)},
+        async attGet(day,fid){const sn=await db.doc("data/users/"+uid+"/files").collection(day).doc(fid).get();return sn.exists?sn.data():null},
+        attDel(day,fid){return db.doc("data/users/"+uid+"/files").collection(day).doc(fid).delete()},
         coach(fn){db.collection("coach").onSnapshot(q=>fn(q.docs.filter(d=>d.exists).map(d=>[d.id,d.data()])),()=>{})}
       };
     }catch(e){return null}
@@ -402,7 +431,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const setStatus=t=>{$("status").textContent=t};
   let toastT=null;
   const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
-  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length));}
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||!!o.church.note||o.plan.some(p=>p.hl));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -446,7 +475,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const hp=el("div","ghead plan","PLAN");g.appendChild(hp);g.appendChild(el("div","ghead",""));
     for(let m=0;m<6;m++)g.appendChild(el("div","ghead",m?m+"0":"00"));
     HOURS.forEach((hr,i)=>{
-      const row=el("div","prow");
+      const row=el("div","prow");row.dataset.i=i;
       const cb=el("input");cb.type="checkbox";cb.id="pc"+i;cb.setAttribute("aria-label",hr+"시 계획 완료");
       const tx=el("input");tx.type="text";tx.id="pt"+i;tx.setAttribute("aria-label",hr+"시 계획");
       cb.onchange=()=>{state.plan[i].d=cb.checked;row.classList.toggle("done",cb.checked);changed()};
@@ -468,9 +497,31 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     try{const bm=await createImageBitmap(file);const sc=Math.min(1,1600/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
       const b=await new Promise(r=>c.toBlob(r,"image/jpeg",0.85));return b&&b.size<file.size?b:file}catch(e){return file}
   }
+  const inlineCache={};
+  async function toDataUrl(file){
+    if(/^image\//.test(file.type)&&window.createImageBitmap){
+      const bm=await createImageBitmap(file);let side=1280,q=0.72,out="";
+      for(let n=0;n<7;n++){const sc=Math.min(1,side/Math.max(bm.width,bm.height));const c=document.createElement("canvas");c.width=Math.round(bm.width*sc);c.height=Math.round(bm.height*sc);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);
+        out=c.toDataURL("image/jpeg",q);if(out.length<235000)return {data:out,type:"image/jpeg"};side=Math.round(side*0.78);q=Math.max(0.5,q-0.06)}
+      if(out.length>=250000)throw {code:"too_large_inline"};return {data:out,type:"image/jpeg"};
+    }
+    if(file.size>170000)throw {code:"too_large_inline"};
+    const data=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>res(fr.result);fr.onerror=()=>rej({code:"read_failed"});fr.readAsDataURL(file)});
+    return {data,type:file.type||"application/octet-stream"};
+  }
+  async function addInline(key,files,k){
+    const box=$("att_"+key);const busy=el("span","busy","저장 중… 0/"+files.length);box.appendChild(busy);let ok=0;
+    for(const f of files){try{const {data,type}=await toDataUrl(f);const fid="f"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+        await store.attSave(k,fid,{name:f.name,type,data,at:new Date().toISOString()});inlineCache[fid]=data;
+        const ent={id:fid,inline:true,name:f.name,type};
+        if(cur!==k){const o=norm(docs[k]);(o.files[key]=o.files[key]||[]).push(ent);docs[k]=o;store.save(k,JSON.parse(JSON.stringify(o)))}else{(state.files[key]=state.files[key]||[]).push(ent);changed()}
+        ok++;busy.textContent="저장 중… "+ok+"/"+files.length}
+      catch(e){const c=e&&e.code;toast(c==="too_large_inline"?"이 파일은 너무 커요 · 사진이 아닌 파일은 170KB까지예요":"저장하지 못했어요 ("+(c||"오류")+")")}}
+    busy.remove();renderAttach();if(ok)toast("✓ "+(ok===1?"사진":"사진 "+ok+"개")+" 저장했어요");
+  }
   async function addFiles(key,list){
     const k=cur;const files=[...list].slice(0,6);if(!files.length)return;
-    if(!assetsApi){toast("이 화면에서는 첨부를 쓸 수 없어요");return}
+    if(!assetsApi){if(store&&store.attSave)return addInline(key,files,k);toast("이 화면에서는 첨부를 쓸 수 없어요");return}
     const box=$("att_"+key);const busy=el("span","busy","올리는 중… 0/"+files.length);box.appendChild(busy);let ok=0;
     for(const f of files){
       try{const ext=(f.name.split(".").pop()||"").toLowerCase();const blob=await shrink(f);
@@ -497,11 +548,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   }
   function renderAttach(){
     ATT.forEach(([id,key])=>{const box=$("att_"+key);if(!box)return;box.innerHTML="";const arr=state.files[key]||[];
-      arr.forEach((f,i)=>{const url=urlCache[f.id]||("/_blob/"+f.id);const img=/^image\//.test(f.type||"");
+      arr.forEach((f,i)=>{let url=f.inline?(inlineCache[f.id]||""):(urlCache[f.id]||("/_blob/"+f.id));const img=/^image\//.test(f.type||"");
+        if(f.inline&&!url&&store&&store.attGet){const k=cur;store.attGet(k,f.id).then(d=>{if(d&&d.data){inlineCache[f.id]=d.data;if(cur===k)renderAttach()}}).catch(()=>{})}
         const a=el("a",img?"th":"fc");a.href=url;a.target="_blank";a.rel="noopener";a.title=f.name||"";
         if(img){const im=el("img");im.src=url;im.alt=f.name||"첨부 사진";im.loading="lazy";a.appendChild(im)}else a.textContent="📄 "+(f.name||"파일");
-        if(assetsApi){const x=el("button","rmv","×");x.type="button";x.setAttribute("aria-label",(f.name||"첨부")+" 지우기");
-          x.onclick=ev=>{ev.preventDefault();ev.stopPropagation();state.files[key].splice(i,1);changed();renderAttach();toast("첨부를 지웠어요");assetsApi.delete(f.id).catch(()=>{})};a.appendChild(x)}
+        if(img)a.onclick=ev=>{ev.preventDefault();if(!url)return;$("lightImg").src=url;$("light").hidden=false};
+        if(f.inline&&!img){a.removeAttribute("href");a.removeAttribute("target")}
+        if(assetsApi||f.inline){const x=el("button","rmv","×");x.type="button";x.setAttribute("aria-label",(f.name||"첨부")+" 지우기");
+          x.onclick=ev=>{ev.preventDefault();ev.stopPropagation();state.files[key].splice(i,1);changed();renderAttach();toast("첨부를 지웠어요");if(f.inline){store&&store.attDel&&store.attDel(cur,f.id).catch(()=>{})}else assetsApi&&assetsApi.delete(f.id).catch(()=>{})};a.appendChild(x)}
         box.appendChild(a)});
       const lb=el("label","add"+(assetsState==="ok"?"":" off"));lb.appendChild(document.createTextNode(assetsState==="loading"?"📎 사진·파일 (준비 중…)":"📎 사진·파일"));
       const inp=el("input","vh");inp.type="file";inp.multiple=true;inp.accept="image/*,application/pdf,.txt,.md,.csv,.json";inp.id="fi_"+key;inp.setAttribute("aria-label",key.startsWith("meal")?"식단 사진·파일 첨부":"회고에 사진·파일 첨부");
@@ -511,10 +565,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     });
   }
   function fillDay(){
-    state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
+    state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).parentNode.classList.toggle("hl-y",p.hl==="y");$("pt"+i).parentNode.classList.toggle("hl-p",p.hl==="p");$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();
+    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();renderChurch();
     markScore();summary();renderCal();renderRoutine();
   }
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
@@ -608,7 +662,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
-    const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
+    const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"⛪ 교회 예배 (화·토)",on:o=>{const it=(settings.church||DEF_CHURCH).items[0];return !!(it&&o.church.c[it.id])}},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
     rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
     LOGS.forEach(l=>{const tr=el("tr");const nm=el("td");const dt=el("span","dot");dt.style.background=dt.style.borderColor="var(--"+l.k+")";nm.append(dt,document.createTextNode(" "+l.name));tr.appendChild(nm);let s=0;
       days.forEach(k=>{const o=get(k),c=o?o.log[l.k].length:0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+l.unit));T.appendChild(tr)});
@@ -738,7 +792,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     });
     if(touched){const a=document.activeElement;const typing=a&&/INPUT|TEXTAREA/.test(a.tagName)&&!a.closest(".cal");if(!typing){buildPalette();render()}}
   }
-  function applySettings(s){if(!s)return;s=clone(s);settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
+  function applySettings(s){if(!s)return;s=clone(s);if(s.church&&Array.isArray(s.church.items)&&Array.isArray(s.church.days))settings.church=s.church;settings.cats=Array.isArray(s.cats)&&s.cats.length>=5?s.cats.concat(DEF_CATS.slice(s.cats.length)).slice(0,DEF_CATS.length):settings.cats;if(Array.isArray(s.habits))settings.habits=s.habits}
   let followToday=true;
   function checkDay(){const today=key(new Date());if(followToday&&cur!==today)go(today)}
 
@@ -758,14 +812,44 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   function setView(v){view=v;$("dayView").hidden=v!=="day";$("weekView").hidden=v!=="week";$("tDay").setAttribute("aria-pressed",String(v==="day"));$("tWeek").setAttribute("aria-pressed",String(v==="week"));go(cur)}
 
   // ---------- painting ----------
-  let painting=false,paintVal="0";
+  let painting=false,paintVal="0",hlPen="",hling=false,hlVal="";
   function startPaint(c){const i=+c.dataset.s;const v=String(brush);paintVal=(state.slots[i]===v)?"0":v;setSlot(i,paintVal)}
+  function setHl(i,v){state.plan[i].hl=v;const row=$("pt"+i).parentNode;row.classList.toggle("hl-y",v==="y");row.classList.toggle("hl-p",v==="p")}
+  function renderHlBar(){
+    const b=$("hlbar");b.innerHTML="";b.appendChild(el("span","lbl","PLAN 형광펜"));
+    [["y","형광","var(--hlyS)"],["p","핑크","var(--hlpS)"],["x","지우개",""]].forEach(([k,n,c])=>{const bt=el("button","hlbtn");bt.type="button";bt.setAttribute("aria-pressed",String(hlPen===k));
+      const sw=el("i");if(c)sw.style.background=c;else sw.style.background="repeating-linear-gradient(45deg,var(--line) 0 3px,transparent 3px 6px)";bt.append(sw,document.createTextNode(n));
+      bt.onclick=()=>{hlPen=hlPen===k?"":k;$("grid").classList.toggle("hlmode",!!hlPen);renderHlBar();if(hlPen)toast(n==="지우개"?"PLAN 줄을 문질러 형광펜을 지워요":n+" 형광펜 · PLAN 줄을 손가락으로 쭉 그어요")};b.appendChild(bt)});
+    if(hlPen)b.appendChild(el("p","hlhint","형광펜을 쓰는 동안에는 PLAN 글을 고칠 수 없어요. 다 쓰면 같은 버튼을 한 번 더 눌러 끄세요."));
+  }
   function bindPaint(){
     const g=$("grid");
-    g.addEventListener("pointerdown",e=>{const c=e.target.closest(".cell");if(!c)return;e.preventDefault();startPaint(c);if(e.pointerType==="mouse"||e.pointerType==="pen")painting=true;else changed()});
-    window.addEventListener("pointermove",e=>{if(!painting)return;const c=document.elementFromPoint(e.clientX,e.clientY);if(c&&c.classList.contains("cell")){const i=+c.dataset.s;if(state.slots[i]!==paintVal)setSlot(i,paintVal)}});
-    window.addEventListener("pointerup",()=>{if(painting){painting=false;changed()}});
+    g.addEventListener("pointerdown",e=>{
+      if(hlPen){const row=e.target.closest(".prow");if(row){e.preventDefault();const i=+row.dataset.i;const want=hlPen==="x"?"":hlPen;hlVal=(hlPen!=="x"&&state.plan[i].hl===want)?"":want;setHl(i,hlVal);hling=true;try{g.setPointerCapture(e.pointerId)}catch(_){}return}}
+      const c=e.target.closest(".cell");if(!c)return;e.preventDefault();startPaint(c);painting=true;try{g.setPointerCapture(e.pointerId)}catch(_){}});
+    g.addEventListener("pointermove",e=>{
+      if(!painting&&!hling)return;const t=document.elementFromPoint(e.clientX,e.clientY);if(!t)return;
+      if(hling){const row=t.closest&&t.closest(".prow");if(row){const i=+row.dataset.i;if((state.plan[i].hl||"")!==hlVal)setHl(i,hlVal)}return}
+      if(t.classList.contains("cell")){const i=+t.dataset.s;if(state.slots[i]!==paintVal)setSlot(i,paintVal)}});
+    const end=()=>{if(painting||hling){painting=false;hling=false;changed()}};
+    g.addEventListener("pointerup",end);g.addEventListener("pointercancel",end);window.addEventListener("pointerup",end);
     g.addEventListener("keydown",e=>{const c=e.target.closest(".cell");if(c&&(e.key==="Enter"||e.key===" ")){e.preventDefault();startPaint(c);changed()}});
+  }
+
+  // ---------- church ----------
+  let churchEditing=false;
+  function renderChurch(){
+    const box=$("church");const ch=settings.church||DEF_CHURCH;const dow=parse(cur).getDay();
+    if(!ch.days.includes(dow)&&!Object.values(state.church.c).some(Boolean)){box.hidden=true;return}
+    box.hidden=false;box.innerHTML="";const done=ch.items.length&&ch.items.every(it=>state.church.c[it.id]);box.classList.toggle("done",!!done);
+    const h=el("h3");h.appendChild(el("span",null,"⛪ 하나님의 교회 가는 날 ("+DOW[dow]+")"));const eb=el("button","ghost",churchEditing?"완료":"항목 편집");eb.type="button";eb.onclick=()=>{churchEditing=!churchEditing;renderChurch()};h.appendChild(eb);box.appendChild(h);
+    if(churchEditing){const list=el("div","editlist");ch.items.forEach((it,i)=>{const r=el("div","editrow");const inp=el("input");inp.type="text";inp.id="chi"+it.id;inp.value=it.name;inp.setAttribute("aria-label","교회 체크 항목");inp.oninput=()=>{it.name=inp.value;saveSettings()};
+        const x=el("button","ghost","삭제");x.type="button";x.onclick=()=>{ch.items.splice(i,1);saveSettings();renderChurch()};r.append(inp,x);list.appendChild(r)});
+      if(ch.items.length<6){const a=el("button","ghost","+ 항목 추가");a.type="button";a.onclick=()=>{ch.items.push({id:"c"+Date.now().toString(36),name:"새 항목"});saveSettings();renderChurch()};list.appendChild(a)}
+      box.appendChild(list);return}
+    const items=el("div","items");ch.items.forEach(it=>{const on=!!state.church.c[it.id];const b=el("button","habit");b.type="button";b.setAttribute("aria-pressed",String(on));b.append(el("span","box",on?"✓":""),el("span",null,it.name));
+      b.onclick=()=>{state.church.c[it.id]=!state.church.c[it.id];changed();renderChurch();if(state.church.c[it.id])toast("✓ "+it.name)};items.appendChild(b)});box.appendChild(items);
+    const n=el("textarea","note");n.id="churchNote";n.placeholder="오늘 말씀·느낀 점 한 줄";n.value=state.church.note||"";n.setAttribute("aria-label","교회 메모");n.oninput=()=>{state.church.note=n.value;changed(true)};box.appendChild(n);
   }
 
   // ---------- wiring ----------
@@ -794,11 +878,12 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       try{navigator.clipboard.writeText(txt).then(()=>setStatus("주간 요약을 복사했어요"),show)}catch(e){show()}};
     MEALS.forEach(([id,f])=>{$(id).oninput=e=>{state.meals[f]=e.target.value;changed(true);if(state.nutrition)renderNut()}});
     $("nutBtn").onclick=calcNutrition;
+    $("light").onclick=e=>{if(e.target.id!=="lightImg")$("light").hidden=true};
     document.addEventListener("visibilitychange",()=>{if(document.hidden){if(t)flush()}else checkDay()});
     window.addEventListener("focus",checkDay);setInterval(checkDay,60000);
   }
 
-  buildAttach();buildPalette();buildGrid();bindPaint();wire();render();
+  buildAttach();buildPalette();buildGrid();renderHlBar();bindPaint();wire();render();
   (async()=>{
     const timer=new Promise(r=>setTimeout(()=>r(null),10000));
     store=(await Promise.race([connect(),timer]))||local;
@@ -807,7 +892,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     catch(e){setStatus("불러오기 실패");return}
     buildPalette();await go(key(new Date()));
     if(store.subscribe)store.subscribe(applyRemote);
-    (async()=>{try{assetsApi=window.claude&&claude.use?await claude.use("assets"):null}catch(e){assetsApi=null}assetsState=assetsApi?"ok":"none";if(view==="day")renderAttach()})();
+    (async()=>{try{assetsApi=window.claude&&claude.use?await claude.use("assets"):null}catch(e){assetsApi=null}assetsState=(assetsApi||store.attSave)?"ok":"none";if(view==="day")renderAttach()})();
     if(store.menu)store.menu(list=>{menus={};list.forEach(([id,d])=>{menus[id]=d});renderMenu()});
     if(store.coach)store.coach(list=>{coach={};list.forEach(([id,d])=>{coach[id]=d});renderCoach()});
     setStatus(store===local?"이 브라우저에만 저장돼요":(docs[cur]?"저장됨 ✓":"새 페이지"));
