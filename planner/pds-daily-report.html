@@ -190,6 +190,24 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .nitems{font-size:.78rem;color:var(--muted);margin:8px 0 0;padding-left:1em;display:flex;flex-direction:column;gap:2px}
 .ncomment{font-size:.86rem;margin:10px 0 0;padding:8px 10px;border-radius:6px;background:var(--empty)}
 .coach{border-color:var(--accent)}
+.words .wsum{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:10px}
+.words .today{font-size:.84rem;background:var(--empty);border-radius:6px;padding:8px 10px;margin:0 0 10px}
+.words .today b{color:var(--accent)}
+.wlist{display:flex;flex-direction:column;gap:6px}
+.witem{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.witem.on{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.witem.pick{border-style:dashed;border-color:var(--accent)}
+.witem .wt{font-size:.72rem;color:var(--muted);font-family:var(--f-mono);letter-spacing:.06em}
+.witem .wq{font-size:.9rem;font-weight:600;overflow-wrap:anywhere}
+.witem .wc{display:flex;align-items:center;gap:4px}
+.witem .wc b{font-family:var(--f-mono);min-width:2ch;text-align:center;font-variant-numeric:tabular-nums}
+.witem button,.wbad button{font:inherit;font-size:.82rem;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;min-width:36px;height:34px;cursor:pointer}
+.witem button.plus{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:700}
+.wbad{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);border-left:4px solid var(--c3);border-radius:8px;padding:8px 10px;margin-top:10px}
+.wbad .nm{font-weight:600;flex:1;min-width:8em}
+.wbad .ct{font-family:var(--f-mono);font-weight:700;font-size:1.3rem;color:var(--c3)}
+.wbad button.plus{background:var(--c3);border-color:var(--c3);color:#fff;font-weight:700}
+.wbad .times{flex-basis:100%;font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
 .paintmode .cell{cursor:crosshair}
 .light{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .light[hidden],.toast[hidden],.church[hidden]{display:none!important}
@@ -314,6 +332,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
         <div class="nutbar"><button type="button" class="go" id="nutBtn">영양 계산하기</button><span class="status" id="nutStatus">52세 한국 남성 권장량 기준</span></div>
         <div id="nut"></div>
       </section>
+      <section class="page words" aria-labelledby="wordsLabel">
+        <div class="pagehead"><span class="label" id="wordsLabel">WORDS · 어머니 사랑의 언어</span><span class="status" id="wordsRate"></span></div>
+        <div id="wordsBody"></div>
+      </section>
       <section class="page see" aria-labelledby="seeLabel">
         <div class="pagehead"><span class="label" id="seeLabel">SEE</span><span class="status" id="planRate"></span></div>
         <label for="seeGood">잘한 점 <span>오늘 나를 칭찬한다면</span></label>
@@ -384,10 +406,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},bad:[]}});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.words=Object.assign({good:{},bad:[]},b.words||{});if(!b.words.good||typeof b.words.good!=="object")b.words.good={};if(!Array.isArray(b.words.bad))b.words.bad=[];b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -432,7 +454,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const setStatus=t=>{$("status").textContent=t};
   let toastT=null;
   const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
-  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||Object.values(o.church.s).some(Boolean)||!!o.church.note||o.plan.some(p=>p.hl));}
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||Object.values(o.church.s).some(Boolean)||!!o.church.note||o.words.bad.length>0||Object.values(o.words.good).some(Boolean)||o.plan.some(p=>p.hl));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -575,7 +597,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).parentNode.classList.toggle("hl-y",p.hl==="y");$("pt"+i).parentNode.classList.toggle("hl-p",p.hl==="p");$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();renderChurch();
+    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();renderChurch();renderWords();
     markScore();summary();renderCal();renderRoutine();
   }
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
@@ -671,6 +693,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     const T=$("wHab");T.innerHTML="";const hr=el("tr");hr.appendChild(el("th",null,"습관"));days.forEach(k=>hr.appendChild(el("th",null,DOW[parse(k).getDay()])));hr.appendChild(el("th",null,"합계"));T.appendChild(hr);
     const rows=[{name:"피티 100개",on:o=>rtDone(o).pt},{name:"물 2L",on:o=>rtDone(o).water},{name:"비타민",on:o=>rtDone(o).vit},{name:"스트레칭 10분+",on:o=>rtDone(o).stretch},{name:"⛪ 교회 예배 (화·토)",on:o=>Object.values(o.church.s).some(Boolean)||!!o.church.c.wor},{name:"걷기 30분+ (주 4회)",on:o=>rtDone(o).walk},{name:"수면 7시간+",on:o=>rtDone(o).sleep}].concat(settings.habits.map(h=>({name:h.name,on:o=>!!o.habits[h.id]})));
     rows.forEach(h=>{const tr=el("tr");tr.appendChild(el("td",null,h.name));let n=0;days.forEach(k=>{const o=get(k),on=!!(o&&h.on(o));if(on)n++;const td=el("td");td.appendChild(el("span","dot"+(on?" on":"")));td.setAttribute("aria-label",on?"완료":"미완료");tr.appendChild(td)});tr.appendChild(el("td","num",n+"/7"));T.appendChild(tr)});
+    [["💬 좋은 말",o=>goodTotal(o),"번"],["🗯️ 나쁜 말",o=>o.words.bad.length,"번"]].forEach(([nm0,fn,u])=>{const tr=el("tr");tr.appendChild(el("td",null,nm0));let s=0;days.forEach(k=>{const o=get(k),c=o?fn(o):0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+u));T.appendChild(tr)});
     LOGS.forEach(l=>{const tr=el("tr");const nm=el("td");const dt=el("span","dot");dt.style.background=dt.style.borderColor="var(--"+l.k+")";nm.append(dt,document.createTextNode(" "+l.name));tr.appendChild(nm);let s=0;
       days.forEach(k=>{const o=get(k),c=o?o.log[l.k].length:0;s+=c;tr.appendChild(el("td","num",c?String(c):"·"))});tr.appendChild(el("td","num",s+l.unit));T.appendChild(tr)});
     const N=$("wNotes");N.innerHTML="";let any=false;
@@ -845,6 +868,29 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 
   // ---------- church ----------
   let churchEditing=false;
+  // ---------- words ----------
+  const WORDS=[["greet","인사","안녕하세요."],["thanks","감사","고마워요. 덕분이에요. 애쓰셨어요."],["sorry","사과","내가 미안해요. 힘들었죠?"],["embrace","포용","괜찮아요. 그럴 수 있어요."],["yield","양보","먼저 하세요."],["respect","존중","당신의 생각을 더 듣고 싶어요."],["cheer","응원","기도(응원)할게요. 잘될 거예요."],["care","배려","제가 도울 일은 없나요?"],["praise","칭찬","대단해요. 잘하고 있어요."]];
+  const goodTotal=o=>Object.values(o.words.good).reduce((a,b)=>a+(+b||0),0);
+  function renderWords(){
+    const body=$("wordsBody");body.innerHTML="";const w=state.words;const d=parse(cur);
+    const doy=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);const pick=WORDS[doy%WORDS.length];
+    const g=goodTotal(state),b=w.bad.length,kinds=WORDS.filter(x=>w.good[x[0]]).length;
+    $("wordsRate").textContent=kinds+"/9가지";
+    const sum=el("div","wsum");[[String(g),"좋은 말"],[String(b),"나쁜 말"],[g+b?Math.round(g/(g+b)*100)+"%":"—","좋은 말 비율"]].forEach(([v,l])=>{const k=el("div","kpi");k.append(el("b",null,v),el("span",null,l));sum.appendChild(k)});body.appendChild(sum);
+    const t=el("p","today");t.append(document.createTextNode("오늘의 한마디 · "),el("b",null,pick[1]+" “"+pick[2]+"”"));body.appendChild(t);
+    const list=el("div","wlist");
+    WORDS.forEach(([k,lab,q])=>{const n=+w.good[k]||0;const it=el("div","witem"+(n?" on":"")+(k===pick[0]&&!n?" pick":""));
+      const tx=el("div");tx.append(el("div","wt",lab),el("div","wq","“"+q+"”"));
+      const c=el("div","wc");if(n){const m=el("button",null,"−");m.type="button";m.setAttribute("aria-label",lab+" 한 번 빼기");m.onclick=()=>{state.words.good[k]=Math.max(0,n-1);changed();renderWords()};c.append(m,el("b",null,"×"+n))}
+      const pl=el("button","plus","+1");pl.type="button";pl.setAttribute("aria-label",lab+" 말 했어요");pl.onclick=()=>{state.words.good[k]=n+1;changed();renderWords();toast("✓ "+lab+" “"+q.split(".")[0]+"” ("+(n+1)+"번)")};c.appendChild(pl);
+      it.append(tx,c);list.appendChild(it)});
+    body.appendChild(list);
+    const bad=el("div","wbad");bad.appendChild(el("span","nm","나쁜 말 (짜증·불평·험담·화)"));bad.appendChild(el("span","ct",String(b)));
+    const bp=el("button","plus","+1");bp.type="button";bp.setAttribute("aria-label","나쁜 말 한 번 기록");bp.onclick=()=>{const n=new Date();state.words.bad.push(cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"");changed();renderWords();toast("기록했어요 · 다음엔 “괜찮아요. 그럴 수 있어요.”")};
+    const bm=el("button",null,"−1");bm.type="button";bm.setAttribute("aria-label","나쁜 말 기록 하나 지우기");bm.onclick=()=>{if(!state.words.bad.length)return;state.words.bad.pop();changed();renderWords()};
+    bad.append(bp,bm,el("div","times",b?"기록 시각 "+w.bad.filter(Boolean).join(" · "):"나쁜 말이 나왔을 때 솔직하게 +1을 눌러요. 줄이려면 먼저 세어봐야 해요."));
+    body.appendChild(bad);
+  }
   function renderChurch(){
     const box=$("church");const ch=settings.church||DEF_CHURCH;const dow=parse(cur).getDay();
     const svcs=svcOf(dow);
