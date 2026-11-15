@@ -250,6 +250,26 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .lg .btn.types button.add{font-size:.78rem;padding:4px 9px}
 .lg .tally{display:flex;flex-wrap:wrap;gap:4px;font-size:.72rem}
 .lg .tally span{border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.weekly{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:14px;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:14px}
+.weekly[hidden]{display:none!important}
+@media (max-width:640px){.weekly{grid-template-columns:minmax(0,1fr)}}
+.weekly .wh{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.weekly .wh b{font-family:var(--f-mono);letter-spacing:.2em;font-size:.86rem}
+.weekly .wh span{font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.weekly textarea{width:100%;min-height:220px;resize:vertical;border:0;background:transparent;color:var(--ink);font:inherit;line-height:2;padding:0 2px;background-image:linear-gradient(transparent calc(2em - 1px),var(--line) 0);background-size:100% 2em}
+.weekly textarea:focus{outline:1px solid var(--line)}
+.wcal{font-family:var(--f-mono);font-size:.78rem;align-self:end}
+.wcal .mh{display:flex;gap:10px;color:var(--muted);margin-bottom:6px}
+.wcal .g{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px;text-align:center;position:relative}
+.wcal .g span{padding:5px 0}
+.wcal .g .dw{color:var(--muted)}
+.wcal .g button{font:inherit;border:0;background:transparent;color:var(--ink);padding:5px 0;cursor:pointer;border-radius:4px}
+.wcal .g .out{opacity:.4}
+.wcal .g .sat{color:var(--c1)}.wcal .g .sun{color:var(--c3)!important}
+.wcal .g .today{font-weight:700;text-decoration:underline}
+.wcal .g button.inwk{border-top:1.5px solid var(--accent);border-bottom:1.5px solid var(--accent);border-radius:0}
+.wcal .g button.inwk.first{border-left:1.5px solid var(--accent);border-radius:8px 0 0 8px}
+.wcal .g button.inwk.last{border-right:1.5px solid var(--accent);border-radius:0 8px 8px 0}
 .badge{font-weight:700;border-radius:999px;padding:2px 10px;background:var(--hlp);color:var(--ink)}
 .paintmode .cell{cursor:crosshair}
 .light{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
@@ -343,6 +363,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   <div id="dayView" class="spread">
     <section class="page" aria-labelledby="pdLabel">
       <div class="pagehead"><span class="label" id="pdLabel">PLAN / DO</span><button class="ghost" id="catEdit">색 이름 바꾸기</button></div>
+      <div class="weekly" id="weeklyCard" hidden></div>
       <div class="church" id="church" hidden></div>
       <div class="routine" aria-label="데일리 루틴">
         <div class="rt" id="rtPt"><h3>피티 <span class="num" id="ptNum">0 / 100</span></h3><div class="bar"><i id="ptBar" style="background:var(--c4);width:0"></i></div><div class="rtbtns"><button type="button" data-pt="-5">−5</button><button type="button" data-pt="5">+5</button><button type="button" data-pt="10">+10</button><button type="button" data-pt="25">+25</button><button type="button" data-pt="100">100 완료</button></div></div>
@@ -454,7 +475,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",pulse:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},fam:{},col:{},oth:{},bad:[]}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",pulse:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},fam:{},col:{},oth:{},bad:[]},weekly:""});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피·음료",unit:"잔",types:["아메리카노","밀크커피","음료","탄산음료"]}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
   const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",pulse:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.words=Object.assign({good:{},fam:{},col:{},oth:{},bad:[]},b.words||{});["col","oth"].forEach(x=>{if(!b.words[x]||typeof b.words[x]!=="object")b.words[x]={}});if(!b.words.good||typeof b.words.good!=="object")b.words.good={};if(!b.words.fam||typeof b.words.fam!=="object")b.words.fam={};if(!Array.isArray(b.words.bad))b.words.bad=[];b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
@@ -502,7 +523,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const setStatus=t=>{$("status").textContent=t};
   let toastT=null;
   const toast=t=>{const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{e.hidden=true},1800);setStatus(t)};
-  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.medAm||o.routine.medPm||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||Object.values(o.church.s).some(Boolean)||!!o.church.note||o.words.bad.length>0||Object.values(o.words.good).some(Boolean)||o.plan.some(p=>p.hl));}
+  const hasContent=o0=>{if(!o0)return false;const o=norm(o0);return (o.plan.some(p=>p.t.trim())||/[1-7]/.test(o.slots)||o.good||o.bad||o.next||o.score||Object.values(o.habits).some(Boolean)||(o.routine&&(o.routine.pt||o.routine.water||o.routine.vit||o.routine.stretch||o.routine.medAm||o.routine.medPm||o.routine.bed||o.routine.wake))||(o.log&&LOGS.some(l=>o.log[l.k]&&o.log[l.k].length))||(o.body&&(o.body.weight||o.body.sys))||(o.routine&&o.routine.walk)||(o.meals&&Object.values(o.meals).some(Boolean))||Object.values(o.files).some(a=>a.length)||Object.values(o.church.c).some(Boolean)||Object.values(o.church.s).some(Boolean)||!!o.church.note||!!o.weekly||o.words.bad.length>0||Object.values(o.words.good).some(Boolean)||o.plan.some(p=>p.hl));}
 
   // ---------- habits ----------
   function monthCount(id){const p=cur.slice(0,7);let n=0;for(const k in docs){if(k.startsWith(p)&&docs[k].habits&&docs[k].habits[id])n++}return n}
@@ -645,7 +666,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     state.plan.forEach((p,i)=>{$("pc"+i).checked=!!p.d;$("pt"+i).value=p.t||"";$("pt"+i).parentNode.classList.toggle("done",!!p.d);$("pt"+i).parentNode.classList.toggle("hl-y",p.hl==="y");$("pt"+i).parentNode.classList.toggle("hl-p",p.hl==="p");$("pt"+i).placeholder=i===0||i===6?"계획 적기":""});
     document.querySelectorAll(".cell").forEach(c=>{const v=state.slots[+c.dataset.s];c.className="cell"+(v!=="0"?" c"+v:"")});
     $("seeGood").value=state.good||"";$("seeBad").value=state.bad||"";$("seeNext").value=state.next||"";
-    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();renderChurch();renderWords();
+    MEALS.forEach(([id,f])=>{$(id).value=state.meals[f]||""});renderNut();renderAttach();renderChurch();renderWords();renderWeekly();
     markScore();summary();renderCal();renderRoutine();
   }
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
@@ -975,6 +996,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
       bad.appendChild(el("div","times","기록 시각 "+w.bad.map(x=>String(x).split("@")[0]).filter(Boolean).join(" · ")))}
     else bad.appendChild(el("div","times","나쁜 말이 나오면 누구에게였는지 골라 +1을 눌러요. 줄이려면 먼저 세어봐야 해요."));
     body.appendChild(bad);
+  }
+  function renderWeekly(){
+    const box=$("weeklyCard");const d=parse(cur);if(d.getDay()!==1){box.hidden=true;box.innerHTML="";return}
+    box.hidden=false;box.innerHTML="";const sun=addDays(cur,6),ds=parse(sun);
+    const h=el("div","wh");h.append(el("b",null,"WEEKLY"),el("span",null,(d.getMonth()+1)+"/"+d.getDate()+" – "+(ds.getMonth()+1)+"/"+ds.getDate()));box.appendChild(h);
+    const ta=el("textarea");ta.id="weeklyNote";ta.setAttribute("aria-label","이번 주 WEEKLY 메모");ta.placeholder="이번 주 목표, 꼭 할 일, 약속, 기도 제목을 적어요";ta.value=state.weekly||"";ta.oninput=()=>{state.weekly=ta.value;changed(true)};box.appendChild(ta);
+    const cal=el("div","wcal");const y=d.getFullYear(),m=d.getMonth();const mh=el("div","mh");mh.append(el("span",null,String(m+1)),el("span",null,["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][m]));cal.appendChild(mh);
+    const g=el("div","g");["M","T","W","T","F","S","S"].forEach((x,i)=>g.appendChild(el("span","dw"+(i===5?" sat":i===6?" sun":""),x)));
+    const off=(new Date(y,m,1).getDay()+6)%7;const today=key(new Date());
+    for(let i=0;i<42;i++){const dd=new Date(y,m,1-off+i);if(i>=35&&dd.getMonth()!==m)break;const k=key(dd);const col=i%7;const inWeek=k>=cur&&k<=sun;
+      const b=el("button",(dd.getMonth()!==m?"out ":"")+(col===5?"sat ":col===6?"sun ":"")+(k===today?"today ":"")+(inWeek?"inwk"+(col===0?" first":col===6?" last":""):""),String(dd.getDate()));b.type="button";b.setAttribute("aria-label",k);b.onclick=()=>go(k);g.appendChild(b)}
+    cal.appendChild(g);box.appendChild(cal);
   }
   function renderChurch(){
     const box=$("church");const ch=settings.church||DEF_CHURCH;const dow=parse(cur).getDay();
