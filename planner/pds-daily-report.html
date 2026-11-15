@@ -245,6 +245,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .bpm span{font-size:.68rem;color:var(--muted);display:block}
 .bpm em{font-style:normal;font-size:.68rem;font-weight:700}
 .bpm em.n{color:var(--ok)}.bpm em.w{color:var(--poo)}.bpm em.h{color:var(--c3)}
+.lg.cofwide{grid-column:1/-1}
+.lg .btn.types{flex-wrap:wrap}
+.lg .btn.types button.add{font-size:.78rem;padding:4px 9px}
+.lg .tally{display:flex;flex-wrap:wrap;gap:4px;font-size:.72rem}
+.lg .tally span{border:1px solid var(--line);border-radius:999px;padding:1px 8px}
 .badge{font-weight:700;border-radius:999px;padding:2px 10px;background:var(--hlp);color:var(--ink)}
 .paintmode .cell{cursor:crosshair}
 .light{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
@@ -450,7 +455,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
   const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",pulse:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},fam:{},col:{},oth:{},bad:[]}});
-  const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
+  const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피·음료",unit:"잔",types:["아메리카노","밀크커피","음료","탄산음료"]}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
   const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",pulse:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.words=Object.assign({good:{},fam:{},col:{},oth:{},bad:[]},b.words||{});["col","oth"].forEach(x=>{if(!b.words[x]||typeof b.words[x]!=="object")b.words[x]={}});if(!b.words.good||typeof b.words.good!=="object")b.words.good={};if(!b.words.fam||typeof b.words.fam!=="object")b.words.fam={};if(!Array.isArray(b.words.bad))b.words.bad=[];b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
@@ -646,17 +651,18 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   function prevWeight(k){const ks=Object.keys(docs).filter(x=>x<k&&docs[x].body&&docs[x].body.weight).sort();return ks.length?parseFloat(docs[ks[ks.length-1]].body.weight):null}
   function renderLogs(){
     const box=$("logs");box.innerHTML="";
-    LOGS.forEach(l=>{const arr=state.log[l.k];const g=el("div","lg");g.style.setProperty("--lc","var(--"+l.k+")");
+    LOGS.forEach(l=>{const arr=state.log[l.k];const g=el("div","lg"+(l.types?" cofwide":""));g.style.setProperty("--lc","var(--"+l.k+")");
       const top=el("div","top");const ct=el("span","ct",String(arr.length));ct.appendChild(el("small",null,l.unit));top.append(el("span","nm",l.name),ct);
-      const bt=el("div","btn");const add=el("button","add","+1");add.type="button";add.setAttribute("aria-label",l.name+" 한 번 추가");
-      add.onclick=()=>{const n=new Date(),at=$("logAt").value;const tm=at||(cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"");
-        state.log[l.k].push(tm);state.log[l.k].sort();$("logAt").value="";renderLogs();changed();
-        const nb=$("logs").querySelectorAll(".lg")[LOGS.indexOf(l)];const a=nb&&nb.querySelector(".add");if(a){a.classList.add("flash");setTimeout(()=>a.classList.remove("flash"),500)}
-        toast("✓ "+l.name+" +1"+(tm?" · "+tm:"")+" (오늘 "+state.log[l.k].length+l.unit+")")};
-      const rm=el("button",null,"−1");rm.type="button";rm.setAttribute("aria-label",l.name+" 마지막 기록 지우기");rm.onclick=()=>{if(!state.log[l.k].length){toast(l.name+" 기록이 아직 없어요");return}state.log[l.k].pop();renderLogs();changed();toast(l.name+" 기록 하나를 지웠어요")};bt.append(add,rm);
-      const tms=el("div","times");arr.forEach((v,i)=>{const c=el("button",null,(v||"시각 없음")+" ×");c.type="button";c.setAttribute("aria-label",l.name+" "+(v||"시각 없음")+" 기록 지우기");c.onclick=()=>{state.log[l.k].splice(i,1);renderLogs();changed();toast(l.name+" "+(v||"")+" 기록을 지웠어요")};tms.appendChild(c)});
+      const bt=el("div","btn"+(l.types?" types":""));
+      const addOne=(ty)=>{const n=new Date(),at=$("logAt").value;const tm=at||(cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"");
+        state.log[l.k].push(tm+(ty?"@"+ty:""));state.log[l.k].sort();$("logAt").value="";renderLogs();changed();
+        toast("✓ "+(ty||l.name)+" +1"+(tm?" · "+tm:"")+" (오늘 "+state.log[l.k].length+l.unit+")")};
+      (l.types||[null]).forEach(ty=>{const add=el("button","add",ty?"+ "+ty:"+1");add.type="button";add.setAttribute("aria-label",(ty||l.name)+" 한 번 추가");add.onclick=()=>addOne(ty);bt.appendChild(add)});
+      const rm=el("button",null,"−1");rm.type="button";rm.setAttribute("aria-label",l.name+" 마지막 기록 지우기");rm.onclick=()=>{if(!state.log[l.k].length){toast(l.name+" 기록이 아직 없어요");return}state.log[l.k].pop();renderLogs();changed();toast(l.name+" 기록 하나를 지웠어요")};bt.appendChild(rm);
+      if(l.types&&arr.length){const cnt={};arr.forEach(v=>{const ty=String(v).split("@")[1]||"커피";cnt[ty]=(cnt[ty]||0)+1});const ta=el("div","tally");Object.entries(cnt).forEach(([ty,c2])=>ta.appendChild(el("span",null,ty+" "+c2)));g._tally=ta}
+      const tms=el("div","times");arr.forEach((v,i)=>{const [tv,ty]=String(v).split("@");const c=el("button",null,(tv||"시각 없음")+(ty?" "+ty:"")+" ×");c.type="button";c.setAttribute("aria-label",(ty||l.name)+" "+(tv||"시각 없음")+" 기록 지우기");c.onclick=()=>{state.log[l.k].splice(i,1);renderLogs();changed();toast((ty||l.name)+" "+(tv||"")+" 기록을 지웠어요")};tms.appendChild(c)});
       if(!arr.length)tms.appendChild(el("span","empty","+1을 누르면 시각이 여기 남아요"));
-      g.append(top,bt,tms);box.appendChild(g)});
+      g.append(top,bt);if(g._tally)g.appendChild(g._tally);g.appendChild(tms);box.appendChild(g)});
     const w=el("div","lg");w.style.setProperty("--lc","var(--ink)");
     const wt=el("div","top");const pw=prevWeight(cur),cw=parseFloat(state.body.weight);
     const diff=(pw!=null&&!isNaN(cw))?(cw-pw):null;
@@ -683,7 +689,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     row.append(mk("bpS","수축기","sys","mmHg","50","250"),mk("bpD","이완기","dia","mmHg","30","160"),mk("bpP","맥박수","pulse","회/분","30","200"));
     bp.append(bt2,row,metBox,foot);refresh();box.appendChild(bp);
     for(let i=0;i<24;i++){const h=$("hr"+i);const old=h.querySelector(".mks");if(old)old.remove()}
-    LOGS.forEach(l=>state.log[l.k].forEach(t=>{if(!t)return;const i=(+t.split(":")[0]-3+24)%24;const h=$("hr"+i);let m=h.querySelector(".mks");if(!m){m=el("span","mks");h.appendChild(m)}const d=el("i");d.style.background="var(--"+l.k+")";d.title=l.name+" "+t;m.appendChild(d)}));
+    LOGS.forEach(l=>state.log[l.k].forEach(t0=>{const t=String(t0).split("@")[0];if(!t)return;const i=(+t.split(":")[0]-3+24)%24;const h=$("hr"+i);let m=h.querySelector(".mks");if(!m){m=el("span","mks");h.appendChild(m)}const d=el("i");d.style.background="var(--"+l.k+")";d.title=(String(t0).split("@")[1]||l.name)+" "+t;m.appendChild(d)}));
   }
   function renderRoutine(){
     renderLogs();
