@@ -235,6 +235,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
 .med button small{font-size:.68rem;color:var(--muted)}
 .med button[aria-pressed="true"]{background:var(--c6);border-color:var(--c6);color:#fff}
 .med button[aria-pressed="true"] small{color:#fff}
+.lg.bpwide{grid-column:1/-1}
+.bpin3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.bpin3 label{display:flex;flex-direction:column;gap:2px;font-size:.7rem;color:var(--muted);min-width:0}
+.bpin3 input{width:100%;min-width:0}
+.bpm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.bpm div{border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
+.bpm b{display:block;font-family:var(--f-mono);font-size:1.05rem;font-variant-numeric:tabular-nums}
+.bpm span{font-size:.68rem;color:var(--muted);display:block}
+.bpm em{font-style:normal;font-size:.68rem;font-weight:700}
+.bpm em.n{color:var(--ok)}.bpm em.w{color:var(--poo)}.bpm em.h{color:var(--c3)}
 .badge{font-weight:700;border-radius:999px;padding:2px 10px;background:var(--hlp);color:var(--ink)}
 .paintmode .cell{cursor:crosshair}
 .light{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
@@ -439,10 +449,10 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
   const monday=k=>{const d=parse(k);return addDays(k,-((d.getDay()+6)%7))};
   const DOW=["일","월","화","수","목","금","토"];
   const fmt=n=>Math.floor(n*10/60)+"h "+(n*10%60)+"m";
-  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},fam:{},col:{},oth:{},bad:[]}});
+  const blank=()=>({plan:Array.from({length:24},()=>({t:"",d:false})),slots:"0".repeat(SLOTS),good:"",bad:"",next:"",score:0,habits:{},routine:{pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},log:{pee:[],poo:[],coffee:[]},body:{weight:"",sys:"",dia:"",pulse:"",bpAt:""},meals:{b:"",l:"",d:"",s:""},nutrition:null,files:{},church:{c:{},s:{},note:""},words:{good:{},fam:{},col:{},oth:{},bad:[]}});
   const LOGS=[{k:"pee",name:"소변",unit:"회"},{k:"poo",name:"변",unit:"회"},{k:"coffee",name:"커피",unit:"잔"}];
   const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
-  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.words=Object.assign({good:{},fam:{},col:{},oth:{},bad:[]},b.words||{});["col","oth"].forEach(x=>{if(!b.words[x]||typeof b.words[x]!=="object")b.words[x]={}});if(!b.words.good||typeof b.words.good!=="object")b.words.good={};if(!b.words.fam||typeof b.words.fam!=="object")b.words.fam={};if(!Array.isArray(b.words.bad))b.words.bad=[];b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
+  const norm=o=>{const b=Object.assign(blank(),clone(o)||{});if(!Array.isArray(b.plan)||b.plan.length!==24)b.plan=blank().plan;if(typeof b.slots!=="string"||b.slots.length!==SLOTS)b.slots="0".repeat(SLOTS);if(!b.habits||typeof b.habits!=="object")b.habits={};b.routine=Object.assign({pt:0,water:0,vit:false,stretch:0,walk:0,medAm:false,medPm:false,bed:"",wake:""},b.routine||{});const lg=b.log&&typeof b.log==="object"?b.log:{};b.log={};LOGS.forEach(l=>{b.log[l.k]=Array.isArray(lg[l.k])?lg[l.k]:[]});b.body=Object.assign({weight:"",sys:"",dia:"",pulse:"",bpAt:""},b.body||{});b.meals=Object.assign({b:"",l:"",d:"",s:""},b.meals||{});b.words=Object.assign({good:{},fam:{},col:{},oth:{},bad:[]},b.words||{});["col","oth"].forEach(x=>{if(!b.words[x]||typeof b.words[x]!=="object")b.words[x]={}});if(!b.words.good||typeof b.words.good!=="object")b.words.good={};if(!b.words.fam||typeof b.words.fam!=="object")b.words.fam={};if(!Array.isArray(b.words.bad))b.words.bad=[];b.church=Object.assign({c:{},s:{},note:""},b.church||{});if(!b.church.c||typeof b.church.c!=="object")b.church.c={};if(!b.church.s||typeof b.church.s!=="object")b.church.s={};if(!b.files||typeof b.files!=="object"||Array.isArray(b.files))b.files={};Object.keys(b.files).forEach(k=>{if(!Array.isArray(b.files[k]))delete b.files[k]});return b};
   const PT_GOAL=100, CUPS=4;
   const MEALS=[["mB","b"],["mL","l"],["mD","d"],["mS","s"]];
   const SLEEP_GOAL=420;
@@ -656,12 +666,22 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     wi.onchange=()=>{state.body.weight=wi.value;renderLogs();changed();if(wi.value)toast("✓ 몸무게 "+wi.value+"kg 저장")};
     const gw=G().weightKg;const hint=(!isNaN(cw)&&gw)?(cw>gw?"목표 "+gw+"kg까지 −"+(cw-gw).toFixed(1)+"kg":"목표 "+gw+"kg 달성 ✓"):(pw!=null?"지난 기록 "+pw.toFixed(1)+"kg":"kg 단위로 적어요");
     w.append(wt,wi,el("div","times",hint));box.appendChild(w);
-    const bp=el("div","lg");bp.style.setProperty("--lc","var(--c3)");const bt2=el("div","top");bt2.appendChild(el("span","nm","혈압"));
-    const cls=bpClass(state.body.sys,state.body.dia);if(cls){const tg=el("span","bptag "+cls[0],cls[1].split(" · ")[0]);bt2.appendChild(tg)}
-    const row=el("div","bpin");const mk=(id,ph,f)=>{const i=el("input","kg");i.type="number";i.id=id;i.inputMode="numeric";i.min="50";i.max="250";i.placeholder=ph;i.value=state.body[f]||"";i.setAttribute("aria-label",ph);
-      i.onchange=()=>{state.body[f]=i.value;const n=new Date();if(state.body.sys&&state.body.dia&&!state.body.bpAt)state.body.bpAt=cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"";renderLogs();changed();if(state.body.sys&&state.body.dia)toast("✓ 혈압 "+state.body.sys+"/"+state.body.dia+" 저장")};return i};
-    row.append(mk("bpS","수축기","sys"),el("span",null,"/"),mk("bpD","이완기","dia"));
-    bp.append(bt2,row,el("div","times",cls?(cls[0]==="h"?cls[1]:"목표 120/80 미만"+(state.body.bpAt?" · "+state.body.bpAt+" 측정":"")):"집·약국에서 잰 값 · 목표 120/80 미만"));box.appendChild(bp);
+    const bp=el("div","lg bpwide");bp.style.setProperty("--lc","var(--c3)");const bt2=el("div","top");bt2.appendChild(el("span","nm","혈압 · 맥박"));const tagBox=el("span");bt2.appendChild(tagBox);
+    const metBox=el("div");const foot=el("div","times");
+    const refresh=()=>{const B=state.body;const sy=+B.sys,di=+B.dia,pu=+B.pulse;const cls=bpClass(B.sys,B.dia);tagBox.innerHTML="";if(cls)tagBox.appendChild(el("span","bptag "+cls[0],cls[1].split(" · ")[0]));
+      metBox.innerHTML="";if((sy&&di)||pu){const m=el("div","bpm");
+        const cell=(label,val,tag,cl,ref)=>{const d=el("div");d.append(el("span",null,label),el("b",null,val));if(tag)d.appendChild(el("em",cl,tag));d.appendChild(el("span",null,ref));m.appendChild(d)};
+        if(pu){const [t,c]=pu<60?["느림","w"]:pu>100?["빠름","h"]:["정상","n"];cell("맥박수",pu+"회",t,c,"안정 시 60–100")}else cell("맥박수","—","","","맥박도 적어주세요");
+        if(sy&&di){const pp=sy-di;const [t,c]=pp>60?["넓음 · 혈관 탄력 체크","h"]:pp>=50?["조금 넓음","w"]:pp<25?["좁음","w"]:["정상","n"];cell("맥압",pp+"mmHg",t,c,"수축기−이완기 · 약 40 정상")}else cell("맥압","—","","","혈압을 적으면 계산돼요");
+        if(sy&&pu){const rpp=sy*pu;const [t,c]=rpp>12000?["높음","h"]:rpp>10000?["조금 높음","w"]:["좋음","n"];cell("심부담도",rpp.toLocaleString(),t,c,"수축기×맥박 · 안정 시 1만 이하")}else cell("심부담도","—","","","혈압+맥박이면 계산돼요");
+        metBox.appendChild(m)}
+      foot.textContent=cls&&cls[0]==="h"?cls[1]:"목표 120/80 미만"+(B.bpAt?" · "+B.bpAt+" 측정":"")+" · 5분 앉아 쉰 뒤 재요"};
+    const row=el("div","bpin3");const mk=(id,ph,f,unit,mn,mx)=>{const lab=el("label");lab.htmlFor=id;lab.appendChild(document.createTextNode(ph+" ("+unit+")"));const i=el("input","kg");i.type="number";i.id=id;i.inputMode="numeric";i.min=mn;i.max=mx;i.placeholder=ph;i.value=state.body[f]||"";
+      i.oninput=()=>{state.body[f]=i.value;refresh()};
+      i.onchange=()=>{state.body[f]=i.value;const n=new Date();if(state.body.sys&&state.body.dia&&!state.body.bpAt)state.body.bpAt=cur===key(n)?pad(n.getHours())+":"+pad(n.getMinutes()):"";refresh();changed();
+        if(state.body.sys&&state.body.dia)toast("✓ 혈압 "+state.body.sys+"/"+state.body.dia+(state.body.pulse?" · 맥박 "+state.body.pulse:"")+" 저장");else if(f==="pulse"&&i.value)toast("✓ 맥박 "+i.value+" 저장")};lab.appendChild(i);return lab};
+    row.append(mk("bpS","수축기","sys","mmHg","50","250"),mk("bpD","이완기","dia","mmHg","30","160"),mk("bpP","맥박수","pulse","회/분","30","200"));
+    bp.append(bt2,row,metBox,foot);refresh();box.appendChild(bp);
     for(let i=0;i<24;i++){const h=$("hr"+i);const old=h.querySelector(".mks");if(old)old.remove()}
     LOGS.forEach(l=>state.log[l.k].forEach(t=>{if(!t)return;const i=(+t.split(":")[0]-3+24)%24;const h=$("hr"+i);let m=h.querySelector(".mks");if(!m){m=el("span","mks");h.appendChild(m)}const d=el("i");d.style.background="var(--"+l.k+")";d.title=l.name+" "+t;m.appendChild(d)}));
   }
@@ -717,11 +737,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,.cell:focus-visi
     days.forEach(k=>{const o=get(k);const col=el("div","wkcol");col.setAttribute("aria-label",k+" DO 기록");
       for(let i=0;i<SLOTS;i++){const v=o?o.slots[i]:"0";col.appendChild(el("span",v!=="0"?"c"+v:null))}
       wk.appendChild(col);
-      if(o){catCounts(o,cnt);planned+=o.plan.filter(p=>p.t.trim()).length;done+=o.plan.filter(p=>p.t.trim()&&p.d).length;if(o.score)scores.push(o.score);if(hasContent(o))rec++;const sm=sleepMin(o);if(sm)sleeps.push(sm);const w=parseFloat(o.body.weight);if(!isNaN(w))wts.push(w);if(+o.body.sys&&+o.body.dia)bps.push([+o.body.sys,+o.body.dia])}});
+      if(o){catCounts(o,cnt);planned+=o.plan.filter(p=>p.t.trim()).length;done+=o.plan.filter(p=>p.t.trim()&&p.d).length;if(o.score)scores.push(o.score);if(hasContent(o))rec++;const sm=sleepMin(o);if(sm)sleeps.push(sm);const w=parseFloat(o.body.weight);if(!isNaN(w))wts.push(w);if(+o.body.sys&&+o.body.dia)bps.push([+o.body.sys,+o.body.dia,+o.body.pulse||0])}});
     const lg=$("wkLegend");lg.innerHTML="";settings.cats.forEach((n,i)=>{const c=el("span","chip");c.style.cursor="default";const sw=el("i");sw.style.background="var(--c"+(i+1)+")";c.append(sw,document.createTextNode(n||("색 "+(i+1))));lg.appendChild(c)});
     const total=Object.values(cnt).reduce((a,b)=>a+b,0);
     const K=$("wKpis");K.innerHTML="";
-    [[fmt(total),"기록한 시간"],[planned?Math.round(done/planned*100)+"%":"—","계획 완료율"],[scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"—","평균 점수"],[sleeps.length?hm(Math.round(sleeps.reduce((a,b)=>a+b,0)/sleeps.length)):"—","평균 수면"],[wts.length?wts[wts.length-1].toFixed(1)+(wts.length>1?" ("+((wts[wts.length-1]-wts[0])>0?"+":"")+(wts[wts.length-1]-wts[0]).toFixed(1)+")":""):"—","몸무게 kg"],[bps.length?Math.round(bps.reduce((a,b)=>a+b[0],0)/bps.length)+"/"+Math.round(bps.reduce((a,b)=>a+b[1],0)/bps.length):"—","평균 혈압"],[rec+"/7","기록한 날"]]
+    [[fmt(total),"기록한 시간"],[planned?Math.round(done/planned*100)+"%":"—","계획 완료율"],[scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1):"—","평균 점수"],[sleeps.length?hm(Math.round(sleeps.reduce((a,b)=>a+b,0)/sleeps.length)):"—","평균 수면"],[wts.length?wts[wts.length-1].toFixed(1)+(wts.length>1?" ("+((wts[wts.length-1]-wts[0])>0?"+":"")+(wts[wts.length-1]-wts[0]).toFixed(1)+")":""):"—","몸무게 kg"],[bps.length?Math.round(bps.reduce((a,b)=>a+b[0],0)/bps.length)+"/"+Math.round(bps.reduce((a,b)=>a+b[1],0)/bps.length)+(bps.some(b=>b[2])?" · "+Math.round(bps.filter(b=>b[2]).reduce((a,b)=>a+b[2],0)/bps.filter(b=>b[2]).length):""):"—","평균 혈압 · 맥박"],[rec+"/7","기록한 날"]]
       .forEach(([v,l])=>{const d=el("div","kpi");d.append(el("b",null,v),el("span",null,l));K.appendChild(d)});
     bars($("wStats"),cnt);
     {const used=new Set();days.forEach(k=>{const o=get(k);if(o)WORDS.forEach(([w])=>{if(+o.words.good[w])used.add(w)})});const d=el("div","kpi");d.append(el("b",null,used.size===9?"🌸 9/9":used.size+"/9"),el("span",null,"좋은 말 가짓수"));$("wKpis").appendChild(d)}
