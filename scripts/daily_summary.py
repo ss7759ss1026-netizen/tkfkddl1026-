@@ -230,18 +230,17 @@ def send_kakao_text(access_token: str, text: str, url: str) -> None:
         raise RuntimeError("카카오 메시지 전송 실패")
 
 
+class RotationSkipped(Exception):
+    """새 리프레시 토큰이 왔지만 저장할 설정(GH_SECRETS_TOKEN)이 없음."""
+
+
 def maybe_rotate_github_secret(new_token) -> None:
     if not new_token:
         return
     gh_token = os.environ.get("GH_SECRETS_TOKEN")
     repo = os.environ.get("GITHUB_REPOSITORY")
     if not gh_token or not repo:
-        print(
-            "새 리프레시 토큰이 발급됐지만 자동 저장 설정이 없습니다. "
-            "토큰 갱신 설정을 확인하세요.",
-            file=sys.stderr,
-        )
-        return
+        raise RotationSkipped()
 
     from nacl import encoding, public
 
@@ -274,14 +273,55 @@ def maybe_rotate_github_secret(new_token) -> None:
     print("리프레시 토큰 자동 저장 완료")
 
 
-def log_failure(label: str, error: Exception) -> None:
+FAILURE_FILE = "failure_reason.txt"
+
+
+def describe_http(error: Exception) -> str:
     if isinstance(error, requests.HTTPError):
         response = error.response
         status = response.status_code if response is not None else "UNKNOWN"
-        detail = f"HTTP {status}"
-    else:
-        detail = type(error).__name__
-    print(f"{label}: {detail}", file=sys.stderr)
+        return f"HTTP {status}"
+    return type(error).__name__
+
+
+def log_failure(label: str, error: Exception) -> None:
+    print(f"{label}: {describe_http(error)}", file=sys.stderr)
+
+
+def write_failure_reason(reason: str) -> None:
+    """카카오로 알릴 수 없는 실패의 원인을 남긴다 (워크플로가 이슈 알림으로 보냄)."""
+    print(reason, file=sys.stderr)
+    try:
+        with open(FAILURE_FILE, "w", encoding="utf-8") as handle:
+            handle.write(reason)
+    except OSError:
+        pass
+
+
+def token_failure_reason(error: Exception) -> str:
+    detail = describe_http(error)
+    if detail == "HTTP 400":
+        return (
+            f"카카오 토큰 갱신 실패 ({detail}): 리프레시 토큰이 만료됐거나 무효입니다. "
+            "PC에서 python scripts/get_kakao_token.py 로 재발급 후 "
+            "Secrets의 KAKAO_REFRESH_TOKEN을 바꿔주세요."
+        )
+    if detail == "HTTP 401":
+        return (
+            f"카카오 토큰 갱신 실패 ({detail}): REST API 키 또는 Client Secret을 "
+            "확인해주세요."
+        )
+    return f"카카오 토큰 갱신 실패 ({detail}): 잠시 뒤 Run workflow로 다시 시도해보세요."
+
+
+def build_alert(warnings: list[str], no_data: bool) -> str:
+    today = dt.datetime.now(KST).strftime("%m/%d")
+    head = (
+        f"🛠 오늘은 레이더가 쉬어요 ({today})"
+        if no_data
+        else f"⚠️ 레이더 점검 알림 ({today})"
+    )
+    return "\n".join([head, *[f"· {line}" for line in warnings]])
 
 
 def main() -> int:
@@ -290,6 +330,7 @@ def main() -> int:
     refresh_token = os.environ["KAKAO_REFRESH_TOKEN"]
     client_secret = os.environ.get("KAKAO_CLIENT_SECRET")
     results = []
+    warnings: list[str] = []
 
     for label, fetch in [
         ("인기 음악", lambda: fetch_top_music_ranking(youtube_key)),
@@ -300,6 +341,7 @@ def main() -> int:
             results.append(fetch())
         except Exception as error:
             log_failure(f"{label} 수집 실패", error)
+            warnings.append(f"{label} 수집 실패 ({describe_http(error)})")
             results.append([])
 
     ranking, playlists, news = results
@@ -307,23 +349,43 @@ def main() -> int:
         f"수집 결과: 인기 음악 {len(ranking)}개 / "
         f"플레이리스트 {len(playlists)}개 / 뉴스 {len(news)}개"
     )
-    if not any(results):
-        print("수집된 데이터가 없어 전송하지 않습니다.", file=sys.stderr)
+    no_data = not any(results)
+
+    try:
+        token_data = refresh_kakao_token(rest_key, refresh_token, client_secret)
+    except Exception as error:
+        # 카카오로는 알릴 수 없으니 워크플로의 이슈 알림으로 넘긴다.
+        write_failure_reason(token_failure_reason(error))
         return 1
 
-    token_data = refresh_kakao_token(rest_key, refresh_token, client_secret)
-    rotation_failed = False
     try:
         maybe_rotate_github_secret(token_data.get("refresh_token"))
+    except RotationSkipped:
+        warnings.append(
+            "새 카카오 토큰을 저장하지 못했어요 (GH_SECRETS_TOKEN 없음). "
+            "약 한 달 안에 알림이 끊길 수 있어요."
+        )
     except Exception as error:
         log_failure("리프레시 토큰 자동 저장 실패", error)
-        rotation_failed = True
+        warnings.append(
+            f"새 카카오 토큰 저장 실패 ({describe_http(error)}). "
+            "GH_SECRETS_TOKEN 만료·권한을 확인하세요."
+        )
+
+    access_token = token_data["access_token"]
+    if warnings or no_data:
+        if no_data and not warnings:
+            warnings.append("수집된 데이터가 없어요.")
+        send_kakao_text(access_token, build_alert(warnings, no_data), YOUTUBE_HOME)
+        print("카카오톡 점검 알림 전송 완료")
+    if no_data:
+        return 0
 
     messages = build_messages(ranking, playlists, news)
     for index, (text, url) in enumerate(messages, start=1):
-        send_kakao_text(token_data["access_token"], text, url)
+        send_kakao_text(access_token, text, url)
         print(f"카카오톡 메시지 {index}/{len(messages)} 전송 완료")
-    return 1 if rotation_failed else 0
+    return 0
 
 
 if __name__ == "__main__":
@@ -331,4 +393,7 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except Exception as error:
         log_failure("실행 실패", error)
+        write_failure_reason(
+            f"실행 실패 ({describe_http(error)}): Actions 로그의 Run daily summary를 확인해주세요."
+        )
         raise SystemExit(1)
