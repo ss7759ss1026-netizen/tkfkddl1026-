@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
 
@@ -30,3 +31,27 @@ jobs:
           GH_SECRETS_TOKEN: ${{ secrets.GH_SECRETS_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: python scripts/daily_summary.py
+
+      # 카카오로 알릴 수 없는 실패(토큰 만료 등)는 GitHub 이슈로 알린다.
+      # GitHub 앱 알림을 켜두면 휴대폰으로 바로 와요.
+      - name: Alert on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          REASON="$(cat failure_reason.txt 2>/dev/null || echo '원인 미상: 로그를 확인해주세요.')"
+          TODAY="$(TZ=Asia/Seoul date +%m/%d)"
+          BODY="@${OWNER} 🚨 ${TODAY} 아침 레이더 고장
+
+          원인: ${REASON}
+
+          로그: ${RUN_URL}"
+          TITLE="🚨 아침 레이더 고장"
+          NUM="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "in:title 아침 레이더 고장" --json number --jq '.[0].number // empty')"
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --repo "$GITHUB_REPOSITORY" --body "$BODY"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --body "$BODY"
+          fi
